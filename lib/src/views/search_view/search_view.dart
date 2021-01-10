@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tarbus2021/src/database/database_helper.dart';
+import 'package:tarbus2021/src/app/app_colors.dart';
+import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/model/bus_stop.dart';
-import 'package:tarbus2021/src/views/bus_stop_list_view/bus_stop_list_item.dart';
+import 'package:tarbus2021/src/views/search_view/controller/search_view_controller.dart';
+import 'package:tarbus2021/src/views/search_view/search_item.dart';
 
 class SearchView extends StatefulWidget {
   @override
@@ -10,79 +12,82 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  List<BusStop> busStopsList = List<BusStop>();
-  List<BusStop> searchedBusStopsList = List<BusStop>();
-
-  bool status = false;
-
-  FocusNode myFocusNode;
+  final SearchViewController viewController = SearchViewController();
 
   @override
   void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
+    viewController.focusNode.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getBusStopList();
-    myFocusNode = FocusNode();
-    myFocusNode.requestFocus();
-  }
-
-  void _getBusStopList() async {
-    busStopsList = await DatabaseHelper.instance.getAllBusStops();
-    searchedBusStopsList = List<BusStop>();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new TextField(
-          focusNode: myFocusNode,
-          onChanged: (text) {
-            setState(() {
-              if (text.trim().length != 0) {
-                status = true;
-              }
-              _doSearchQuery(text);
-            });
-          },
-          style: new TextStyle(
-            color: Colors.white,
-          ),
-          decoration: new InputDecoration(
-              suffixIcon: new Icon(Icons.search, color: Colors.white), hintText: "Search...", hintStyle: new TextStyle(color: Colors.white)),
-        ),
-      ),
-      body: status
-          ? ListView.builder(
-              itemCount: searchedBusStopsList.length,
-              itemBuilder: (context, index) {
-                return BusStopListItem(busStop: searchedBusStopsList[index]);
-              },
-            )
-          : Padding(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                "Zacznij wpisywać tekst aby wyszukać przystanek",
-                maxLines: 2,
-              )),
+          backgroundColor: AppColors.primaryColor,
+          bottom: PreferredSize(child: _buildSearchField(), preferredSize: Size.fromHeight(kToolbarHeight)),
+          title: Text(
+            'Szukaj',
+            style: TextStyle(fontFamily: 'Asap', fontWeight: FontWeight.bold),
+          )),
+      body: _buildBody(),
     );
   }
 
-  void _doSearchQuery(String text) async {
-    searchedBusStopsList.clear();
-    for (BusStop busStop in busStopsList) {
-      String result = busStop.name.toLowerCase().trim();
-      text = text.toLowerCase().trim();
-      if (result.contains(text)) {
-        searchedBusStopsList.add(busStop);
-        print(result);
-      }
+  Widget _buildBody() {
+    if (viewController.searchStatus) {
+      return SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: AppDimens.margin_view_horizontally),
+          child: FutureBuilder<List<BusStop>>(
+            future: viewController.getSearchedBusStops(viewController.searchValue),
+            builder: (BuildContext context, AsyncSnapshot<List<BusStop>> snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var busStop = snapshot.data[index];
+                    return SearchItem(busStop: busStop);
+                  },
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: EdgeInsets.all(15),
+        child: Text(
+          'Zacznij wpisywać tekst aby wyszukać przystanek',
+          style: TextStyle(fontFamily: 'Asap'),
+          maxLines: 2,
+        ),
+      );
     }
+  }
+
+  Widget _buildSearchField() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppDimens.margin_view_horizontally),
+      child: TextField(
+        focusNode: viewController.focusNode,
+        onChanged: (text) {
+          setState(() {
+            viewController.searchBusStop(text);
+          });
+        },
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Asap'),
+        decoration: InputDecoration(
+          suffixIcon: Icon(Icons.search, color: Colors.white),
+          hintText: 'Wpisz nazwę przystanku',
+          hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontFamily: 'Asap'),
+        ),
+      ),
+    );
   }
 }
