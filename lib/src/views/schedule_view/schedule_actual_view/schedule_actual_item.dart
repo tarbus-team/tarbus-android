@@ -96,7 +96,7 @@ class ScheduleActualItem extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-                    if (departure.isTommorow)
+                    /*if (departure.isTommorow)
                       Text(
                         'Jutro',
                         textAlign: TextAlign.end,
@@ -104,7 +104,7 @@ class ScheduleActualItem extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 11,
                         ),
-                      ),
+                      ),*/
                   ],
                 ),
               ),

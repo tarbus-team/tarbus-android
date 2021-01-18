@@ -6,11 +6,9 @@ import 'package:sqflite/sqflite.dart';
 import 'package:tarbus2021/src/model/bus_line.dart';
 import 'package:tarbus2021/src/model/bus_stop.dart';
 import 'package:tarbus2021/src/model/departure.dart';
-import 'package:tarbus2021/src/model/destination.dart';
 import 'package:tarbus2021/src/model/last_updated.dart';
 import 'package:tarbus2021/src/model/route_holder.dart';
-import 'package:tarbus2021/src/model/single_destination.dart';
-import 'package:tarbus2021/src/model/track.dart';
+import 'package:tarbus2021/src/model/track_route.dart';
 
 class DatabaseHelper {
   // make this a singleton class
@@ -22,7 +20,8 @@ class DatabaseHelper {
   static Database db;
 
   Future<Database> get database async {
-    const NEW_DB_VERSION = 3;
+    const NEW_DB_VERSION = 4;
+    //const NEW_DB_VERSION = 3;
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, 'tarbus.db');
 
@@ -84,19 +83,26 @@ class DatabaseHelper {
 
   Future<bool> clearAllDatabase() async {
     final db = await database;
-    var query = 'DELETE FROM BusStop';
+    var query = 'DELETE FROM BusLine';
     var response = await db.rawQuery(query);
-    query = 'DELETE FROM Departure';
+    query = 'DELETE FROM BusStop';
     response = await db.rawQuery(query);
-    query = 'DELETE FROM BusLine';
+    query = 'DELETE FROM BusStopConnection';
+    response = await db.rawQuery(query);
+    query = 'DELETE FROM Departure';
     response = await db.rawQuery(query);
     query = 'DELETE FROM DayType';
     response = await db.rawQuery(query);
-    query = 'DELETE FROM Destination';
+    query = 'DELETE FROM Destinations';
+    response = await db.rawQuery(query);
+    query = 'DELETE FROM RoadType';
+    response = await db.rawQuery(query);
+    query = 'DELETE FROM Route';
+    response = await db.rawQuery(query);
+    query = 'DELETE FROM RouteConnections';
     response = await db.rawQuery(query);
     query = 'DELETE FROM Track';
     response = await db.rawQuery(query);
-
     return true;
   }
 
@@ -107,7 +113,7 @@ class DatabaseHelper {
       if (counter > 0) {
         buffer.write(" AND ");
       }
-      buffer.write(' bus_stop_search_name LIKE "%$pattern%"');
+      buffer.write(' bs_search_name LIKE "%$pattern%"');
       counter++;
     }
     var query = 'SELECT * FROM BusStop WHERE ${buffer.toString()}';
@@ -116,10 +122,61 @@ class DatabaseHelper {
     var response = await db.rawQuery(query);
     List<BusStop> busStops = response.map((c) => BusStop.fromJson(c)).toList();
     for (BusStop busStop in busStops) {
-      List<SingleDestination> result = await getBusStopRoute(busStop.number);
-      busStop.destinations = result;
+      busStop.routesFromBusStop = await getDestinationsByBusStopId(busStop.id);
     }
     return busStops;
+  }
+
+  Future<List<TrackRoute>> getDestinationsByBusStopId(var id) async {
+    var query = 'SELECT * FROM Route WHERE Route.r_id IN (SELECT DISTINCT t_route_id FROM Departure JOIN Track ON Departure.d_track_id = Track.t_id'
+        ' WHERE d_bus_stop_id = $id)';
+    final db = await database;
+    var response = await db.rawQuery(query);
+    List<TrackRoute> routes = response.map((c) => TrackRoute.fromJson(c)).toList();
+    return routes;
+  }
+
+  Future<List<Departure>> getDeparturesByBusStopId(var id) async {
+    var query = 'SELECT * FROM Departure JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id JOIN Track ON Departure.d_track_id = Track.t_id '
+        'JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol JOIN Route '
+        'ON Track.t_route_id = Route.r_id WHERE Departure.d_bus_stop_id = $id';
+    final db = await database;
+    var response = await db.rawQuery(query);
+    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    return departures;
+  }
+
+  Future<List<Departure>> getAllDeparturesByDayType(var busStopId, var dayTypes) async {
+    var query = 'SELECT * FROM Departure JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id JOIN Track ON Departure.d_track_id = Track.t_id '
+        'JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol JOIN Route '
+        'ON Track.t_route_id = Route.r_id WHERE Departure.d_bus_stop_id = $busStopId AND Track.t_day_id IN '
+        '($dayTypes) ORDER BY Departure.bus_line_lp';
+    final db = await database;
+    var response = await db.rawQuery(query);
+    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    return departures;
+  }
+
+  Future<List<RouteHolder>> getRouteDetailsByLineId(var lineId) async {
+    var query = 'SELECT * FROM Route WHERE Route.r_bus_line_id = $lineId';
+    final db = await database;
+    var response = await db.rawQuery(query);
+    List<TrackRoute> trackRoutes = response.map((c) => TrackRoute.fromJson(c)).toList();
+    List<RouteHolder> routeHolders = <RouteHolder>[];
+    for (TrackRoute trackRoute in trackRoutes) {
+      List<BusStop> busStops = await getBusStopsByRouteId(trackRoute.id);
+      routeHolders.add(RouteHolder(trackRoute: trackRoute, busStops: busStops));
+    }
+    return routeHolders;
+  }
+
+  Future<List<Departure>> getDeparturesByTrackId(var id) async {
+    var query = 'SELECT * FROM Departure JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id WHERE Departure.d_track_id = \'$id\' ORDER BY '
+        'Departure.d_bus_stop_lp';
+    final db = await database;
+    var response = await db.rawQuery(query);
+    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    return departures;
   }
 
   Future<List<BusStop>> getAllBusStops() async {
@@ -128,10 +185,25 @@ class DatabaseHelper {
     //Using a RAW Query here to fetch the list of data
     var response = await db.rawQuery(query);
     List<BusStop> busStops = response.map((c) => BusStop.fromJson(c)).toList();
-    for (BusStop busStop in busStops) {
-      List<SingleDestination> result = await getBusStopRoute(busStop.number);
-      busStop.destinations = result;
-    }
+    return busStops;
+  }
+
+  Future<List<BusLine>> getAllBusLines() async {
+    var query = 'SELECT * FROM BusLine';
+    final db = await database;
+    //Using a RAW Query here to fetch the list of data
+    var response = await db.rawQuery(query);
+    List<BusLine> busLines = response.map((c) => BusLine.fromJson(c)).toList();
+    return busLines;
+  }
+
+  Future<List<BusStop>> getBusStopsByRouteId(var routeId) async {
+    var query = 'SELECT * FROM RouteConnections JOIN BusStop ON BusStop.bs_id = RouteConnections.rc_bus_stop_id WHERE RouteConnections_rc_route_id '
+        '= $routeId ORDER BY rc_lp';
+    final db = await database;
+    //Using a RAW Query here to fetch the list of data
+    var response = await db.rawQuery(query);
+    List<BusStop> busStops = response.map((c) => BusStop.fromJson(c)).toList();
     return busStops;
   }
 
@@ -141,96 +213,10 @@ class DatabaseHelper {
     //Using a RAW Query here to fetch the list of data
     var response = await db.rawQuery(query);
     List<LastUpdated> lastupdate = response.map((c) => LastUpdated.fromJson(c)).toList();
-    return lastupdate[0];
-  }
-
-  Future<List<SingleDestination>> getBusStopRoute(int id) async {
-    var query = 'SELECT DISTINCT destination_name FROM Destination JOIN Track ON track_destination_id = destination_id JOIN Departure ON '
-        'departure_track_id = track_id JOIN BusStop ON bus_stop_number = departure_bus_stop_number WHERE bus_stop_number = $id';
-    final db = await database;
-    //Using a RAW Query here to fetch the list of data
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => SingleDestination.fromJson(c)).toList();
-    return list;
-  }
-
-  Future<List<Departure>> getDeparturesByBusStopId(int busStopId) async {
-    var query = 'SELECT * FROM Departure JOIN BusStop ON Departure.departure_bus_stop_number = BusStop.bus_stop_number JOIN BusLine ON Departure '
-        '.departure_bus_line_id = BusLine.bus_line_id JOIN Track ON Departure.departure_track_id = Track.track_id JOIN Destination ON Track '
-        '.track_destination_id = Destination.destination_id WHERE Departure.departure_bus_stop_number = $busStopId ORDER BY time_in_sec';
-    final db = await database;
-    //Using a RAW Query here to fetch the list of data
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => Departure.fromJson(c)).toList()..sort((a, b) => a.realTime.compareTo(b.realTime));
-    return list;
-  }
-
-  Future<List<Track>> getAllTracks() async {
-    var query = 'SELECT * FROM Track, Destination WHERE track_destination_id = destination_id ';
-    final db = await database;
-    //Using a RAW Query here to fetch the list of data
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => Track.fromJson(c)).toList();
-    return list;
-  }
-
-  Future<List<Departure>> getDeparturesByTrackId(String trackId) async {
-    var query = 'SELECT * FROM Departure JOIN BusStop ON Departure.departure_bus_stop_number = BusStop.bus_stop_number JOIN BusLine ON Departure '
-        '.departure_bus_line_id = BusLine.bus_line_id JOIN Track ON Departure.departure_track_id = Track.track_id JOIN Destination ON Track '
-        '.track_destination_id = Destination.destination_id WHERE track_id = \'$trackId\' ORDER BY time_in_sec';
-    final db = await database;
-    //Using a RAW Query here to fetch the list of data
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => Departure.fromJson(c)).toList()..sort((a, b) => a.realTime.compareTo(b.realTime));
-    ;
-    return list;
-  }
-
-  Future<List<BusLine>> getAllBusLines() async {
-    var query = 'SELECT * FROM BusLine';
-    final db = await database;
-    //Using a RAW Query here to fetch the list of data
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => BusLine.fromJson(c)).toList();
-    return list;
-  }
-
-  Future<List<Departure>> getAllDeparturesByDayType(int busStopId, String dayTypes) async {
-    var query = 'SELECT * FROM Departure JOIN BusStop ON Departure.departure_bus_stop_number = BusStop.bus_stop_number JOIN BusLine ON Departure '
-        '.departure_bus_line_id = BusLine.bus_line_id JOIN Track ON Departure.departure_track_id = Track.track_id JOIN Destination ON Track '
-        '.track_destination_id = Destination.destination_id WHERE Departure.departure_bus_stop_number = $busStopId AND Track.day_type IN '
-        '($dayTypes) ORDER BY time_in_sec';
-
-    final db = await database;
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => Departure.fromJson(c)).toList()..sort((a, b) => a.realTime.compareTo(b.realTime));
-    return list;
-  }
-
-  Future<List<RouteHolder>> getAllDestinationsByBysLineId(int busLineId) async {
-    var routeHolderList = <RouteHolder>[];
-    var query = 'SELECT * FROM Destination WHERE destination_bus_line_id = $busLineId AND destination_id NOT IN(SELECT ignored_destination_id '
-        'FROM IgnoredDestinations)';
-    final db = await database;
-    //Using a RAW Query here to fetch the list of data
-    var response = await db.rawQuery(query);
-    var list = response.map((c) => Destination.fromJson(c)).toList();
-    for (var destination in list) {
-      var query = 'SELECT * FROM BusStop JOIN Departure ON Departure.departure_bus_stop_number = BusStop.bus_stop_number JOIN Track ON Departure '
-          '.departure_track_id = Track.track_id WHERE Track.track_id = (SELECT Track.track_id FROM Track WHERE Track.track_destination_id = '
-          '${destination.id} LIMIT 1)';
-      final db = await database;
-      //Using a RAW Query here to fetch the list of data
-      var response2 = await db.rawQuery(query);
-      var departureList = response2.map((c) => Departure.fromJson(c)).toList()..sort((a, b) => a.realTime.compareTo(b.realTime));
-      var busStopList = <BusStop>[];
-      for (Departure departure in departureList) {
-        busStopList.add(departure.busStop);
-      }
-      var routeHolder = RouteHolder(destination: destination, busStops: busStopList);
-      //print(routeHolder.toString());
-      routeHolderList.add(routeHolder);
+    if (lastupdate.isEmpty) {
+      var sql = "INSERT INTO LastUpdated (id, year,month,day,hour,min) VALUES(1,0,0,0,0,0)";
+      return LastUpdated(year: 0, month: 0, day: 0, hour: 0, min: 0);
     }
-    return routeHolderList;
+    return lastupdate[0];
   }
 }

@@ -1,29 +1,34 @@
-import 'package:tarbus2021/src/model/single_destination.dart';
+import 'package:latlong/latlong.dart';
+import 'package:tarbus2021/src/model/track_route.dart';
+import 'package:tarbus2021/src/utils/geo_utils.dart';
 
 class BusStop {
+  int id;
   int number;
+  LatLng coords;
   String name;
   String searchName;
-  String type;
-  int isCity;
-  List<SingleDestination> destinations;
+  bool isCity;
 
-  BusStop({this.number, this.name, this.type, this.destinations, this.isCity, this.searchName});
+  List<TrackRoute> routesFromBusStop;
 
-  String get parsedDestinations {
-    var result = StringBuffer();
-    for (var singleDestination in destinations) {
-      result.write(singleDestination.destination);
-      result.write(', ');
+  BusStop({this.id, this.number, this.coords, this.name, this.searchName, this.isCity});
+
+  String get parsedRoutesFromBusStop {
+    StringBuffer result;
+    for (TrackRoute route in routesFromBusStop) {
+      result.write(' ${route.destinationName},');
     }
     return result.toString();
   }
 
-  factory BusStop.fromJson(Map<String, dynamic> json) => new BusStop(
-        number: json['bus_stop_number'],
-        searchName: json['bus_stop_name'],
-        name: json['bus_stop_name'],
-        type: json['bus_stop_type'],
-        isCity: json['is_city'],
-      );
+  factory BusStop.fromJson(Map<String, dynamic> json) {
+    var coords = GeoUtils.parseStringToCoords(json['bs_coords']);
+    var isCity = false;
+    if (json['bs_is_city'] == 1) {
+      isCity = true;
+    }
+    return BusStop(
+        id: json['bs_id'], number: json['bs_number'], coords: coords, name: json['bs_name'], searchName: json['bs_search_name'], isCity: isCity);
+  }
 }

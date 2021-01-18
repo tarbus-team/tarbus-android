@@ -19,7 +19,7 @@ class ScheduleDepartureListItem extends StatelessWidget {
           departure.track.destination.destinationShortcut == '-' ? '' : departure.track.destination.destinationShortcut,
           style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Asap'),
         ),
-        Text(departure.track.dayType == 3 ? '+' : '', style: TextStyle(fontFamily: 'Asap')),
+        Text(departure.track.dayId == 3 ? '+' : '', style: TextStyle(fontFamily: 'Asap')),
       ],
     );
   }

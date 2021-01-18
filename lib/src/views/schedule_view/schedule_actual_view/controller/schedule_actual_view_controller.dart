@@ -28,14 +28,14 @@ class ScheduleActualViewController {
         result.add(departure);
       }
     }
-    if (result.length < 7) {
+    /*if (result.length < 7) {
       for (Departure departure in allDepartures) {
-        if (DateUtils.isTommorow(departure.track.dayType) && departure.track.destination.lastBusStopNumber != id) {
+        if (DateUtils.isTommorow(departure.track.dayId) && departure.track.destination.lastBusStopNumber != id) {
           departure.isTommorow = true;
           result.add(departure);
         }
       }
-    }
+    }*/
     return result;
   }
 }

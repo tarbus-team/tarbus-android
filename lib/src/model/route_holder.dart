@@ -1,10 +1,10 @@
-import 'package:tarbus2021/src/model/destination.dart';
+import 'package:tarbus2021/src/model/track_route.dart';
 
 import 'bus_stop.dart';
 
 class RouteHolder {
-  Destination destination;
+  TrackRoute trackRoute;
   List<BusStop> busStops;
 
-  RouteHolder({this.destination, this.busStops});
+  RouteHolder({this.trackRoute, this.busStops});
 }

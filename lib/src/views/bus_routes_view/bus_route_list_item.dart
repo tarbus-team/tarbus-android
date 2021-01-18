@@ -20,8 +20,8 @@ class _BusRouteListItemState extends State<BusRouteListItem> {
   @override
   Widget build(BuildContext context) {
     String destinationName = Settings.isDevelop
-        ? 'id: ${widget.routeHolder.destination.id} - name: ${widget.routeHolder.destination.name}'
-        : '${widget.routeHolder.destination.name}';
+        ? 'id: ${widget.routeHolder.trackRoute.id} - name: ${widget.routeHolder.trackRoute.destinationName}'
+        : '${widget.routeHolder.trackRoute.destinationName}';
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -55,7 +55,7 @@ class _BusRouteListItemState extends State<BusRouteListItem> {
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Asap'),
                       ),
                       Text(
-                        widget.routeHolder.destination.description,
+                        widget.routeHolder.trackRoute.destinationName,
                         overflow: TextOverflow.clip,
                         style: TextStyle(fontFamily: 'Asap', fontStyle: FontStyle.italic),
                         softWrap: true,
