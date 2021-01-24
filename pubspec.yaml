@@ -35,13 +35,19 @@ dependencies:
   http: ^0.12.2
   connectivity: ^2.0.2
   flutter_map: any
+  # share: 0.6.5+4
+  flutter_markdown: ^0.5.2
+  retrofit: any
+  logger: any
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.8.1
+  retrofit_generator: any
+  build_runner: any
+  dio: 3.0.9
 
 flutter_icons:
   image_path: "assets/logo.png"
