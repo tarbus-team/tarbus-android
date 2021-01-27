@@ -1,55 +1,40 @@
-import 'package:latlong/latlong.dart';
-import 'package:tarbus2021/src/model/entity/track_route.dart';
-import 'package:tarbus2021/src/utils/format_utils.dart';
-
 class BusStop {
   int id;
   int number;
-  LatLng coords;
+  double lat;
+  double lng;
   String name;
   String searchName;
-  bool isCity;
   bool isOptional;
+  String destinations;
 
-  List<TrackRoute> routesFromBusStop;
-
-  BusStop({this.id, this.number, this.coords, this.name, this.searchName, this.isCity, this.isOptional});
-
-  String get parsedRoutesFromBusStop {
-    StringBuffer result = StringBuffer();
-    for (TrackRoute route in routesFromBusStop) {
-      result.write(' ${route.destinationName},');
-    }
-    return result.toString();
-  }
+  BusStop({this.id, this.number, this.lat, this.lng, this.name, this.searchName, this.isOptional, this.destinations});
 
   factory BusStop.fromJson(Map<String, dynamic> json) {
-    var coords = FormatUtils.parseStringToCoords(json['bs_coords']);
-    var isCity = false;
-    if (json['bs_is_city'] == 1) {
-      isCity = true;
-    }
     return BusStop(
-        id: json['bs_id'], number: json['bs_number'], coords: coords, name: json['bs_name'], searchName: json['bs_search_name'], isCity: isCity);
+      id: json['bs_id'],
+      number: json['bs_number'],
+      lat: json['bs_lat'],
+      lng: json['bs_lng'],
+      name: json['bs_name'],
+      searchName: json['bs_search_name'],
+      destinations: json['bs_destinations'],
+    );
   }
 
   factory BusStop.fromJsonRoute(Map<String, dynamic> json) {
-    var coords = FormatUtils.parseStringToCoords(json['bs_coords']);
-    var isCity = false;
     var isOptional = false;
-    if (json['bs_is_city'] == 1) {
-      isCity = true;
-    }
     if (json['rc_is_optional'] == 1) {
       isOptional = true;
     }
     return BusStop(
         id: json['bs_id'],
         number: json['bs_number'],
-        coords: coords,
+        lat: json['bs_lat'],
+        lng: json['bs_lng'],
         name: json['bs_name'],
         searchName: json['bs_search_name'],
-        isCity: isCity,
+        destinations: json['bs_destinations'],
         isOptional: isOptional);
   }
 }

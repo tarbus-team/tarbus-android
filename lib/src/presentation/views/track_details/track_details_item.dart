@@ -36,7 +36,7 @@ class TrackDetailsItemView extends StatelessWidget {
                 flex: 1,
                 child: Image(image: AssetImage(viewController.getTrackIconPath()), height: 35, fit: BoxFit.fitHeight),
               ),
-              Expanded(
+              Expanded(Pustej
                 flex: 7,
                 child: Text(
                   departure.busStop.name,

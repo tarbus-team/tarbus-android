@@ -14,7 +14,7 @@ class ScheduleActualViewController {
   }
 
   bool showDeparture(Departure departure, int id) {
-    if (departure.track.isToday && (currentTime < 3600 || departure.realTime > currentTime)) {
+    if (departure.track.isToday && (currentTime < 3600 || departure.timeInMin > currentTime)) {
       return true;
     }
     return false;

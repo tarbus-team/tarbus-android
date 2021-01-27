@@ -16,6 +16,7 @@ class JsonDatabaseUtils {
         List<String> keysList = <String>[];
         List<List<String>> globalValues = List<List<String>>();
 
+        int valuesCounter = 0;
         for (int j = 0; j < data.length; j++) {
           Map<String, dynamic> record = data[j];
           List<String> valuesList = <String>[];
@@ -27,9 +28,14 @@ class JsonDatabaseUtils {
             valuesList.add('\'$recordKey\'');
           }
           globalValues.add(valuesList);
+          if (valuesCounter >= 100 || j == data.length - 1) {
+            DatabaseHelper.instance
+                .doSQLVoid('INSERT INTO $tableName (${sqlListOfStringToString(keysList)}) VALUES ${sqlArrayOfArrayObjectToString(globalValues)}');
+            globalValues.clear();
+            valuesCounter = 0;
+          }
+          valuesCounter++;
         }
-        DatabaseHelper.instance
-            .doSQL('INSERT INTO $tableName (${sqlListOfStringToString(keysList)}) VALUES ${sqlArrayOfArrayObjectToString(globalValues)}');
       }
     }
 

@@ -4,7 +4,6 @@ import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/settings.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/presentation/views/track_details/track_details_view.dart';
-import 'package:tarbus2021/src/utils/format_utils.dart';
 
 class ScheduleActualItem extends StatelessWidget {
   final Departure departure;
@@ -99,7 +98,7 @@ class ScheduleActualItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          FormatUtils.secToHHmm(departure.timeInSec),
+                          departure.timeInString,
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

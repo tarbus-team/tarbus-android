@@ -65,7 +65,7 @@ class _ScheduleActualViewState extends State<ScheduleActualView> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var departure = snapshot.data[index];
-                  return ScheduleActualItem(departure: departure, busStopId: widget.busStop.number);
+                  return ScheduleActualItem(departure: departure, busStopId: widget.busStop.id);
                 },
               );
             } else {

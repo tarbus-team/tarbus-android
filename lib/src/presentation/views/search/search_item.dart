@@ -40,7 +40,7 @@ class SearchItem extends StatelessWidget {
                   ),
                   Expanded(
                       child: Text(
-                    busStop.parsedRoutesFromBusStop,
+                    busStop.destinations == null ? "-" : busStop.destinations,
                     maxLines: 2,
                     style: TextStyle(color: AppColors.gray, fontStyle: FontStyle.italic),
                   )),

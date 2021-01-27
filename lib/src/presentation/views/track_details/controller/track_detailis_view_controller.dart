@@ -13,7 +13,6 @@ class TrackDetailsViewController {
 
   String getTrackIconPath() {
     String iconPath;
-
     var status = isCurrent ? 'b' : 'g';
     if (index == 0) {
       iconPath = 'assets/icons/first_bus_stop_icon_$status.png';

@@ -6,8 +6,7 @@ import 'bus_stop.dart';
 class Departure {
   int id;
   int busStopLp;
-  int timeInSec;
-  int realTime;
+  int timeInMin;
   String timeInString;
 
   BusStop busStop;
@@ -15,13 +14,12 @@ class Departure {
   BusLine busLine;
   bool isTommorow = false;
 
-  Departure({this.id, this.busStopLp, this.timeInSec, this.realTime, this.timeInString, this.busStop, this.track, this.busLine});
+  Departure({this.id, this.busStopLp, this.timeInMin, this.timeInString, this.busStop, this.track, this.busLine});
 
   Departure.copy(Departure departure) {
     id = departure.id;
     busStopLp = departure.busStopLp;
-    timeInSec = departure.timeInSec;
-    realTime = departure.realTime;
+    timeInMin = departure.timeInMin;
     timeInString = departure.timeInString;
     busStop = departure.busStop;
     track = departure.track;
@@ -29,18 +27,11 @@ class Departure {
   }
 
   factory Departure.fromJson(Map<String, dynamic> json) {
-    var timeInSec = json['d_time_in_sec'];
-    var realTime = timeInSec;
-    if (timeInSec < 3600) {
-      realTime = timeInSec + 86400;
-    }
-
     return Departure(
       id: json['d_id'],
       busStopLp: json['d_bus_stop_lp'],
-      realTime: realTime,
+      timeInMin: json['d_time_in_min'],
       timeInString: json['d_time_string'],
-      timeInSec: timeInSec,
       busStop: BusStop.fromJson(json),
       busLine: BusLine.fromJson(json),
       track: Track.fromJson(json),
@@ -49,6 +40,6 @@ class Departure {
 
   @override
   String toString() {
-    return 'Departure{id: $id, busStopLp: $busStopLp, timeInSec: $timeInSec, realTime: $realTime, timeInString: $timeInString, busStop: $busStop, track: $track, busLine: $busLine}';
+    return 'Departure{id: $id, busStopLp: $busStopLp, realTime: $timeInMin, timeInString: $timeInString, busStop: $busStop, track: $track, busLine: $busLine}';
   }
 }
