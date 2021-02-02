@@ -44,14 +44,14 @@ class ScheduleActualItem extends StatelessWidget {
                   child: Container(
                     color: AppColors.primaryColor,
                     child: Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(4),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ImageIcon(
                             AssetImage("assets/icons/bus_b.png"),
-                            size: 18,
+                            size: 16,
                             color: Colors.white,
                           ),
                           Container(

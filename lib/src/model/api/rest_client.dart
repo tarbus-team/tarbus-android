@@ -6,7 +6,7 @@ import 'package:tarbus2021/src/model/api/response/response_welcome_message.dart'
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: "https://dpajak99.github.io/tarbus-api/v2-0-1/")
+@RestApi(baseUrl: "https://dpajak99.github.io/tarbus-api/v2-1-1/")
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 

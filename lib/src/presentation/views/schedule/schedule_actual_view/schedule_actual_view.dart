@@ -59,15 +59,19 @@ class _ScheduleActualViewState extends State<ScheduleActualView> {
           future: viewController.getAllDepartures(widget.busStop.id),
           builder: (BuildContext context, AsyncSnapshot<List<Departure>> snapshot) {
             if (snapshot.hasData) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var departure = snapshot.data[index];
-                  return ScheduleActualItem(departure: departure, busStopId: widget.busStop.id);
-                },
-              );
+              if (snapshot.data.isEmpty) {
+                return Text("Brak odjazdów dzisiaj i jutro");
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var departure = snapshot.data[index];
+                    return ScheduleActualItem(departure: departure, busStopId: widget.busStop.id);
+                  },
+                );
+              }
             } else {
               return Center(child: CircularProgressIndicator());
             }

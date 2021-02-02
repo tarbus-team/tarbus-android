@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.appStartSettings.hasDialog) {
-        _showDialog();
+        //_showDialog();
       }
     });
   }
@@ -111,6 +111,7 @@ class _HomeViewState extends State<HomeView> {
             }
           },
           child: Markdown(
+            physics: BouncingScrollPhysics(),
             data: message,
             shrinkWrap: true,
           )),

@@ -8,7 +8,6 @@ class ScheduleStaticDestinationDescItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(destination.toString());
     return Text('${destination.scheduleName}');
   }
 }

@@ -9,6 +9,7 @@ import 'package:tarbus2021/src/model/entity/bus_stop.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/model/entity/route_holder.dart';
 import 'package:tarbus2021/src/model/entity/track_route.dart';
+import 'package:tarbus2021/src/utils/string_utils.dart';
 
 class DatabaseHelper {
   // make this a singleton class
@@ -20,8 +21,8 @@ class DatabaseHelper {
   static Database db;
 
   Future<Database> get database async {
-    const NEW_DB_VERSION = 9;
-    //const NEW_DB_VERSION = 3;
+    //const NEW_DB_VERSION = 4;
+    const NEW_DB_VERSION = 5;
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, 'tarbus.db');
 
@@ -90,7 +91,7 @@ class DatabaseHelper {
       'BusStop',
       'BusStopConnection',
       'Departure',
-      'DayType',
+      'Calendar',
       'Destinations',
       'RoadType',
       'Route',
@@ -127,38 +128,30 @@ class DatabaseHelper {
       buffer.write(' bs_search_name LIKE "%$pattern%"');
       counter++;
     }
-    var query = 'SELECT * FROM BusStop WHERE ${buffer.toString()}';
+    var query = 'SELECT * FROM BusStop '
+        'WHERE ${buffer.toString()} '
+        'LIMIT 25';
     var response = await doSQL(query);
     List<BusStop> busStops = response.map((c) => BusStop.fromJson(c)).toList();
     return busStops;
   }
 
-  Future<List<Departure>> getDeparturesByBusStopId(var id) async {
+  Future<List<Departure>> getNextDepartures(int busStopId, String dayTypes, int startFromTime) async {
+    var dayTypesQuery = StringUtils.databaseInQueryBuilder(dayTypes.split(" "));
     var query = 'SELECT * FROM Departure '
         'JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id '
         'JOIN Track ON Departure.d_track_id = Track.t_id '
         'JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id '
         'JOIN Route ON Track.t_route_id = Route.r_id '
         'JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id '
-        'WHERE Departure.d_bus_stop_id = $id';
+        'WHERE Departure.d_bus_stop_id = $busStopId '
+        'AND Track.t_day_types IN ($dayTypesQuery) '
+        'AND Departure.d_time_in_min > $startFromTime '
+        'ORDER BY d_time_in_min';
+    print(query);
 
     var response = await doSQL(query);
-    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList()..sort((a, b) => a.timeInMin.compareTo(b.timeInMin));
-    return departures;
-  }
-
-  Future<List<Departure>> getAllDeparturesByDayType(var busStopId, var dayTypes) async {
-    var query = "SELECT * FROM Departure "
-        "JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id "
-        "JOIN Track ON Departure.d_track_id = Track.t_id "
-        "JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id "
-        "JOIN Route ON Track.t_route_id = Route.r_id "
-        "JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id "
-        "WHERE Departure.d_bus_stop_id = $busStopId "
-        "AND Track.t_day_id IN ($dayTypes)";
-
-    var response = await doSQL(query);
-    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList()..sort((a, b) => a.timeInMin.compareTo(b.timeInMin));
+    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
   }
 
@@ -175,14 +168,12 @@ class DatabaseHelper {
   }
 
   Future<List<Departure>> getDeparturesByTrackId(var id) async {
-    print("id: $id");
     var query = 'SELECT * FROM Departure '
         'JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id '
         'WHERE Departure.d_track_id = \'$id\' '
-        'ORDER BY Departure.d_bus_stop_lp';
+        'ORDER BY Departure.d_time_in_min';
 
     var response = await doSQL(query);
-    print("response: $response");
     List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
   }
@@ -195,7 +186,7 @@ class DatabaseHelper {
   }
 
   Future<List<BusLine>> getAllBusLines() async {
-    var query = 'SELECT * FROM BusLine';
+    var query = 'SELECT * FROM BusLine ORDER BY bl_name';
     var response = await doSQL(query);
     List<BusLine> busLines = response.map((c) => BusLine.fromJson(c)).toList();
     return busLines;
@@ -223,5 +214,51 @@ class DatabaseHelper {
       List<ResponseLastUpdated> lastupdate = response.map((c) => ResponseLastUpdated.fromJson(c)).toList();
       return lastupdate[0];
     }
+  }
+
+  Future<String> getCurrentDayType(String currentDateString) async {
+    var query = 'SELECT c_day_types FROM Calendar WHERE c_date = "$currentDateString"';
+    var response = await doSQL(query);
+    var currentDayTypeObject = response.elementAt(0);
+    return currentDayTypeObject["c_day_types"];
+  }
+
+  Future<List<TrackRoute>> getRoutesByBusStopId(int busStopId) async {
+    var query = 'SELECT * FROM Route '
+        'JOIN RouteConnections ON RouteConnections.rc_route_id = Route.r_id '
+        'JOIN BusLine ON Route.r_bus_line_id = BusLine.bl_id '
+        'WHERE RouteConnections.rc_bus_stop_id = $busStopId '
+        'ORDER BY BusLine.bl_name';
+    var response = await doSQL(query);
+    List<TrackRoute> routes = response.map((c) => TrackRoute.fromJson(c)).toList();
+    return routes;
+  }
+
+  Future<List<Departure>> getDeparturesByRouteAndDay(List<String> dayTypes, TrackRoute trackRoute, int busStopId) async {
+    var queryFragment = StringBuffer();
+    var isFirstIteration = true;
+    for (String dayType in dayTypes) {
+      if (!isFirstIteration) {
+        queryFragment.write("OR ");
+      }
+      queryFragment.write('instr(Track.t_day_types, \'$dayType\') ');
+      isFirstIteration = false;
+    }
+    var query = "SELECT * FROM Departure "
+        "JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id "
+        "JOIN Track ON Departure.d_track_id = Track.t_id "
+        "JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id "
+        "JOIN Route ON Track.t_route_id = Route.r_id "
+        "JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id "
+        "WHERE Departure.d_bus_stop_id = $busStopId "
+        'AND ($queryFragment) '
+        'AND Route.r_id = ${trackRoute.id} '
+        "ORDER BY d_time_in_min";
+
+    print(query);
+
+    var response = await doSQL(query);
+    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    return departures;
   }
 }

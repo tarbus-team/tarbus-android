@@ -1,43 +1,36 @@
+import 'package:intl/intl.dart';
 import 'package:tarbus2021/src/model/database/database_helper.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
-import 'package:tarbus2021/src/utils/date_utils.dart';
+import 'package:tarbus2021/src/utils/time_utils.dart';
 
 class ScheduleActualViewController {
   int currentTime;
 
   ScheduleActualViewController() {
-    currentTime = DateUtils.getCurrentTimeInSec();
-    if (currentTime < 3600) {
-      currentTime += 86400;
+    currentTime = TimeUtils.getCurrentTimeInMin();
+    if (currentTime < 60) {
+      currentTime += 3600;
     }
-    currentTime -= 600;
-  }
-
-  bool showDeparture(Departure departure, int id) {
-    if (departure.track.isToday && (currentTime < 3600 || departure.timeInMin > currentTime)) {
-      return true;
-    }
-    return false;
+    currentTime -= 10;
   }
 
   Future<List<Departure>> getAllDepartures(int id) async {
-    List<Departure> allDepartures = await DatabaseHelper.instance.getDeparturesByBusStopId(id);
-    List<Departure> result = <Departure>[];
-    for (Departure departure in allDepartures) {
-      if (showDeparture(departure, id)) {
-        departure.track.isTommorow = false;
-        result.add(departure);
+    var dateFormatter = new DateFormat('dd-MM-yyyy');
+    var dateToday = new DateTime.now();
+    String formattedDateToday = dateFormatter.format(dateToday);
+    var currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
+
+    List<Departure> allDepartures = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, (TimeUtils.parseTimeToMin(dateToday) - 10));
+    if (allDepartures.length < 10) {
+      dateToday.add(Duration(days: 1));
+      formattedDateToday = dateFormatter.format(dateToday);
+      currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
+      List<Departure> tommorowDepartures = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, 0);
+      for (var departure in tommorowDepartures) {
+        departure.isTommorow = true;
       }
+      allDepartures.addAll(tommorowDepartures);
     }
-    if (result.length < 7) {
-      for (Departure departure in allDepartures) {
-        if (DateUtils.isTommorow(departure.track.dayId)) {
-          Departure tommorowDeparture = Departure.copy(departure);
-          tommorowDeparture.isTommorow = true;
-          result.add(tommorowDeparture);
-        }
-      }
-    }
-    return result;
+    return allDepartures;
   }
 }

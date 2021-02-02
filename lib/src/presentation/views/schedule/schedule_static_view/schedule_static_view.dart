@@ -5,8 +5,6 @@ import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
-import 'package:tarbus2021/src/model/entity/departure.dart';
-import 'package:tarbus2021/src/model/entity/track_departure_holder.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/controller/schedule_static_view_controller.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/schedule_static_item.dart';
 
@@ -20,9 +18,21 @@ class ScheduleStaticView extends StatefulWidget {
 }
 
 class _ScheduleStaticViewState extends State<ScheduleStaticView> {
+  final ScheduleStaticViewController viewController = ScheduleStaticViewController();
+  var loadingStatus = true;
+
   @override
   void initState() {
+    update();
     super.initState();
+  }
+
+  void update() async {
+    if (await viewController.getRoutesByBusStopId(widget.busStop.id)) {
+      setState(() {
+        loadingStatus = false;
+      });
+    }
   }
 
   @override
@@ -78,37 +88,25 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> {
     );
   }
 
-  Widget _buildStaticSchedule(String dayTypes) {
-    final ScheduleStaticViewController viewController = ScheduleStaticViewController();
-
-    return SingleChildScrollView(
-      physics: ScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: AppDimens.margin_view_horizontally, horizontal: 5),
-        child: FutureBuilder<List<Departure>>(
-          future: viewController.getAllDeparturesByDayType(widget.busStop.id, dayTypes),
-          builder: (BuildContext context, AsyncSnapshot<List<Departure>> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: viewController.allLineRouteHolder.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var lineRouteHolder = viewController.allLineRouteHolder[index];
-                  TrackDepartureHolder trackDepartureHolder =
-                      viewController.selectTracksAndDepartures(lineRouteHolder.busLine, lineRouteHolder.route.id);
-                  return ScheduleStaticItem(
-                      busLine: lineRouteHolder.busLine,
-                      selectedDepartures: trackDepartureHolder.selectedDepartures,
-                      destinations: trackDepartureHolder.destinations);
-                },
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
+  Widget _buildStaticSchedule(List<String> dayTypes) {
+    if (loadingStatus) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: AppDimens.margin_view_horizontally, horizontal: 5),
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: viewController.routesFromBusStop.length,
+            itemBuilder: (BuildContext context, int index) {
+              var trackRoute = viewController.routesFromBusStop[index];
+              return ScheduleStaticItem(trackRoute: trackRoute, dayTypes: dayTypes, busStopId: widget.busStop.id);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }

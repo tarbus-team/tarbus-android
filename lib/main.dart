@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: 'Asap',
       ),
+      //home: SplashScreenView(),
       home: SplashScreenView(),
     );
   }

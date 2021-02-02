@@ -50,7 +50,6 @@ class SplashScreenViewController {
     appStartSettings.lastUpdated = await getLastUpdateDate();
     appStartSettings.welcomeMessage = await getWelcomeMessage();
     appStartSettings.dialogContent = await getAlertDialog();
-    print(appStartSettings.dialogContent.toString());
     if (appStartSettings.dialogContent == null || appStartSettings.dialogContent.id == 0) {
       appStartSettings.hasDialog = false;
     } else {

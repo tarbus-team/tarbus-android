@@ -1,37 +1,28 @@
 import 'package:tarbus2021/src/model/entity/track_route.dart';
-import 'package:tarbus2021/src/utils/date_utils.dart';
 
 import 'destination.dart';
 
 class Track {
   String id;
-  String dayInString;
-  int dayId;
+  String companyDayName;
+  String dayType;
 
   Destination destination;
   TrackRoute route;
 
-  bool isToday;
-  bool isTommorow = false;
-
-  Track({this.id, this.dayInString, this.dayId, this.destination, this.isToday, this.route});
+  Track({this.id, this.companyDayName, this.dayType, this.destination, this.route});
 
   factory Track.fromJson(Map<String, dynamic> json) {
-    var dayId = json['t_day_id'];
-    var isToday = DateUtils.isToday(dayId);
-
     return Track(
-      id: json['t_id'],
-      dayInString: json['t_day_string'],
-      dayId: dayId,
-      destination: Destination.fromJson(json),
-      route: TrackRoute.fromJson(json),
-      isToday: isToday,
-    );
+        id: json['t_id'],
+        companyDayName: json['t_day_string'],
+        dayType: json['t_day_types'],
+        destination: Destination.fromJson(json),
+        route: TrackRoute.fromJson(json));
   }
 
   @override
   String toString() {
-    return 'Track{id: $id, dayInString: $dayInString, dayId: $dayId, destination: $destination, route: $route, isToday: $isToday}';
+    return 'Track{id: $id, dayInString: $companyDayName, dayId: $dayType, destination: $destination, route: $route}';
   }
 }

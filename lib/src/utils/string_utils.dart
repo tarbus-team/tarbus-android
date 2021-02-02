@@ -1,7 +1,7 @@
 import 'package:tarbus2021/src/model/entity/unwanted_letter_holder.dart';
 
 class StringUtils {
-  static String removeLowercasePolishLetters( String text ) {
+  static String removeLowercasePolishLetters(String text) {
     List<UnwantedLetterHolder> unwantedLetters = [
       UnwantedLetterHolder('ą', 'a'),
       UnwantedLetterHolder('ć', 'c'),
@@ -18,5 +18,18 @@ class StringUtils {
       text = text.replaceAll(unwantedLetter.oldChar, unwantedLetter.newChar);
     }
     return text;
+  }
+
+  static String databaseInQueryBuilder(var objectArray) {
+    var convertedString = StringBuffer();
+    var isFirstIteration = true;
+    for (var object in objectArray) {
+      if (!isFirstIteration) {
+        convertedString.write(',');
+      }
+      convertedString.write('\'$object\'');
+      isFirstIteration = false;
+    }
+    return convertedString.toString();
   }
 }

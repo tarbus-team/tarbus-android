@@ -15,7 +15,6 @@ class TrackDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("BUSSTOP DUPA 34545345345: $busStopId");
     var currentIndex = -2;
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +47,6 @@ class TrackDetailsView extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   var departure = snapshot.data[index];
                   var parsedIndex = index;
-                  print("busStopId: $busStopId, departureBusStopId: ${departure.busStop.id}");
                   if (busStopId == departure.busStop.id) {
                     currentIndex = index;
                   }
