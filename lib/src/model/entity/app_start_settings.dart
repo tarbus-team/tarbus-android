@@ -8,4 +8,9 @@ class AppStartSettings {
   ResponseWelcomeDialog dialogContent = ResponseWelcomeDialog();
   ResponseWelcomeMessage welcomeMessage = ResponseWelcomeMessage.offline();
   ResponseLastUpdated lastUpdated;
+
+  @override
+  String toString() {
+    return 'AppStartSettings{isOnline: $isOnline, hasDialog: $hasDialog, dialogContent: $dialogContent, welcomeMessage: $welcomeMessage, lastUpdated: $lastUpdated}';
+  }
 }

@@ -20,8 +20,9 @@ class AppString {
 
   // Important widgets
   //*************************************
-  static const String bottomNavigationClosestDepartures = 'Najbliższe odjazdy';
-  static const String bottomNavigationSchedule = 'Rozkład jazdy';
+  static const String bottomNavigationHome = 'Start';
+  static const String bottomNavigationBusLines = 'Linie';
+  static const String bottomNavigationSearch = 'Szukaj';
 
   // Labels
   //************************************

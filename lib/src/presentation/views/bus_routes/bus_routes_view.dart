@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tarbus2021/src/app/app_colors.dart';
-import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/model/entity/route_holder.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/horizontal_line.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/favourites_bus_line_icon.dart';
+import 'package:tarbus2021/src/presentation/views/home/header_title.dart';
 
 import 'bus_route_list_item.dart';
 import 'controller/bus_routes_view_controller.dart';
 
 class BusRoutesView extends StatelessWidget {
+  static const route = '/busLines/busRoute';
   final BusLine busLine;
   final BusRoutesViewController viewController = BusRoutesViewController();
 
@@ -20,47 +21,48 @@ class BusRoutesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${AppString.labelBusLine} - ${busLine.name}',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          FavouritesBusLineIcon(
+            busLineId: busLine.id.toString(),
+          ),
+        ],
+        title: Row(
+          children: [
+            AppBarTitle(
+              title: '${AppString.labelBusLine} - ${busLine.name}',
+            )
+          ],
         ),
-        backgroundColor: AppColors.primaryColor,
       ),
       body: SingleChildScrollView(
         physics: ScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.all(AppDimens.margin_view_horizontally),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                '${AppString.labelDestinationForLine} ${busLine.name}:\n',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              HorizontalLine(),
-              FutureBuilder<List<RouteHolder>>(
-                future: viewController.getAllDeparturesByLineId(busLine.id),
-                builder: (BuildContext context, AsyncSnapshot<List<RouteHolder>> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var routeHolder = snapshot.data[index];
-                        return BusRouteListItem(routeHolder: routeHolder);
-                      },
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            HeaderTitle(
+              title: '${AppString.labelDestinationForLine} ${busLine.name}:',
+            ),
+            FutureBuilder<List<RouteHolder>>(
+              future: viewController.getAllDeparturesByLineId(busLine.id),
+              builder: (BuildContext context, AsyncSnapshot<List<RouteHolder>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var routeHolder = snapshot.data[index];
+                      return BusRouteListItem(routeHolder: routeHolder);
+                    },
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -40,6 +40,8 @@ dependencies:
   retrofit: any
   logger: any
   intl: ^0.16.1
+  provider: ^4.1.2
+  shared_preferences: any
 
 
 dev_dependencies:
@@ -84,13 +86,15 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Asap
-       fonts:
-         - asset: assets/fonts/Asap-Regular.ttf
-         - asset: assets/fonts/Asap-Bold.ttf
-           weight: 700
-         - asset: assets/fonts/Asap-Italic.ttf
-           style: italic
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Thin.ttf
+          weight: 200
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

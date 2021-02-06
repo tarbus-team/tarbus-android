@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:tarbus2021/src/app/app_colors.dart';
-import 'package:tarbus2021/src/app/app_dimens.dart';
-import 'package:tarbus2021/src/app/settings.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
-import 'package:tarbus2021/src/model/entity/departure.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_Indicator.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_actual_view/schedule_actual_item.dart';
 
 import 'controller/schedule_actual_view_controller.dart';
@@ -19,65 +15,55 @@ class ScheduleActualView extends StatefulWidget {
   _ScheduleActualViewState createState() => _ScheduleActualViewState();
 }
 
-class _ScheduleActualViewState extends State<ScheduleActualView> {
+class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticKeepAliveClientMixin<ScheduleActualView> {
+  @override
+  bool get wantKeepAlive => true;
+
   ScheduleActualViewController viewController = ScheduleActualViewController();
+  var isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => update());
+  }
+
+  void update() async {
+    if (await viewController.getAllDepartures(widget.busStop.id)) ;
+    setState(() {
+      isInitialized = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var busStopName = widget.busStop.name;
-    if (Settings.isDevelop) {
-      busStopName = 'ID: ${widget.busStop.number} : $busStopName';
-    }
-    return Scaffold(
-      appBar: AppBar(
-        title: SvgPicture.asset(
-          "assets/logo_tarbus_header.svg",
-          color: Colors.white,
-          height: 35,
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.primaryColor,
-        bottom: PreferredSize(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                busStopName,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            preferredSize: Size.fromHeight(35)),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: _buildActualSchedule(),
       ),
-      body: _buildActualSchedule(),
     );
   }
 
   Widget _buildActualSchedule() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(AppDimens.margin_view_horizontally),
-        child: FutureBuilder<List<Departure>>(
-          future: viewController.getAllDepartures(widget.busStop.id),
-          builder: (BuildContext context, AsyncSnapshot<List<Departure>> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.isEmpty) {
-                return Text("Brak odjazdów dzisiaj i jutro");
-              } else {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var departure = snapshot.data[index];
-                    return ScheduleActualItem(departure: departure, busStopId: widget.busStop.id);
-                  },
-                );
-              }
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
-      ),
-    );
+    if (!isInitialized) {
+      return Container(
+        height: MediaQuery.of(context).size.height / 1.6,
+        child: AppCircularProgressIndicator(),
+      );
+    }
+    if (viewController.departuresList.isEmpty) {
+      return Text("Brak odjazdów dzisiaj i jutro");
+    } else {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: viewController.departuresList.length,
+        itemBuilder: (BuildContext context, int index) {
+          var departure = viewController.departuresList[index];
+          return ScheduleActualItem(departure: departure, busStopId: widget.busStop.id);
+        },
+      );
+    }
   }
 }

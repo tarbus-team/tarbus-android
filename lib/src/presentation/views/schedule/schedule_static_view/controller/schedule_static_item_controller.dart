@@ -8,7 +8,7 @@ class ScheduleStaticItemController {
   List<String> dayTypes;
   TrackRoute trackRoute;
 
-  ScheduleStaticItemController({this.dayTypes, this.trackRoute, this.busStopId});
+  ScheduleStaticItemController({this.trackRoute, this.busStopId});
 
   List<Destination> selectUniqueDepartures(List<Departure> departures) {
     List<Destination> allDestinations = <Destination>[];
@@ -24,6 +24,7 @@ class ScheduleStaticItemController {
   }
 
   Future<List<Departure>> getDeparturesByRouteAndDay() async {
+    print('getDeparturesByRouteAndDay');
     var allDepartures = await DatabaseHelper.instance.getDeparturesByRouteAndDay(dayTypes, trackRoute, busStopId);
     return allDepartures;
   }

@@ -5,6 +5,7 @@ import 'package:tarbus2021/src/utils/time_utils.dart';
 
 class ScheduleActualViewController {
   int currentTime;
+  List<Departure> departuresList;
 
   ScheduleActualViewController() {
     currentTime = TimeUtils.getCurrentTimeInMin();
@@ -14,14 +15,21 @@ class ScheduleActualViewController {
     currentTime -= 10;
   }
 
-  Future<List<Departure>> getAllDepartures(int id) async {
+  Future<bool> getAllDepartures(int id) async {
     var dateFormatter = new DateFormat('dd-MM-yyyy');
     var dateToday = new DateTime.now();
+    var startFromTime = (TimeUtils.parseTimeToMin(dateToday) - 10);
+    if (dateToday.hour == 0) {
+      dateToday = dateToday.subtract(Duration(days: 1));
+      startFromTime = 1430 + dateToday.minute;
+    }
+
     String formattedDateToday = dateFormatter.format(dateToday);
     var currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
 
-    List<Departure> allDepartures = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, (TimeUtils.parseTimeToMin(dateToday) - 10));
-    if (allDepartures.length < 10) {
+    departuresList = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, startFromTime);
+
+    if (departuresList.length < 10) {
       dateToday.add(Duration(days: 1));
       formattedDateToday = dateFormatter.format(dateToday);
       currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
@@ -29,8 +37,8 @@ class ScheduleActualViewController {
       for (var departure in tommorowDepartures) {
         departure.isTommorow = true;
       }
-      allDepartures.addAll(tommorowDepartures);
+      departuresList.addAll(tommorowDepartures);
     }
-    return allDepartures;
+    return true;
   }
 }

@@ -1,23 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
-import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
-import 'package:tarbus2021/src/model/api/response/response_welcome_dialog.dart';
-import 'package:tarbus2021/src/model/entity/app_start_settings.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/horizontal_line.dart';
-import 'package:tarbus2021/src/presentation/views/app_info/app_info_view.dart';
-import 'package:tarbus2021/src/presentation/views/bus_lines/bus_lines_view.dart';
+import 'package:tarbus2021/src/model/entity/bus_line.dart';
+import 'package:tarbus2021/src/model/entity/favourite_bus_stop.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/snackbar_button.dart';
 import 'package:tarbus2021/src/presentation/views/home/controller/home_view_controller.dart';
-import 'package:tarbus2021/src/presentation/views/home/home_button.dart';
-import 'package:tarbus2021/src/presentation/views/search/search_view.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import 'header_title.dart';
 
 class HomeView extends StatefulWidget {
-  final AppStartSettings appStartSettings;
+  static const route = '/home';
 
-  HomeView({this.appStartSettings});
+  HomeView();
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -27,183 +24,113 @@ class _HomeViewState extends State<HomeView> {
   HomeViewController viewController = HomeViewController();
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (widget.appStartSettings.hasDialog) {
-        //_showDialog();
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    String updateTime = widget.appStartSettings.lastUpdated.toString();
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppString.titleMainView),
-        centerTitle: true,
-        backgroundColor: AppColors.primaryColor,
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: AppDimens.margin_view_horizontally),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image(
-                    image: AssetImage('assets/logo_tarbus_menu.png'),
-                    height: 80,
-                  ),
-                ],
-              ),
-              _buildMessageBox(),
-              HorizontalLine(),
-              HomeButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => BusLinesView()));
-                },
-                title: AppString.labelBusLines,
-                image: AssetImage("assets/icons/bus_b.png"),
-              ),
-              HomeButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => SearchView()));
-                },
-                title: AppString.labelSearchBusStop,
-                icon: Icons.search,
-              ),
-              HomeButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => AppInfoView()));
-                },
-                title: AppString.labelInfoAboutApp,
-                icon: Icons.info,
-              ),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppDimens.margin_view_horizontally, vertical: 20),
-                  child: Text('${AppString.labelLastUpdated} $updateTime', style: TextStyle(fontSize: 12))),
-            ],
-          ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Row(
+          children: [
+            SnackbarButton(action: () {
+              Scaffold.of(context).openDrawer();
+            }),
+            AppBarTitle(title: AppString.appInfoApplicationName)
+          ],
         ),
       ),
-    );
-  }
-
-  Widget _buildMessageBox() {
-    var message = widget.appStartSettings.welcomeMessage.message;
-    if (message == null) {
-      message = '';
-    }
-    return Padding(
-      padding: EdgeInsets.all(15),
-      child: FlatButton(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onPressed: () {
-            var href = widget.appStartSettings.welcomeMessage.href;
-            if (href != null && href != '') {
-              launchURL(href);
-            }
-          },
-          child: Markdown(
-            physics: BouncingScrollPhysics(),
-            data: message,
-            shrinkWrap: true,
-          )),
-    );
-  }
-
-  void launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    }
-  }
-
-  void _showDialog() async {
-    ResponseWelcomeDialog dialogContent = widget.appStartSettings.dialogContent;
-    await showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        content: SingleChildScrollView(
-          child: Wrap(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width - 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (dialogContent.imageHref.isNotEmpty)
-                      Image.network(
-                        dialogContent.imageHref,
-                        height: 50,
-                      ),
-                    if (dialogContent.title.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          dialogContent.title,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    if (dialogContent.content.isNotEmpty)
-                      Markdown(
-                        padding: EdgeInsets.all(0),
-                        data: dialogContent.content,
-                        shrinkWrap: true,
-                      ),
-                    if (dialogContent.hasButtonLink)
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            color: AppColors.lightgray,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HeaderTitle(
+              title: 'Ulubione linie autobusowe',
+              actionName: 'Dodaj',
+            ),
+            FutureBuilder<List<BusLine>>(
+              future: viewController.getFavouritesBusLines(),
+              builder: (BuildContext context, AsyncSnapshot<List<BusLine>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var busLine = snapshot.data[index];
+                      return Card(
+                        child: ListTile(
+                          leading: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset('assets/icons/icon_bus.svg', width: 25, height: 25),
+                            ],
                           ),
-                          child: ButtonTheme(
-                            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            minWidth: 0,
-                            height: 0,
-                            child: FlatButton(
-                              onPressed: () {
-                                launchURL(dialogContent.buttonLinkHref);
-                              },
-                              child: Text(
-                                dialogContent.buttonLinkContent,
-                                style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryColor),
-                              ),
-                            ),
-                          ),
+                          title: Text(busLine.name),
+                          subtitle: Text('Michalus'),
+                          trailing: Icon(Icons.more_vert),
                         ),
-                      ),
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+            HeaderTitle(
+              title: 'Ulubione przystanki',
+              actionName: 'Dodaj',
+            ),
+            FutureBuilder<List<FavouriteBusStop>>(
+              future: viewController.getFavouritesBusStops(),
+              builder: (BuildContext context, AsyncSnapshot<List<FavouriteBusStop>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var favBusStop = snapshot.data[index];
+                      return Card(
+                        child: ListTile(
+                          leading: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset('assets/icons/icon_bus_stop.svg', width: 25, height: 25),
+                            ],
+                          ),
+                          title: Text(favBusStop.name),
+                          subtitle: Text(favBusStop.busStop.name),
+                          trailing: Icon(Icons.more_vert),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+            HeaderTitle(title: 'Społeczność'),
+            Card(
+              child: ListTile(
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage('assets/icons/fb_icon_rounded.png'),
+                    ),
                   ],
                 ),
+                title: Text('Jesteśmy na Facebooku'),
+                subtitle: Text('Dołącz do nas'),
+                trailing: RaisedButton(
+                  onPressed: () {},
+                  color: AppColors.primaryColor,
+                  child: Text('Przejdź', style: TextStyle(color: Colors.white)),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        actions: <Widget>[
-          if (dialogContent.hasButtonClose)
-            FlatButton(
-              onPressed: () {
-                viewController.addDialogToList(dialogContent.id);
-                Navigator.of(context).pop();
-              },
-              child: Text(AppString.labelNeverShowAgain),
-            ),
-          if (dialogContent.hasButtonRemindMeLater)
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(AppString.labelRemindMeLater),
-            ),
-        ],
       ),
     );
   }

@@ -14,7 +14,7 @@ class SearchItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(3),
-      color: AppColors.lightgray,
+      color: AppColors.lightGrey,
       child: FlatButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => FactoryScheduleView(busStop: busStop)));

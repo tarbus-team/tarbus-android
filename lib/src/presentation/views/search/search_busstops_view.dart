@@ -1,21 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/snackbar_button.dart';
 import 'package:tarbus2021/src/presentation/views/search/search_item.dart';
 
 import 'controller/search_view_controller.dart';
 
-class SearchView extends StatefulWidget {
-  static const route = '/search';
+class SearchBusStopsView extends StatefulWidget {
+  static const route = '/search/busStops';
   @override
   _SearchBusStopViewState createState() => _SearchBusStopViewState();
 }
 
-class _SearchBusStopViewState extends State<SearchView> {
+class _SearchBusStopViewState extends State<SearchBusStopsView> {
   final SearchViewController viewController = SearchViewController();
 
   @override
@@ -28,16 +27,12 @@ class _SearchBusStopViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Row(
-          children: [
-            SnackbarButton(action: () {
-              Scaffold.of(context).openDrawer();
-            }),
-            AppBarTitle(title: AppString.labelSearch)
-          ],
-        ),
-      ),
+          backgroundColor: AppColors.primaryColor,
+          bottom: PreferredSize(child: _buildSearchField(), preferredSize: Size.fromHeight(kToolbarHeight)),
+          title: Text(
+            AppString.labelSearch,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
       body: _buildBody(),
     );
   }
@@ -76,5 +71,25 @@ class _SearchBusStopViewState extends State<SearchView> {
         ),
       );
     }
+  }
+
+  Widget _buildSearchField() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppDimens.margin_view_horizontally),
+      child: TextField(
+        focusNode: viewController.focusNode,
+        onChanged: (text) {
+          setState(() {
+            viewController.searchBusStop(text);
+          });
+        },
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        decoration: InputDecoration(
+          suffixIcon: Icon(Icons.search, color: Colors.white),
+          hintText: AppString.labelTypeBusStopName,
+          hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
+        ),
+      ),
+    );
   }
 }

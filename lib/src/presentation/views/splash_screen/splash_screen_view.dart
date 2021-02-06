@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
-import 'package:tarbus2021/src/presentation/views/home/home_view.dart';
 
 import 'controller/splash_screen_view_controller.dart';
 
 class SplashScreenView extends StatefulWidget {
+  static const route = '/splash';
+
   @override
   _SplashScreenViewState createState() => _SplashScreenViewState();
 }
@@ -52,8 +53,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   }
 
   void openHomeView() {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute<String>(builder: (context) => HomeView(appStartSettings: viewController.appStartSettings)));
+    Navigator.of(context).pushReplacementNamed('/start', arguments: viewController.appStartSettings);
   }
 
   @override
@@ -144,7 +144,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
           ),
           RaisedButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute<String>(builder: (context) => HomeView()));
+              openHomeView();
             },
             child: Text(AppString.labelContinue),
           ),

@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
-import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_Indicator.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/clear_button.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/controller/schedule_static_view_controller.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/schedule_static_item.dart';
 
@@ -19,12 +18,13 @@ class ScheduleStaticView extends StatefulWidget {
 
 class _ScheduleStaticViewState extends State<ScheduleStaticView> {
   final ScheduleStaticViewController viewController = ScheduleStaticViewController();
+  var displayedDayTypes = ScheduleStaticViewController.WorkDays;
   var loadingStatus = true;
 
   @override
   void initState() {
-    update();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => update());
   }
 
   void update() async {
@@ -37,74 +37,98 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: SvgPicture.asset(
-            "assets/logo_tarbus_header.svg",
-            color: Colors.white,
-            height: 35,
-          ),
-          centerTitle: true,
-          backgroundColor: AppColors.primaryColor,
-          bottom: PreferredSize(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    widget.busStop.name,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
+    return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(8, 15, 8, 8),
+            child: Container(
+              decoration: new BoxDecoration(
+                color: Theme.of(context).accentColor,
+                borderRadius: new BorderRadius.all(Radius.circular(8.0)),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildDayButton(
+                      days: ScheduleStaticViewController.WorkDays,
+                      title: 'Dni robocze',
+                    ),
+                    _buildDayButton(
+                      days: ScheduleStaticViewController.FreeDays,
+                      title: 'Soboty',
+                    ),
+                    _buildDayButton(
+                      days: ScheduleStaticViewController.HolidayDays,
+                      title: 'Święta',
+                      isLast: true,
+                    ),
+                  ],
                 ),
-                TabBar(tabs: [
-                  Text(
-                    AppString.labelWorkDays,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    AppString.labelFreeDays,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    AppString.labelHolyDays,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ]),
-              ],
+              ),
             ),
-            preferredSize: Size.fromHeight(80),
           ),
+          _buildStaticSchedule(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDayButton({List<String> days, String title, bool isLast = false}) {
+    var _isSelected = displayedDayTypes == days;
+    return Expanded(
+      flex: 3,
+      child: Container(
+        decoration: new BoxDecoration(
+          borderRadius: new BorderRadius.all(Radius.circular(8.0)),
         ),
-        body: TabBarView(
-          children: [
-            _buildStaticSchedule(ScheduleStaticViewController.WorkDays),
-            _buildStaticSchedule(ScheduleStaticViewController.FreeDays),
-            _buildStaticSchedule(ScheduleStaticViewController.HolidayDays),
-          ],
+        child: Container(
+          decoration: new BoxDecoration(
+            border: Border(
+              right: BorderSide(width: isLast ? 0 : 1.0, color: Colors.black12),
+            ),
+          ),
+          child: ClearButton(
+            button: RaisedButton(
+              elevation: 0,
+              color: _isSelected ? Colors.white : Theme.of(context).accentColor,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(title),
+              ),
+              onPressed: () {
+                setState(() {
+                  displayedDayTypes = days;
+                });
+              },
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildStaticSchedule(List<String> dayTypes) {
+  Widget _buildStaticSchedule() {
     if (loadingStatus) {
-      return Center(child: CircularProgressIndicator());
+      return Container(
+        height: MediaQuery.of(context).size.height / 1.6,
+        child: AppCircularProgressIndicator(),
+      );
     } else {
-      return SingleChildScrollView(
-        physics: ScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: AppDimens.margin_view_horizontally, horizontal: 5),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: viewController.routesFromBusStop.length,
-            itemBuilder: (BuildContext context, int index) {
-              var trackRoute = viewController.routesFromBusStop[index];
-              return ScheduleStaticItem(trackRoute: trackRoute, dayTypes: dayTypes, busStopId: widget.busStop.id);
-            },
-          ),
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: AppDimens.margin_view_horizontally, horizontal: 5),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: viewController.routesFromBusStop.length,
+          itemBuilder: (BuildContext context, int index) {
+            var trackRoute = viewController.routesFromBusStop[index];
+            return ScheduleStaticItem(trackRoute: trackRoute, dayTypes: displayedDayTypes, busStopId: widget.busStop.id);
+          },
         ),
       );
     }

@@ -4,6 +4,8 @@ import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/model/entity/destination.dart';
 import 'package:tarbus2021/src/model/entity/track_route.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/nothing.dart';
+import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/controller/schedule_static_view_controller.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/schedule_departure_list_item.dart';
 
 import 'controller/schedule_static_item_controller.dart';
@@ -25,92 +27,115 @@ class _ScheduleStaticItemState extends State<ScheduleStaticItem> with TickerProv
 
   @override
   void initState() {
-    viewController = ScheduleStaticItemController(dayTypes: widget.dayTypes, trackRoute: widget.trackRoute, busStopId: widget.busStopId);
+    viewController = ScheduleStaticItemController(trackRoute: widget.trackRoute, busStopId: widget.busStopId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(2.5),
-      child: Container(
-        color: AppColors.lightgray,
-        child: ButtonTheme(
-          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          minWidth: 0,
-          height: 0,
-          child: FlatButton(
-            padding: EdgeInsets.all(0),
-            onPressed: () {
+    viewController.dayTypes = widget.dayTypes;
+    var busLineName = widget.trackRoute.busLine.name;
+    if (busLineName.length == 3) {
+      busLineName = "$busLineName  ";
+    }
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            onTap: () {
               setState(() {
                 visibilityStatus = !visibilityStatus;
               });
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+            contentPadding: EdgeInsets.all(0),
+            leading: _buildBusLineBox(busLineName),
+            title: _buildDestinationNameBux(widget.trackRoute.destinationName),
+            trailing: Padding(
+              padding: EdgeInsets.all(8),
+              child: Icon(
+                _buildDropdownIcon(),
+              ),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            child: AnimatedSize(
+              vsync: this,
+              alignment: Alignment.topCenter,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.fastOutSlowIn,
+              child: _buildScheduleTable(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _buildDropdownIcon() {
+    if (visibilityStatus) {
+      return Icons.keyboard_arrow_up;
+    }
+    return Icons.keyboard_arrow_down;
+  }
+
+  Widget _buildDestinationNameBux(String destinationName) {
+    return Text(
+      destinationName,
+      style: TextStyle(fontSize: 15),
+    );
+  }
+
+  Widget _buildBusLineBox(String busLineName) {
+    var _dayName = 'Robocze';
+    if (widget.dayTypes == ScheduleStaticViewController.FreeDays) {
+      _dayName = 'Soboty';
+    } else if (widget.dayTypes == ScheduleStaticViewController.HolidayDays) {
+      _dayName = 'Święta';
+    }
+    return Container(
+      width: 85.0,
+      height: 42.0,
+      decoration: new BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: new BorderRadius.all(Radius.circular(8.0)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(7),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 40,
-                      color: AppColors.primaryColor,
-                      child: Padding(
-                        padding: EdgeInsets.all(7),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ImageIcon(
-                              AssetImage("assets/icons/bus_b.png"),
-                              size: 19,
-                              color: Colors.white,
-                            ),
-                            Container(
-                              width: 5,
-                            ),
-                            Text(
-                              widget.trackRoute.busLine.name,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 5,
-                    ),
-                    Container(
-                      child: Text(
-                        widget.trackRoute.destinationName,
-                        maxLines: 2,
-                        overflow: TextOverflow.clip,
-                        softWrap: true,
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                  ],
+                Icon(
+                  Icons.event_note_outlined,
+                  color: Colors.white,
+                  size: 16,
                 ),
                 Container(
-                  width: double.infinity,
-                  child: AnimatedSize(
-                    vsync: this,
-                    alignment: Alignment.topCenter,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.fastOutSlowIn,
-                    child: _buildScheduleTable(),
+                  width: 4,
+                ),
+                Text(
+                  busLineName,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
-          ),
+            Text(
+              _dayName,
+              style: TextStyle(fontSize: 10.0, color: Colors.white),
+            ),
+          ],
         ),
       ),
     );
@@ -118,54 +143,57 @@ class _ScheduleStaticItemState extends State<ScheduleStaticItem> with TickerProv
 
   Widget _buildScheduleTable() {
     if (visibilityStatus) {
-      return Container(
-        width: double.infinity,
-        child: FutureBuilder<List<Departure>>(
-          future: viewController.getDeparturesByRouteAndDay(),
-          builder: (BuildContext context, AsyncSnapshot<List<Departure>> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.isEmpty) {
-                return Text('Brak odjazdów w tym dniu');
+      return Padding(
+        padding: EdgeInsets.all(20),
+        child: Container(
+          width: double.infinity,
+          child: FutureBuilder<List<Departure>>(
+            future: viewController.getDeparturesByRouteAndDay(),
+            builder: (BuildContext context, AsyncSnapshot<List<Departure>> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.isEmpty) {
+                  return Text('Brak odjazdów w tym dniu');
+                }
+                List<Destination> destinations = viewController.selectUniqueDepartures(snapshot.data);
+                return Column(
+                  children: [
+                    GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5, childAspectRatio: 2.5),
+                      physics: NeverScrollableScrollPhysics(),
+                      // to disable GridView's scrolling
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var departure = snapshot.data[index];
+                        return ScheduleDepartureListItem(departure: departure);
+                      },
+                    ),
+                    Container(
+                      height: 20.0,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: destinations.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var destination = destinations[index];
+                        return Text(
+                          destination.scheduleName,
+                          style: TextStyle(color: AppColors.darkGrey2),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              } else {
+                return Nothing();
               }
-              List<Destination> destinations = viewController.selectUniqueDepartures(snapshot.data);
-              return Column(
-                children: [
-                  GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5, childAspectRatio: 2.5),
-                    physics: NeverScrollableScrollPhysics(),
-                    // to disable GridView's scrolling
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var departure = snapshot.data[index];
-                      return ScheduleDepartureListItem(departure: departure);
-                    },
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: destinations.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var destination = destinations[index];
-                      return Text(destination.scheduleName);
-                    },
-                  ),
-                ],
-              );
-            } else {
-              return Container(
-                width: 0,
-                height: 0,
-              );
-            }
-          },
+            },
+          ),
         ),
       );
     } else {
-      return Container(
-        width: 0,
-        height: 0,
-      );
+      return Nothing();
     }
   }
 }
