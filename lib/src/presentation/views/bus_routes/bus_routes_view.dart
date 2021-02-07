@@ -5,7 +5,6 @@ import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/model/entity/route_holder.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/favourites_bus_line_icon.dart';
-import 'package:tarbus2021/src/presentation/views/home/header_title.dart';
 
 import 'bus_route_list_item.dart';
 import 'controller/bus_routes_view_controller.dart';
@@ -41,8 +40,12 @@ class BusRoutesView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            HeaderTitle(
-              title: '${AppString.labelDestinationForLine} ${busLine.name}:',
+            ListTile(
+              title: Text(
+                'Kierunki dla linii ${busLine.name}',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text('Michalus'),
             ),
             FutureBuilder<List<RouteHolder>>(
               future: viewController.getAllDeparturesByLineId(busLine.id),

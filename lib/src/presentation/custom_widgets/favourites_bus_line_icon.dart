@@ -16,13 +16,18 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
   @override
   void initState() {
     update();
-
     super.initState();
   }
 
   void update() async {
     _isFavourite = await FavouritesBusLineUtils.checkIfExist(widget.busLineId);
     setState(() {});
+  }
+
+  @override
+  void didUpdateWidget(covariant FavouritesBusLineIcon oldWidget) {
+    update();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -33,6 +38,9 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
         onPressed: () async {
           if (await FavouritesBusLineUtils.removeFavouriteBusLine(widget.busLineId)) {
             setState(() {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('Usunięto z ulubionych!'),
+              ));
               _isFavourite = false;
             });
           }
@@ -45,6 +53,9 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
           if (await FavouritesBusLineUtils.addFavouriteBusLine(widget.busLineId)) {
             setState(() {
               _isFavourite = true;
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('Dodano do ulubionych!'),
+              ));
             });
           }
         },

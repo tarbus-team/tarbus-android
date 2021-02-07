@@ -76,40 +76,50 @@ class _BusRouteListItemState extends State<BusRouteListItem> with TickerProvider
     if (isTrackVisible) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: AppDimens.margin_view_horizontally, vertical: 15.0),
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.routeHolder.busStops.length,
-          itemBuilder: (BuildContext context, int index) {
-            var busStop = widget.routeHolder.busStops[index];
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Trasa',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.routeHolder.busStops.length,
+              itemBuilder: (BuildContext context, int index) {
+                var busStop = widget.routeHolder.busStops[index];
 
-            return ClearButton(
-              button: FlatButton(
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).pushNamed(FactoryScheduleView.route, arguments: busStop);
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: EdgeInsets.all(0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image(
-                        image: AssetImage(viewController.getBusStopIconPath(index, widget.routeHolder.busStops.length)),
-                        height: 30,
-                        fit: BoxFit.fitHeight),
-                    Container(
-                      width: 8,
+                return ClearButton(
+                  button: FlatButton(
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).pushNamed(FactoryScheduleView.route, arguments: busStop);
+                    },
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: EdgeInsets.all(0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                            image: AssetImage(viewController.getBusStopIconPath(index, widget.routeHolder.busStops.length)),
+                            height: 30,
+                            fit: BoxFit.fitHeight),
+                        Container(
+                          width: 8,
+                        ),
+                        _getBusStopName(busStop.name, busStop.isOptional),
+                      ],
                     ),
-                    _getBusStopName(busStop.name, busStop.isOptional),
-                  ],
-                ),
-              ),
-            );
-          },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       );
     } else {

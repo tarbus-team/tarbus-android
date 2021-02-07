@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/model/database/database_helper.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/model/entity/track.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
 import 'package:tarbus2021/src/presentation/views/track_details/track_details_item.dart';
 
 class TrackDetailsView extends StatelessWidget {
@@ -18,23 +17,10 @@ class TrackDetailsView extends StatelessWidget {
     var currentIndex = -2;
     return Scaffold(
       appBar: AppBar(
-        title: SvgPicture.asset(
-          "assets/logo_tarbus_header.svg",
-          color: Colors.white,
-          height: 35,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Row(
+          children: [AppBarTitle(title: 'Trasa wybranego odjazdu')],
         ),
-        centerTitle: true,
-        backgroundColor: AppColors.primaryColor,
-        bottom: PreferredSize(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                track.destination.directionBoardName,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            preferredSize: Size.fromHeight(40)),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 10),

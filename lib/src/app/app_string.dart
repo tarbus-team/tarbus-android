@@ -45,8 +45,10 @@ class AppString {
   static const String labelRemindMeLater = 'Przypomnij mi później';
   static const String labelSearch = 'Szukaj';
   static const String labelSearchBusStop = 'Szukaj przystanku';
-  static const String labelStartWriteToSearch = 'Zacznij wpisywać tekst aby wyszukać przystanek';
-  static const String labelTypeBusStopName = 'Wpisz nazwę przystanku';
+  static const String labelStartWriteToSearchBusStop = 'Zacznij wpisywać tekst aby wyszukać przystanek';
+  static const String labelStartWriteToSearchBusLine = 'Zacznij wpisywać tekst aby wyszukać linie';
+  static const String labelSearchInputBusStop = 'Wpisz nazwę przystanku';
+  static const String labelSearchInputBusLine = 'Wpisz nazwę linii';
   static const String labelWorkDays = 'Dni robocze';
 
   // Texts

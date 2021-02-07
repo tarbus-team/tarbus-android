@@ -135,6 +135,24 @@ class DatabaseHelper {
     return busStops;
   }
 
+  Future<List<BusLine>> getSearchedBusLines(List<String> patterns) async {
+    var buffer = new StringBuffer();
+    var counter = 0;
+    for (String pattern in patterns) {
+      if (counter > 0) {
+        buffer.write(" AND ");
+      }
+      buffer.write(' bl_name LIKE "%$pattern%"');
+      counter++;
+    }
+    var query = 'SELECT * FROM BusLine '
+        'WHERE ${buffer.toString()} '
+        'LIMIT 25';
+    var response = await doSQL(query);
+    List<BusLine> busLines = response.map((c) => BusLine.fromJson(c)).toList();
+    return busLines;
+  }
+
   Future<List<Departure>> getNextDepartures(int busStopId, String dayTypes, int startFromTime) async {
     var dayTypesQuery = dayTypes.split(" ");
     var queryFragment = StringBuffer();

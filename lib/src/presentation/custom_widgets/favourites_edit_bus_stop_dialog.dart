@@ -7,16 +7,17 @@ import 'package:tarbus2021/src/utils/favourites_bus_stop_utils.dart';
 
 import 'appbar_title.dart';
 
-class FavouritesBusStopDialog extends StatefulWidget {
+class FavouritesEditBusStopDialog extends StatefulWidget {
   final BusStop busStop;
+  final String oldName;
 
-  const FavouritesBusStopDialog({Key key, this.busStop}) : super(key: key);
+  const FavouritesEditBusStopDialog({Key key, this.busStop, this.oldName}) : super(key: key);
 
   @override
-  _FavouritesBusStopDialogState createState() => _FavouritesBusStopDialogState();
+  _FavouritesEditBusStopDialogState createState() => _FavouritesEditBusStopDialogState();
 }
 
-class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
+class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialog> {
   var _busStopNameController = TextEditingController();
   var _inputNode = FocusNode();
   var _isFirstOpen = true;
@@ -54,13 +55,13 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
           icon: Icon(Icons.close),
           onPressed: () {
             closeKeyboard();
-            Navigator.of(context).pop(false);
+            Navigator.of(context).pop(true);
           },
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
           children: [
-            AppBarTitle(title: 'Dodaj do ulubionych'),
+            AppBarTitle(title: 'Edycja'),
           ],
         ),
         actions: [
@@ -69,7 +70,7 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
               if (!_validated) {
                 return;
               }
-              if (await FavouritesBusStopUtils.addFavouriteBusStop(widget.busStop.id.toString(), _busStopNameController.text)) {
+              if (await FavouritesBusStopUtils.editName(widget.busStop.id.toString(), _busStopNameController.text)) {
                 closeKeyboard();
                 Navigator.of(context).pop(true);
               }
@@ -95,6 +96,12 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
               ],
             ),
             Text('Lokalizacja: ${widget.busStop.lat}, ${widget.busStop.lng}'),
+            Container(
+              height: 10.0,
+            ),
+            Text(
+              'Stara nazwa: ${widget.oldName}',
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Container(
@@ -115,7 +122,7 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
                       borderRadius: new BorderRadius.circular(8.0),
                       borderSide: new BorderSide(),
                     ),
-                    labelText: 'Wpisz swoją nazwę dla przystanku',
+                    labelText: 'Wpisz nową nazwę',
                   ),
                 ),
               ),

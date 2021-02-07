@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/clear_button.dart';
@@ -15,7 +16,7 @@ class BusLineListItem extends StatelessWidget {
     return ClearButton(
       button: RaisedButton(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
         color: AppColors.primaryColor,
         onPressed: () {
@@ -37,10 +38,9 @@ class BusLineListItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ImageIcon(
-              AssetImage("assets/icons/bus_w.png"),
+            SvgPicture.asset(
+              "assets/icons/icon_bus.svg",
               color: Colors.white,
-              size: 22,
             ),
             Container(
               width: 14,

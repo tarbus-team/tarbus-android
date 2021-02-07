@@ -11,8 +11,8 @@ class HomeViewController {
   Future<List<FavouriteBusStop>> getFavouritesBusStops() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String favourites = (prefs.getString('FAVOURITE_BUS_STOPS') ?? null);
-
-    if (favourites == null) {
+    print('fav: $favourites');
+    if (favourites == null || favourites.isEmpty) {
       return <FavouriteBusStop>[];
     }
     var list = <FavouriteBusStop>[];

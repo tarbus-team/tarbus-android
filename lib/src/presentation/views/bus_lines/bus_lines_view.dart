@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
@@ -28,27 +27,50 @@ class BusLinesView extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(AppDimens.margin_view_horizontally),
+        padding: EdgeInsets.all(8),
         child: Column(
           children: [
-            Expanded(
-              child: FutureBuilder<List<BusLine>>(
-                future: viewController.getBusLines(),
-                builder: (BuildContext context, AsyncSnapshot<List<BusLine>> snapshot) {
-                  if (snapshot.hasData) {
-                    return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: 10, mainAxisSpacing: 10, crossAxisCount: 3, childAspectRatio: 2.5),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var busLine = snapshot.data[index];
-                        return BusLineListItem(busLine: busLine);
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage(
+                            'assets/company_data/logo_michalus.png',
+                          ),
+                          height: 35.0,
+                          width: 35.0,
+                        ),
+                      ],
+                    ),
+                    title: Text('Michalus'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: FutureBuilder<List<BusLine>>(
+                      future: viewController.getBusLines(),
+                      builder: (BuildContext context, AsyncSnapshot<List<BusLine>> snapshot) {
+                        if (snapshot.hasData) {
+                          return GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisSpacing: 10, mainAxisSpacing: 10, crossAxisCount: 3, childAspectRatio: 2.5),
+                            itemCount: snapshot.data.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              var busLine = snapshot.data[index];
+                              return BusLineListItem(busLine: busLine);
+                            },
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
                       },
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

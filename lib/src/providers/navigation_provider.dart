@@ -100,8 +100,8 @@ class NavigationProvider extends ChangeNotifier {
 
   /// Set currently visible tab.
   void setTab(int tab) {
+    final currentNavigatorState = currentScreen.navigatorState.currentState;
     if (tab == currentTabIndex) {
-      final currentNavigatorState = currentScreen.navigatorState.currentState;
       if (currentNavigatorState.canPop()) {
         while (currentNavigatorState.canPop()) {
           currentNavigatorState.pop();
@@ -109,6 +109,9 @@ class NavigationProvider extends ChangeNotifier {
       }
       notifyListeners();
     } else {
+      while (currentNavigatorState.canPop()) {
+        currentNavigatorState.pop();
+      }
       _currentScreenIndex = tab;
       notifyListeners();
     }
