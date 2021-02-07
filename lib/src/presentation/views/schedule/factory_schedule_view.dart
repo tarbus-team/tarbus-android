@@ -82,6 +82,7 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
             busStop: widget.busStop,
           ),
           ScheduleStaticView(
+            parentTabController: _tabController,
             busStop: widget.busStop,
           ),
         ],
