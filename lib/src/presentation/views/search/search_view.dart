@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/snackbar_button.dart';
@@ -40,17 +41,17 @@ class _SearchBusStopViewState extends State<SearchView> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SearchBusLineView(),
+                    builder: (context) => SearchBusStopView(),
                   ),
                 );
               },
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.search_outlined),
+                  Icon(Icons.search_outlined, color: AppColors.instance(context).iconColor),
                 ],
               ),
-              title: Text('Wyszukaj linie autobusowe'),
+              title: Text('Wyszukaj przystanki'),
               subtitle: Text('Kliknij aby wyszukać'),
             ),
           ),
@@ -60,17 +61,20 @@ class _SearchBusStopViewState extends State<SearchView> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SearchBusStopView(),
+                    builder: (context) => SearchBusLineView(),
                   ),
                 );
               },
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.search_outlined),
+                  Icon(
+                    Icons.search_outlined,
+                    color: AppColors.instance(context).iconColor,
+                  ),
                 ],
               ),
-              title: Text('Wyszukaj przystanki'),
+              title: Text('Wyszukaj linie autobusowe'),
               subtitle: Text('Kliknij aby wyszukać'),
             ),
           ),

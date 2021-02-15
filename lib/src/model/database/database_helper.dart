@@ -159,9 +159,9 @@ class DatabaseHelper {
     var isFirstIteration = true;
     for (String dayType in dayTypesQuery) {
       if (!isFirstIteration) {
-        queryFragment.write("OR ");
+        queryFragment.write("OR Track.t_day_types ");
       }
-      queryFragment.write('instr(Track.t_day_types, \'$dayType\') ');
+      queryFragment.write('LIKE \'%$dayType%\' ');
       isFirstIteration = false;
     }
     var query = 'SELECT * FROM Departure '
@@ -171,7 +171,7 @@ class DatabaseHelper {
         'JOIN Route ON Track.t_route_id = Route.r_id '
         'JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id '
         'WHERE Departure.d_bus_stop_id = $busStopId '
-        'AND ${queryFragment.toString()} '
+        'AND (Track.t_day_types ${queryFragment.toString()}) '
         'AND Departure.d_time_in_min > $startFromTime '
         'ORDER BY d_time_in_min';
 
@@ -265,9 +265,9 @@ class DatabaseHelper {
     var isFirstIteration = true;
     for (String dayType in dayTypes) {
       if (!isFirstIteration) {
-        queryFragment.write("OR ");
+        queryFragment.write("OR Track.t_day_types");
       }
-      queryFragment.write('instr(Track.t_day_types, \'$dayType\') ');
+      queryFragment.write(' LIKE \'%$dayType%\' ');
       isFirstIteration = false;
     }
     var query = "SELECT * FROM Departure "
@@ -277,7 +277,7 @@ class DatabaseHelper {
         "JOIN Route ON Track.t_route_id = Route.r_id "
         "JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id "
         "WHERE Departure.d_bus_stop_id = $busStopId "
-        'AND ($queryFragment) '
+        'AND (Track.t_day_types $queryFragment) '
         'AND Route.r_id = ${trackRoute.id} '
         "ORDER BY d_time_in_min";
 

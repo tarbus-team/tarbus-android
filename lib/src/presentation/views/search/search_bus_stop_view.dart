@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
@@ -70,7 +71,15 @@ class _SearchBusStopViewState extends State<SearchBusStopView> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.search_outlined, color: Colors.black12, size: 80.0),
+            SvgPicture.asset(
+              'assets/icons/icon_bus_stop.svg',
+              width: 80,
+              height: 80,
+              color: AppColors.instance(context).iconColor,
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Text(
               AppString.labelStartWriteToSearchBusStop,
               maxLines: 2,
@@ -91,7 +100,7 @@ class _SearchBusStopViewState extends State<SearchBusStopView> {
           viewController.startSearch(text);
           update(text);
         },
-        cursorColor: AppColors.primaryColor,
+        cursorColor: Theme.of(context).primaryColor,
         showCursor: true,
         style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0),
         decoration: InputDecoration(

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/clear_button.dart';
 import 'package:tarbus2021/src/presentation/views/bus_routes/bus_routes_view.dart';
@@ -18,7 +17,7 @@ class BusLineListItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        color: AppColors.primaryColor,
+        color: Theme.of(context).primaryColor,
         onPressed: () {
           Navigator.of(context).push(
             PageRouteBuilder(

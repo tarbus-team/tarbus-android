@@ -1,7 +1,8 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/model/database/database_helper.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/model/entity/favourite_bus_stop.dart';
+import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class HomeViewController {
   void addDialogToList(var id) {
@@ -9,30 +10,20 @@ class HomeViewController {
   }
 
   Future<List<FavouriteBusStop>> getFavouritesBusStops() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String favourites = (prefs.getString('FAVOURITE_BUS_STOPS') ?? null);
-    print('fav: $favourites');
-    if (favourites == null || favourites.isEmpty) {
-      return <FavouriteBusStop>[];
+    var favourites = await SharedPreferencesUtils.getSharedListString(AppConsts.SharedPreferencesFavStop);
+    var favList = <FavouriteBusStop>[];
+
+    for (String favourite in favourites) {
+      var favItem = favourite.split(', ');
+      var _busStop = await DatabaseHelper.instance.getFavouritesBusStop(favItem[0]);
+      favList.add(FavouriteBusStop(name: favItem[1], busStop: _busStop));
     }
-    var list = <FavouriteBusStop>[];
-    var favouritesList = favourites.split(',');
-    for (int i = 0; i < favouritesList.length; i++) {
-      if (i % 2 == 0) {
-        print(i);
-        var _busStop = await DatabaseHelper.instance.getFavouritesBusStop(favouritesList[i]);
-        list.add(FavouriteBusStop(name: favouritesList[i + 1], busStop: _busStop));
-      }
-    }
-    return list;
+
+    return favList;
   }
 
   Future<List<BusLine>> getFavouritesBusLines() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String favourites = (prefs.getString('FAVOURITE_BUS_LINES') ?? null);
-    if (favourites == null) {
-      return <BusLine>[];
-    }
-    return await DatabaseHelper.instance.getFavouritesBusLines(favourites);
+    var favourites = await SharedPreferencesUtils.getSharedListString(AppConsts.SharedPreferencesFavLine);
+    return await DatabaseHelper.instance.getFavouritesBusLines(favourites.join(','));
   }
 }

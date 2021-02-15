@@ -8,6 +8,6 @@ class ClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme(padding: EdgeInsets.all(0), materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, minWidth: 0, height: 0, child: button);
+    return ButtonTheme(padding: EdgeInsets.zero, materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, minWidth: 0, height: 0, child: button);
   }
 }

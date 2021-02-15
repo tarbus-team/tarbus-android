@@ -37,12 +37,21 @@ class BusLinesView extends StatelessWidget {
                     leading: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Image(
-                          image: AssetImage(
-                            'assets/company_data/logo_michalus.png',
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          height: 35.0,
-                          width: 35.0,
+                          child: Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Image(
+                              image: AssetImage(
+                                'assets/company_data/logo_michalus.png',
+                              ),
+                              height: 35.0,
+                              width: 35.0,
+                            ),
+                          ),
                         ),
                       ],
                     ),

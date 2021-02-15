@@ -5,7 +5,7 @@ class HorizontalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.lineColor,
+      color: AppColors.instance(context).lineColor,
       height: 1,
     );
   }

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
-import 'package:tarbus2021/src/utils/favourites_bus_stop_utils.dart';
+import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 import 'appbar_title.dart';
 
@@ -69,7 +70,8 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
               if (!_validated) {
                 return;
               }
-              if (await FavouritesBusStopUtils.addFavouriteBusStop(widget.busStop.id.toString(), _busStopNameController.text)) {
+              if (await SharedPreferencesUtils.add(
+                  AppConsts.SharedPreferencesFavStop, '${widget.busStop.id.toString()}, ${_busStopNameController.text}')) {
                 closeKeyboard();
                 Navigator.of(context).pop(true);
               }
@@ -107,7 +109,7 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
                   controller: _busStopNameController,
                   validator: (text) => validate(text),
                   inputFormatters: [
-                    LengthLimitingTextInputFormatter(15),
+                    LengthLimitingTextInputFormatter(20),
                   ],
                   decoration: InputDecoration(
                     fillColor: Colors.white,

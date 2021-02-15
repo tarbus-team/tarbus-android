@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tarbus2021/src/utils/favourites_bus_line_utils.dart';
+import 'package:tarbus2021/src/app/app_consts.dart';
+import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class FavouritesBusLineIcon extends StatefulWidget {
   final String busLineId;
@@ -20,7 +21,7 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
   }
 
   void update() async {
-    _isFavourite = await FavouritesBusLineUtils.checkIfExist(widget.busLineId);
+    _isFavourite = await SharedPreferencesUtils.checkIfExist(AppConsts.SharedPreferencesFavLine, widget.busLineId);
     setState(() {});
   }
 
@@ -34,9 +35,11 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
   Widget build(BuildContext context) {
     if (_isFavourite) {
       return IconButton(
-        icon: Icon(Icons.favorite),
+        icon: Icon(
+          Icons.favorite,
+        ),
         onPressed: () async {
-          if (await FavouritesBusLineUtils.removeFavouriteBusLine(widget.busLineId)) {
+          if (await SharedPreferencesUtils.remove(AppConsts.SharedPreferencesFavLine, widget.busLineId)) {
             setState(() {
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text('Usunięto z ulubionych!'),
@@ -48,9 +51,11 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
       );
     } else {
       return IconButton(
-        icon: Icon(Icons.favorite_border),
+        icon: Icon(
+          Icons.favorite_border,
+        ),
         onPressed: () async {
-          if (await FavouritesBusLineUtils.addFavouriteBusLine(widget.busLineId)) {
+          if (await SharedPreferencesUtils.add(AppConsts.SharedPreferencesFavLine, widget.busLineId)) {
             setState(() {
               _isFavourite = true;
               Scaffold.of(context).showSnackBar(SnackBar(

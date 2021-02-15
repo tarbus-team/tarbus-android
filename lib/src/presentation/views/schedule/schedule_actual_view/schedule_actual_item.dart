@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/presentation/views/track_details/track_details_view.dart';
@@ -27,19 +28,19 @@ class ScheduleActualItem extends StatelessWidget {
         },
         visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         contentPadding: EdgeInsets.all(0),
-        leading: _buildBusLineBox(busLineName),
-        trailing: _buildDepartureTimeBox(),
+        leading: _buildBusLineBox(context, busLineName),
+        trailing: _buildDepartureTimeBox(context),
         title: _buildDepartureNameBox(),
       ),
     );
   }
 
-  Widget _buildBusLineBox(String busLineName) {
+  Widget _buildBusLineBox(BuildContext context, String busLineName) {
     return Container(
       width: 75.0,
       height: 40.0,
       decoration: new BoxDecoration(
-        color: AppColors.primaryColor,
+        color: Theme.of(context).primaryColor,
         borderRadius: new BorderRadius.all(Radius.circular(8.0)),
       ),
       child: Padding(
@@ -48,10 +49,11 @@ class ScheduleActualItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ImageIcon(
-              AssetImage("assets/icons/bus_b.png"),
+            SvgPicture.asset(
+              "assets/icons/icon_bus.svg",
               color: Colors.white,
-              size: 16,
+              height: 15,
+              width: 15,
             ),
             Container(
               width: 4,
@@ -77,7 +79,7 @@ class ScheduleActualItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDepartureTimeBox() {
+  Widget _buildDepartureTimeBox(BuildContext context) {
     return Container(
       height: 40,
       child: Padding(
@@ -100,6 +102,7 @@ class ScheduleActualItem extends StatelessWidget {
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: AppColors.instance(context).tommorowLabelColor,
                   fontSize: 11,
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/presentation/views/splash_screen/splash_screen_view.dart';
 import 'package:tarbus2021/src/providers/navigation_provider.dart';
 
@@ -9,19 +10,20 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  String _fontFamily = 'Roboto';
+  final String _fontFamily = 'Roboto';
 
   @override
   Widget build(BuildContext context) {
+    AppColors appColors = AppColors.instance(context);
     ThemeData _darkTheme = ThemeData(
       appBarTheme: AppBarTheme(
-        brightness: Brightness.light,
+        brightness: Brightness.dark,
         textTheme: Typography.material2018().white,
         iconTheme: const IconThemeData(color: Colors.white),
         actionsIconTheme: const IconThemeData(color: Colors.white),
       ),
-      primaryColor: AppColors.primaryColor,
-      accentColor: AppColors.lightGrey,
+      primaryColor: appColors.primaryColor,
+      accentColor: appColors.lightGrey,
       brightness: Brightness.dark,
       fontFamily: _fontFamily,
       textTheme: TextTheme(),
@@ -35,9 +37,9 @@ class MyApp extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black87),
         actionsIconTheme: const IconThemeData(color: Colors.black87),
       ),
-      accentColor: AppColors.lightGrey,
+      accentColor: appColors.lightGrey,
       brightness: Brightness.light,
-      primaryColor: AppColors.primaryColor,
+      primaryColor: appColors.primaryColor,
       fontFamily: _fontFamily,
       textTheme: TextTheme(),
       iconTheme: IconThemeData(color: Colors.black87),
@@ -50,8 +52,9 @@ class MyApp extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return MaterialApp(
-            title: 'Flutter Splash Sample',
+            title: AppString.appInfoApplicationName,
             debugShowCheckedModeBanner: false,
+            darkTheme: _darkTheme,
             theme: _lightTheme,
             home: SplashScreenView(),
             onGenerateRoute: NavigationProvider.of(context).onGenerateRoute,

@@ -57,6 +57,7 @@ class BusRoutesView extends StatelessWidget {
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       var routeHolder = snapshot.data[index];
+                      routeHolder.trackRoute.busLine = busLine;
                       return BusRouteListItem(routeHolder: routeHolder);
                     },
                   );

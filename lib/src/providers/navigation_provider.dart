@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
+import 'package:tarbus2021/src/model/entity/bus_stop_arguments_holder.dart';
 import 'package:tarbus2021/src/model/entity/screen.dart';
 import 'package:tarbus2021/src/presentation/views/bus_lines/bus_lines_view.dart';
 import 'package:tarbus2021/src/presentation/views/bus_routes/bus_routes_view.dart';
@@ -31,9 +32,11 @@ class NavigationProvider extends ChangeNotifier {
       case BusRoutesView.route:
         return MaterialPageRoute(builder: (_) => BusRoutesView(busLine: settings.arguments));
       case FactoryScheduleView.route:
+        BusStopArgumentsHolder args = settings.arguments;
         return PageRouteBuilder(
             pageBuilder: (context, animation1, animation2) {
-              return FactoryScheduleView(busStop: settings.arguments);
+              print("ARGS: ${args.busLineFilter}");
+              return FactoryScheduleView(busStop: args.busStop, busLineFilter: args.busLineFilter);
             },
             transitionsBuilder: (context, animation1, animation2, child) {
               return FadeTransition(
@@ -130,7 +133,7 @@ class NavigationProvider extends ChangeNotifier {
         notifyListeners();
         return false;
       }
-      return false;
+      return true;
     }
   }
 }

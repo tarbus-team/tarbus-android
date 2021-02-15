@@ -6,6 +6,7 @@ import 'package:tarbus2021/src/utils/time_utils.dart';
 class ScheduleActualViewController {
   int currentTime;
   List<Departure> departuresList;
+  List<Departure> visibleDeparturesList;
 
   ScheduleActualViewController() {
     currentTime = TimeUtils.getCurrentTimeInMin();
@@ -29,7 +30,7 @@ class ScheduleActualViewController {
 
     departuresList = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, startFromTime);
 
-    if (departuresList.length < 10) {
+    if (departuresList.length < 13) {
       dateToday.add(Duration(days: 1));
       formattedDateToday = dateFormatter.format(dateToday);
       currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
@@ -39,6 +40,7 @@ class ScheduleActualViewController {
       }
       departuresList.addAll(tommorowDepartures);
     }
+    visibleDeparturesList = departuresList;
     return true;
   }
 }

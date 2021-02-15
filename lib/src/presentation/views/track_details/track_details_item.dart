@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/model/entity/bus_stop_arguments_holder.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
-import 'package:tarbus2021/src/presentation/views/schedule/schedule_actual_view/schedule_actual_view.dart';
+import 'package:tarbus2021/src/presentation/views/schedule/factory_schedule_view.dart';
 import 'package:tarbus2021/src/presentation/views/track_details/controller/track_detailis_view_controller.dart';
 
 class TrackDetailsItemView extends StatelessWidget {
@@ -23,7 +24,10 @@ class TrackDetailsItemView extends StatelessWidget {
       height: 0,
       child: FlatButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => ScheduleActualView(busStop: departure.busStop)));
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).pushNamed(FactoryScheduleView.route, arguments: BusStopArgumentsHolder(busStop: departure.busStop));
         },
         padding: EdgeInsets.all(0),
         child: Padding(

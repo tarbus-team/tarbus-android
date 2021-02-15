@@ -12,8 +12,9 @@ import 'controller/factory_schedule_view_controller.dart';
 class FactoryScheduleView extends StatefulWidget {
   static const route = '/scheduleView';
   final BusStop busStop;
+  final String busLineFilter;
 
-  const FactoryScheduleView({Key key, this.busStop}) : super(key: key);
+  const FactoryScheduleView({Key key, this.busStop, this.busLineFilter}) : super(key: key);
 
   @override
   _FactoryScheduleViewState createState() => _FactoryScheduleViewState();
@@ -32,6 +33,7 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
 
   @override
   Widget build(BuildContext context) {
+    print("BusLineFilter: ${widget.busLineFilter} ");
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -58,7 +60,8 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
               TabBar(
                 controller: _tabController,
                 indicatorColor: Colors.indigo,
-                labelColor: AppColors.mainFontColor,
+                labelColor: AppColors.instance(context).mainFontColor,
+                physics: AlwaysScrollableScrollPhysics(),
                 indicatorSize: TabBarIndicatorSize.label,
                 labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
                 labelStyle: TextStyle(
@@ -80,6 +83,7 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
         children: [
           ScheduleActualView(
             busStop: widget.busStop,
+            busLineFilter: widget.busLineFilter,
           ),
           ScheduleStaticView(
             parentTabController: _tabController,

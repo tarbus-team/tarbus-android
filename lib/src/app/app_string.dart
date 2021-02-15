@@ -2,14 +2,14 @@ class AppString {
   // App info
   //***************************************
   static const String appInfoApplicationName = 'tarBUS';
-  static const String appInfoVersion = 'Wersja aplikacji: 2.0.0';
+  static const String appInfoVersion = '2.1.1';
 
   // Errors
   //**************************************
   static const String errorUnknown = 'Wystąpił błąd zewnętrzny. Prosimy o wyrozumiałość, naprawimy go tak szybko jak możemy. W tym czasie, możesz '
       'korzystać z aplikacji w trybie offline';
   static const String errorNoInternetConnection =
-      'Brak połączenia z internetem. Nie możemy sprawdzić czy rozkład jazdy jest aktualny! Możesz kontynuować lub spróbować '
+      'Brak połączenia z internetem. Nie możemy sprawdzić czy rozkład jazdy jest aktualny! Możesz kontynuować w trybie offline lub spróbować '
       'ponownie';
 
   // View titles
@@ -31,7 +31,7 @@ class AppString {
   static const String labelBusLines = 'Linie autobusowe';
   static const String labelCheckAgain = 'Sprawdź ponownie';
   static const String labelContact = 'Kontakt:';
-  static const String labelContinue = 'Kontynuuj';
+  static const String labelContinue = 'Kontynuuj w trybie offline';
   static const String labelDestinationForLine = 'Kierunki dla linii';
   static const String labelDestinationShortcut = 'kier.';
   static const String labelDownloadingSchedule = 'Trwa pobieranie nowego rozkładu jazdy';

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/model/api/repository.dart';
 import 'package:tarbus2021/src/model/api/response/response_last_updated.dart';
 import 'package:tarbus2021/src/model/api/response/response_welcome_dialog.dart';
@@ -9,13 +10,14 @@ import 'package:tarbus2021/src/model/database/database_helper.dart';
 import 'package:tarbus2021/src/model/entity/app_start_settings.dart';
 import 'package:tarbus2021/src/utils/connection_utils.dart';
 import 'package:tarbus2021/src/utils/json_databaase_utils.dart';
+import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 enum ScheduleStatus { actual, old, noConnection }
 
 class SplashScreenViewController {
   ScheduleStatus scheduleStatus;
   ResponseLastUpdated lastUpdated;
-  AppStartSettings appStartSettings;
+  AppStartSettings settings;
 
   SplashScreenViewController();
 
@@ -31,31 +33,27 @@ class SplashScreenViewController {
     return await Repository.getClient().getAlertDialog();
   }
 
-  Future<bool> checkIfShowAlert(var id) {
-    return DatabaseHelper.instance.checkIfAlertExist(id);
-  }
-
   Future<bool> setSettingsOffline() async {
-    appStartSettings = AppStartSettings();
-    appStartSettings.lastUpdated = await getLastUpdateDate();
-    appStartSettings.welcomeMessage = ResponseWelcomeMessage.offline();
-    appStartSettings.hasDialog = false;
-    appStartSettings.isOnline = false;
+    settings = AppStartSettings();
+    settings.lastUpdated = await getLastUpdateDate();
+    settings.welcomeMessage = ResponseWelcomeMessage.offline();
+    settings.hasDialog = false;
+    settings.isOnline = false;
     scheduleStatus = ScheduleStatus.noConnection;
     return false;
   }
 
   Future<bool> setSettingsOnline() async {
-    appStartSettings = AppStartSettings();
-    appStartSettings.lastUpdated = await getLastUpdateDate();
-    appStartSettings.welcomeMessage = await getWelcomeMessage();
-    appStartSettings.dialogContent = await getAlertDialog();
-    if (appStartSettings.dialogContent == null || appStartSettings.dialogContent.id == 0) {
-      appStartSettings.hasDialog = false;
+    settings = AppStartSettings();
+    settings.lastUpdated = await getLastUpdateDate();
+    settings.welcomeMessage = await getWelcomeMessage();
+    settings.dialogContent = await getAlertDialog();
+    if (settings.dialogContent == null || settings.dialogContent.id == 0) {
+      settings.hasDialog = false;
     } else {
-      appStartSettings.hasDialog = await checkIfShowAlert(appStartSettings.dialogContent.id);
+      settings.hasDialog = !await SharedPreferencesUtils.checkIfExist(AppConsts.SharedPreferencesDialog, settings.dialogContent.id.toString());
     }
-    appStartSettings.isOnline = true;
+    settings.isOnline = true;
     return true;
   }
 
@@ -70,7 +68,7 @@ class SplashScreenViewController {
   Future<ScheduleStatus> checkForUpdates() async {
     if (scheduleStatus == ScheduleStatus.noConnection) return ScheduleStatus.noConnection;
     var remoteLastUpdate = await Repository.getClient().getLastUpdateDate();
-    var localLastUpdate = appStartSettings.lastUpdated;
+    var localLastUpdate = settings.lastUpdated;
     lastUpdated = remoteLastUpdate;
     if (remoteLastUpdate.equal(localLastUpdate)) {
       return ScheduleStatus.actual;
@@ -87,7 +85,7 @@ class SplashScreenViewController {
         String newDatabaseString = await Repository.getClient().getNewDatabase();
         JsonDatabaseUtils dbResponse = JsonDatabaseUtils.fromJson(jsonDecode(newDatabaseString));
         DatabaseHelper.instance.updateScheduleDate(lastUpdated);
-        appStartSettings.lastUpdated = lastUpdated;
+        settings.lastUpdated = lastUpdated;
         return dbResponse.operationStatus;
       }
     }

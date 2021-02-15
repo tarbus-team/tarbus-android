@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/favourites_bus_stop_dialog.dart';
-import 'package:tarbus2021/src/utils/favourites_bus_stop_utils.dart';
+import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class FavouritesBusStopIcon extends StatefulWidget {
   final BusStop busStop;
@@ -29,7 +30,7 @@ class _FavouritesBusStopIconState extends State<FavouritesBusStopIcon> {
   }
 
   void update() async {
-    isFavourite = await FavouritesBusStopUtils.checkIfExist(widget.busStop.id.toString());
+    isFavourite = await SharedPreferencesUtils.checkIfExistByIndex(AppConsts.SharedPreferencesFavStop, widget.busStop.id.toString(), 0);
     setState(() {});
   }
 
@@ -41,7 +42,7 @@ class _FavouritesBusStopIconState extends State<FavouritesBusStopIcon> {
           IconButton(
             icon: Icon(Icons.favorite),
             onPressed: () async {
-              if (await FavouritesBusStopUtils.removeFavouriteBusStop(widget.busStop.id.toString())) {
+              if (await SharedPreferencesUtils.removeByIndex(AppConsts.SharedPreferencesFavStop, widget.busStop.id.toString(), 0)) {
                 setState(() {
                   isFavourite = false;
                   Scaffold.of(context).showSnackBar(SnackBar(

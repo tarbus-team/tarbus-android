@@ -59,6 +59,7 @@ class _ScheduleStaticItemState extends State<ScheduleStaticItem> with TickerProv
               padding: EdgeInsets.all(8),
               child: Icon(
                 _buildDropdownIcon(),
+                color: AppColors.instance(context).iconColor,
               ),
             ),
           ),
@@ -100,9 +101,9 @@ class _ScheduleStaticItemState extends State<ScheduleStaticItem> with TickerProv
     }
     return Container(
       width: 85.0,
-      height: 42.0,
+      height: 44.0,
       decoration: new BoxDecoration(
-        color: AppColors.primaryColor,
+        color: Theme.of(context).primaryColor,
         borderRadius: new BorderRadius.all(Radius.circular(8.0)),
       ),
       child: Padding(
@@ -179,7 +180,7 @@ class _ScheduleStaticItemState extends State<ScheduleStaticItem> with TickerProv
                         var destination = destinations[index];
                         return Text(
                           destination.scheduleName,
-                          style: TextStyle(color: AppColors.darkGrey2),
+                          style: TextStyle(color: AppColors.instance(context).staticDeparturesNames),
                         );
                       },
                     ),

@@ -9,6 +9,7 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
+      overflow: TextOverflow.clip,
       style: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 20.0,

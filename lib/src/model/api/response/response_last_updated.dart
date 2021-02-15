@@ -16,7 +16,12 @@ class ResponseLastUpdated {
 
   @override
   String toString() {
-    return '$day-$month-$year $hour:$min';
+    var dayString = day < 10 ? '0$day' : '$day';
+    var monthString = month < 10 ? '0$month' : '$month';
+    var hourString = hour < 10 ? '0$hour' : '$hour';
+    var minString = min < 10 ? '0$min' : '$min';
+
+    return '$dayString.$monthString.$year, $hourString:$minString';
   }
 
   factory ResponseLastUpdated.fromJson(Map<String, dynamic> json) =>
