@@ -28,10 +28,10 @@ class Departure {
 
   factory Departure.fromJson(Map<String, dynamic> json) {
     return Departure(
-      id: json['d_id'],
-      busStopLp: json['d_bus_stop_lp'],
-      timeInMin: json['d_time_in_min'],
-      timeInString: json['d_time_string'],
+      id: json['d_id'] as int,
+      busStopLp: json['d_bus_stop_lp'] as int,
+      timeInMin: json['d_time_in_min'] as int,
+      timeInString: json['d_time_string'] as String,
       busStop: BusStop.fromJson(json),
       busLine: BusLine.fromJson(json),
       track: Track.fromJson(json),

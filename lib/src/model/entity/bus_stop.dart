@@ -12,13 +12,13 @@ class BusStop {
 
   factory BusStop.fromJson(Map<String, dynamic> json) {
     return BusStop(
-      id: json['bs_id'],
-      number: json['bs_number'],
-      lat: json['bs_lat'],
-      lng: json['bs_lng'],
-      name: json['bs_name'],
-      searchName: json['bs_search_name'],
-      destinations: json['bs_destinations'],
+      id: json['bs_id'] as int,
+      number: json['bs_number'] as int,
+      lat: json['bs_lat'] as double,
+      lng: json['bs_lng'] as double,
+      name: json['bs_name'] as String,
+      searchName: json['bs_search_name'] as String,
+      destinations: json['bs_destinations'] as String,
     );
   }
 
@@ -28,13 +28,13 @@ class BusStop {
       isOptional = true;
     }
     return BusStop(
-        id: json['bs_id'],
-        number: json['bs_number'],
-        lat: json['bs_lat'],
-        lng: json['bs_lng'],
-        name: json['bs_name'],
-        searchName: json['bs_search_name'],
-        destinations: json['bs_destinations'],
+        id: json['bs_id'] as int,
+        number: json['bs_number'] as int,
+        lat: json['bs_lat'] as double,
+        lng: json['bs_lng'] as double,
+        name: json['bs_name'] as String,
+        searchName: json['bs_search_name'] as String,
+        destinations: json['bs_destinations'] as String,
         isOptional: isOptional);
   }
 }

@@ -13,14 +13,14 @@ class WelcomeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WelcomeDialogController viewController = WelcomeDialogController();
+    var viewController = WelcomeDialogController();
 
     return AlertDialog(
       title: Text(dialog.title),
       content: SingleChildScrollView(
         child: Wrap(
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width - 100,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tarbus2021/src/app/app_consts.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class FavouritesBusLineIcon extends StatefulWidget {
@@ -42,7 +43,7 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
           if (await SharedPreferencesUtils.remove(AppConsts.SharedPreferencesFavLine, widget.busLineId)) {
             setState(() {
               Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Usunięto z ulubionych!'),
+                content: Text(AppString.alertSucessufullyDeletedBusLine),
               ));
               _isFavourite = false;
             });
@@ -59,7 +60,7 @@ class _FavouritesBusLineIconState extends State<FavouritesBusLineIcon> {
             setState(() {
               _isFavourite = true;
               Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Dodano do ulubionych!'),
+                content: Text(AppString.alertSuccesfullyAddedToFavourites),
               ));
             });
           }

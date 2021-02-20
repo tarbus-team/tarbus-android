@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/model/entity/favourite_bus_stop.dart';
@@ -47,63 +48,63 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
         ),
       ),
       body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HeaderTitle(
-                title: 'Ulubione linie autobusowe',
-                actionName: 'Dodaj',
-                action: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchBusLineView(showFavouritesButton: true),
-                    ),
-                  );
-                  setState(() {});
-                },
-              ),
-              _buildFavBusLineList(),
-              HeaderTitle(
-                title: 'Ulubione przystanki',
-                actionName: 'Dodaj',
-                action: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchBusStopView(showFavouritesButton: true),
-                    ),
-                  );
-                  setState(() {});
-                },
-              ),
-              _buildFavBusStopList(),
-              HeaderTitle(title: 'Społeczność'),
-              Card(
-                margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
-                child: ListTile(
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image(
-                        image: AssetImage('assets/icons/fb_icon_rounded.png'),
-                      ),
-                    ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HeaderTitle(
+              title: AppString.labelFavBusLines,
+              actionName: AppString.labelAdd,
+              action: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => SearchBusLineView(showFavouritesButton: true),
                   ),
-                  title: Text('Jesteśmy na Facebooku'),
-                  subtitle: Text('Dołącz do nas'),
-                  trailing: RaisedButton(
-                    onPressed: () {
-                      WebPageUtils.openURL('https://www.facebook.com/tarbus2021');
-                    },
-                    color: Theme.of(context).primaryColor,
-                    child: Text('Przejdź', style: TextStyle(color: Colors.white)),
+                );
+                setState(() {});
+              },
+            ),
+            _buildFavBusLineList(),
+            HeaderTitle(
+              title: AppString.labelFavBusStops,
+              actionName: AppString.labelAdd,
+              action: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => SearchBusStopView(showFavouritesButton: true),
                   ),
+                );
+                setState(() {});
+              },
+            ),
+            _buildFavBusStopList(),
+            HeaderTitle(title: AppString.labelCommunity),
+            Card(
+              margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+              child: ListTile(
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage('assets/icons/fb_icon_rounded.png'),
+                    ),
+                  ],
+                ),
+                title: Text(AppString.labelWeAreOnFacebook),
+                subtitle: Text(AppString.labelJoinUs),
+                trailing: RaisedButton(
+                  onPressed: () {
+                    WebPageUtils.openURL(AppConsts.FACEBOOK_TARBUS);
+                  },
+                  color: Theme.of(context).primaryColor,
+                  child: Text(AppString.labelGo, style: TextStyle(color: Colors.white)),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
     );
   }
 
@@ -113,11 +114,11 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       builder: (BuildContext context, AsyncSnapshot<List<FavouriteBusStop>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.isEmpty) {
-            return Container(
+            return SizedBox(
               height: 80.0,
               child: Center(
                 child: Text(
-                  'Brak ulubionych przystanków!',
+                  AppString.labelEmptyFavStops,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -150,11 +151,11 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       builder: (BuildContext context, AsyncSnapshot<List<BusLine>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.isEmpty) {
-            return Container(
+            return SizedBox(
               height: 80.0,
               child: Center(
                 child: Text(
-                  'Brak ulubionych linii!',
+                  AppString.labelEmptyFavLines,
                   textAlign: TextAlign.center,
                 ),
               ),

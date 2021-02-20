@@ -4,11 +4,11 @@ import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
 
 class HeaderTitle extends StatelessWidget {
-  final title;
-  final action;
+  final String title;
+  final Function action;
   final String actionName;
 
-  HeaderTitle({@required this.title, this.action, this.actionName = ""});
+  HeaderTitle({@required this.title, this.action, this.actionName = ''});
 
   @override
   Widget build(BuildContext context) {

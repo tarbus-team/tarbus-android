@@ -34,20 +34,22 @@ class SplashScreenViewController {
   }
 
   Future<bool> setSettingsOffline() async {
-    settings = AppStartSettings();
-    settings.lastUpdated = await getLastUpdateDate();
-    settings.welcomeMessage = ResponseWelcomeMessage.offline();
-    settings.hasDialog = false;
-    settings.isOnline = false;
+    settings = AppStartSettings()
+      ..lastUpdated = await getLastUpdateDate()
+      ..welcomeMessage = ResponseWelcomeMessage.offline()
+      ..hasDialog = false
+      ..isOnline = false;
+
     scheduleStatus = ScheduleStatus.noConnection;
     return false;
   }
 
   Future<bool> setSettingsOnline() async {
-    settings = AppStartSettings();
-    settings.lastUpdated = await getLastUpdateDate();
-    settings.welcomeMessage = await getWelcomeMessage();
-    settings.dialogContent = await getAlertDialog();
+    settings = AppStartSettings()
+      ..lastUpdated = await getLastUpdateDate()
+      ..welcomeMessage = await getWelcomeMessage()
+      ..dialogContent = await getAlertDialog();
+
     if (settings.dialogContent == null || settings.dialogContent.id == 0) {
       settings.hasDialog = false;
     } else {
@@ -82,8 +84,8 @@ class SplashScreenViewController {
       return true;
     } else {
       if (await DatabaseHelper.instance.clearAllDatabase()) {
-        String newDatabaseString = await Repository.getClient().getNewDatabase();
-        JsonDatabaseUtils dbResponse = JsonDatabaseUtils.fromJson(jsonDecode(newDatabaseString));
+        var newDatabaseString = await Repository.getClient().getNewDatabase();
+        var dbResponse = JsonDatabaseUtils.fromJson(jsonDecode(newDatabaseString) as List<dynamic>);
         DatabaseHelper.instance.updateScheduleDate(lastUpdated);
         settings.lastUpdated = lastUpdated;
         return dbResponse.operationStatus;

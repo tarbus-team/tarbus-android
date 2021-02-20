@@ -3,27 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_consts.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
+import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/model/entity/custop_popup_menu.dart';
 import 'package:tarbus2021/src/presentation/views/bus_routes/bus_routes_view.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class FavBusLineListItem extends StatelessWidget {
-  final favBusLine;
-  final onUpdate;
+  final BusLine favBusLine;
+  final Function onUpdate;
 
   const FavBusLineListItem({Key key, this.favBusLine, this.onUpdate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List choices = [
+    var choices = [
       CustomPopupMenu(
-        title: 'Usuń',
+        title: AppString.labelDelete,
         icon: Icons.delete_outline,
         action: () {
           SharedPreferencesUtils.remove(AppConsts.SharedPreferencesFavLine, favBusLine.id.toString());
           Scaffold.of(context).showSnackBar(
             SnackBar(
-              content: Text('Pomyślnie skasowano!'),
+              content: Text(AppString.alertSucessufullyDeletedBusLine),
             ),
           );
         },
@@ -35,7 +37,7 @@ class FavBusLineListItem extends StatelessWidget {
       child: ListTile(
         onTap: () async {
           await Navigator.of(context).push(
-            PageRouteBuilder(
+            PageRouteBuilder<void>(
               pageBuilder: (context, animation1, animation2) {
                 return BusRoutesView(busLine: favBusLine);
               },
@@ -62,10 +64,10 @@ class FavBusLineListItem extends StatelessWidget {
           ],
         ),
         title: Text(favBusLine.name),
-        subtitle: Text('Michalus'),
+        subtitle: Text(AppString.companyMichalus),
         trailing: PopupMenuButton(
           elevation: 3.2,
-          onSelected: (value) {
+          onSelected: (dynamic value) {
             value.action();
           },
           itemBuilder: (BuildContext context) {

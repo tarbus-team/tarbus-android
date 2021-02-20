@@ -6,25 +6,25 @@ class JsonDatabaseUtils {
   JsonDatabaseUtils({this.operationStatus});
 
   factory JsonDatabaseUtils.fromJson(List<dynamic> json) {
-    for (int i = 0; i < json.length; i++) {
-      Map<String, dynamic> item = json[i];
+    for (var i = 0; i < json.length; i++) {
+      var item = json[i] as Map<String, dynamic>;
       String tableName;
 
       if (item['type'] == 'table') {
-        tableName = item['name'];
-        List<dynamic> data = item['data'];
-        List<String> keysList = <String>[];
-        List<List<String>> globalValues = List<List<String>>();
+        tableName = item['name'] as String;
+        var data = item['data'] as List<dynamic>;
+        var keysList = <String>[];
+        var globalValues = <List<String>>[];
 
-        int valuesCounter = 0;
-        for (int j = 0; j < data.length; j++) {
-          Map<String, dynamic> record = data[j];
-          List<String> valuesList = <String>[];
+        var valuesCounter = 0;
+        for (var j = 0; j < data.length; j++) {
+          var record = data[j] as Map<String, dynamic>;
+          var valuesList = <String>[];
           for (var key in record.keys) {
             if (j == 0) {
               keysList.add(key);
             }
-            var recordKey = record[key];
+            var recordKey = record[key] as String;
             valuesList.add('\'$recordKey\'');
           }
           globalValues.add(valuesList);
@@ -43,9 +43,9 @@ class JsonDatabaseUtils {
   }
 
   static String sqlArrayOfArrayObjectToString(List<List<String>> list) {
-    StringBuffer result = StringBuffer();
-    bool isFirstIteration = true;
-    for (List<String> listInside in list) {
+    var result = StringBuffer();
+    var isFirstIteration = true;
+    for (var listInside in list) {
       if (isFirstIteration) {
         result.write('(${sqlListOfStringToString(listInside)})');
         isFirstIteration = false;
@@ -57,9 +57,9 @@ class JsonDatabaseUtils {
   }
 
   static String sqlListOfStringToString(List<String> list) {
-    StringBuffer result = StringBuffer();
-    int i = 0;
-    for (String item in list) {
+    var result = StringBuffer();
+    var i = 0;
+    for (var item in list) {
       if (i == 0) {
         result.write(item);
       } else {

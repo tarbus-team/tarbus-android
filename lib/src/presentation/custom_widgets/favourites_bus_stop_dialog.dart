@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
@@ -18,9 +19,9 @@ class FavouritesBusStopDialog extends StatefulWidget {
 }
 
 class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
-  var _busStopNameController = TextEditingController();
-  var _inputNode = FocusNode();
-  var _isFirstOpen = true;
+  final _busStopNameController = TextEditingController();
+  final _inputNode = FocusNode();
+  final _isFirstOpen = true;
   var _validated = true;
 
   void openKeyboard() {
@@ -32,11 +33,11 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
   }
 
   String validate(String text) {
-    var textCharArray = text.split("");
-    for (String a in textCharArray) {
-      if (a == '\"' || a == ',' || a == '\'') {
+    var textCharArray = text.split('');
+    for (var a in textCharArray) {
+      if (a == '"' || a == ',' || a == '\'') {
         _validated = false;
-        return 'Pole nie może zawierać znaków (")(,)(\')';
+        return AppString.labelNameRequitments;
       }
     }
     _validated = true;
@@ -61,7 +62,7 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
           children: [
-            AppBarTitle(title: 'Dodaj do ulubionych'),
+            AppBarTitle(title: AppString.labelAddToFavourites),
           ],
         ),
         actions: [
@@ -70,13 +71,16 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
               if (!_validated) {
                 return;
               }
+              if (_busStopNameController.text.isEmpty) {
+                _busStopNameController.text = AppString.labelNewBusStopUppercase;
+              }
               if (await SharedPreferencesUtils.add(
                   AppConsts.SharedPreferencesFavStop, '${widget.busStop.id.toString()}, ${_busStopNameController.text}')) {
                 closeKeyboard();
                 Navigator.of(context).pop(true);
               }
             },
-            child: Text('ZAPISZ'),
+            child: Text(AppString.labelSaveUppercase),
           ),
         ],
       ),
@@ -92,14 +96,14 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
             ),
             Row(
               children: [
-                Text('Kierunki: '),
+                Text('${AppString.labelDestinations}: '),
                 Text(widget.busStop.destinations),
               ],
             ),
-            Text('Lokalizacja: ${widget.busStop.lat}, ${widget.busStop.lng}'),
+            Text('${AppString.labelLocation}: ${widget.busStop.lat}, ${widget.busStop.lng}'),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
-              child: Container(
+              child: SizedBox(
                 height: 65.0,
                 child: TextFormField(
                   autovalidateMode: AutovalidateMode.always,
@@ -107,17 +111,17 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
                   focusNode: _inputNode,
                   autofocus: true,
                   controller: _busStopNameController,
-                  validator: (text) => validate(text),
+                  validator: validate,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(20),
                   ],
                   decoration: InputDecoration(
                     fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(8.0),
-                      borderSide: new BorderSide(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(),
                     ),
-                    labelText: 'Wpisz swoją nazwę dla przystanku',
+                    labelText: AppString.labelActionAddToFav,
                   ),
                 ),
               ),

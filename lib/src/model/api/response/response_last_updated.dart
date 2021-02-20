@@ -24,6 +24,6 @@ class ResponseLastUpdated {
     return '$dayString.$monthString.$year, $hourString:$minString';
   }
 
-  factory ResponseLastUpdated.fromJson(Map<String, dynamic> json) =>
-      ResponseLastUpdated(year: json['year'], month: json['month'], day: json['day'], hour: json['hour'], min: json['min']);
+  factory ResponseLastUpdated.fromJson(Map<String, dynamic> json) => ResponseLastUpdated(
+      year: json['year'] as int, month: json['month'] as int, day: json['day'] as int, hour: json['hour'] as int, min: json['min'] as int);
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_Indicator.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_indicator.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/controller/schedule_static_view_controller.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_static_view/schedule_static_item.dart';
 
@@ -20,14 +20,13 @@ class ScheduleStaticView extends StatefulWidget {
 class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTickerProviderStateMixin {
   final ScheduleStaticViewController viewController = ScheduleStaticViewController();
   bool swipeStatus;
-  var displayedDayTypes = [
-    ScheduleStaticViewController.WorkDays,
-    ScheduleStaticViewController.FreeDays,
-    ScheduleStaticViewController.HolidayDays,
+  List<List<String>> displayedDayTypes = [
+    ScheduleStaticViewController.workDays,
+    ScheduleStaticViewController.freeDays,
+    ScheduleStaticViewController.holidayDays,
   ];
-  var _selectedIndex = 0;
 
-  var loadingStatus = true;
+  bool loadingStatus = true;
   TabController _tabController;
   DragStartDetails startVerticalDragDetails;
   DragUpdateDetails updateVerticalDragDetails;
@@ -37,12 +36,7 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
     swipeStatus = false;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => update());
-    _tabController = new TabController(length: 3, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _selectedIndex = _tabController.index;
-      });
-    });
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   void update() async {
@@ -70,13 +64,13 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
                   Padding(
                     padding: EdgeInsets.fromLTRB(8, 15, 8, 8),
                     child: Container(
-                      decoration: new BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.instance(context).lightGrey,
-                        borderRadius: new BorderRadius.all(Radius.circular(8.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(5),
-                        child: Container(
+                        child: SizedBox(
                           height: 33,
                           child: TabBar(
                             controller: _tabController,
@@ -94,15 +88,15 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
                             isScrollable: true,
                             tabs: [
                               _buildDayButton(
-                                days: ScheduleStaticViewController.WorkDays,
+                                days: ScheduleStaticViewController.workDays,
                                 title: 'Dni robocze',
                               ),
                               _buildDayButton(
-                                days: ScheduleStaticViewController.FreeDays,
+                                days: ScheduleStaticViewController.freeDays,
                                 title: 'Soboty',
                               ),
                               _buildDayButton(
-                                days: ScheduleStaticViewController.HolidayDays,
+                                days: ScheduleStaticViewController.holidayDays,
                                 title: 'Święta',
                                 isLast: true,
                               ),
@@ -121,9 +115,9 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildStaticSchedule(days: ScheduleStaticViewController.WorkDays),
-          _buildStaticSchedule(days: ScheduleStaticViewController.FreeDays),
-          _buildStaticSchedule(days: ScheduleStaticViewController.HolidayDays),
+          _buildStaticSchedule(days: ScheduleStaticViewController.workDays),
+          _buildStaticSchedule(days: ScheduleStaticViewController.freeDays),
+          _buildStaticSchedule(days: ScheduleStaticViewController.holidayDays),
         ],
       ),
     );
@@ -133,7 +127,7 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
     var _borderColor = isLast ? Colors.transparent : Colors.black12;
     return Container(
       width: (MediaQuery.of(context).size.width / 3) - 13,
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
           right: BorderSide(width: isLast ? 0 : 1.0, color: _borderColor),
         ),
@@ -151,7 +145,7 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
 
   Widget _buildStaticSchedule({List<String> days}) {
     if (loadingStatus) {
-      return Container(
+      return SizedBox(
         height: MediaQuery.of(context).size.height / 1.6,
         child: AppCircularProgressIndicator(),
       );
@@ -165,9 +159,9 @@ class _ScheduleStaticViewState extends State<ScheduleStaticView> with SingleTick
           updateVerticalDragDetails = dragDetails;
         },
         onHorizontalDragEnd: (endDetails) {
-          double dx = updateVerticalDragDetails.globalPosition.dx - startVerticalDragDetails.globalPosition.dx;
-          double dy = updateVerticalDragDetails.globalPosition.dy - startVerticalDragDetails.globalPosition.dy;
-          double velocity = endDetails.primaryVelocity;
+          var dx = updateVerticalDragDetails.globalPosition.dx - startVerticalDragDetails.globalPosition.dx;
+          var dy = updateVerticalDragDetails.globalPosition.dy - startVerticalDragDetails.globalPosition.dy;
+          var velocity = endDetails.primaryVelocity;
 
           if (dx < 0) dx = -dx;
           if (dy < 0) dy = -dy;

@@ -8,12 +8,12 @@ class Destination {
   Destination({this.id, this.routeId, this.symbol, this.directionBoardName, this.scheduleName});
 
   factory Destination.fromJson(Map<String, dynamic> json) => Destination(
-        id: json['ds_id'],
-        routeId: json['ds_route_id'],
-        symbol: json['ds_symbol'],
-        directionBoardName: json['ds_direction_board_name'],
+        id: json['ds_id'] as int,
+        routeId: json['ds_route_id'] as int,
+        symbol: json['ds_symbol'] as String,
+        directionBoardName: json['ds_direction_board_name'] as String,
         //TODO: Literówka - schedule a nie shedule
-        scheduleName: json['ds_shedule_name'],
+        scheduleName: json['ds_shedule_name'] as String,
       );
 
   @override

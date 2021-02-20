@@ -2,13 +2,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesUtils {
   static Future<List<String>> getSharedListString(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var prefs = await SharedPreferences.getInstance();
     var result = prefs.getStringList(key) ?? <String>[];
     return result;
   }
 
   static void setSharedListString(List<String> values, String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(key, values);
   }
 
@@ -29,7 +29,7 @@ class SharedPreferencesUtils {
 
   static Future<bool> checkIfExistByIndex(String key, String id, int index) async {
     var sharedList = await SharedPreferencesUtils.getSharedListString(key);
-    for (String item in sharedList) {
+    for (var item in sharedList) {
       var splited = item.split(',');
       if (splited[index] == id) {
         return true;
@@ -47,7 +47,7 @@ class SharedPreferencesUtils {
 
   static Future<bool> removeByIndex(String key, String id, int index) async {
     var sharedList = await SharedPreferencesUtils.getSharedListString(key);
-    for (String item in sharedList) {
+    for (var item in sharedList) {
       var splited = item.split(',');
       if (splited[index] == id) {
         sharedList.remove(item);
@@ -63,7 +63,7 @@ class SharedPreferencesUtils {
     print('$key $id $newValue, $index');
     var sharedList = await SharedPreferencesUtils.getSharedListString(key);
     var resultList = <String>[];
-    for (String item in sharedList) {
+    for (var item in sharedList) {
       var splited = item.split(',');
       if (splited[index] == id) {
         item = '$id, $newValue';

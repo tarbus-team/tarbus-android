@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppColors appColors = AppColors.instance(context);
-    ThemeData _darkTheme = ThemeData(
+    var appColors = AppColors.instance(context);
+    var _darkTheme = ThemeData(
       appBarTheme: AppBarTheme(
         brightness: Brightness.dark,
         textTheme: Typography.material2018().white,
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       iconTheme: IconThemeData(color: Colors.black87),
     );
 
-    ThemeData _lightTheme = ThemeData(
+    var _lightTheme = ThemeData(
       appBarTheme: AppBarTheme(
         brightness: Brightness.light,
         textTheme: Typography.material2018().black,

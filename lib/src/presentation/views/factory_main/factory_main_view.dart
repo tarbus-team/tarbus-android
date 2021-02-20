@@ -28,7 +28,7 @@ class _FactoryMainViewState extends State<FactoryMainView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.appStartSettings.hasDialog) {
-        ResponseWelcomeDialog dialog = widget.appStartSettings.dialogContent;
+        var dialog = widget.appStartSettings.dialogContent;
         _showDialog(dialog);
       }
     });
@@ -74,7 +74,7 @@ class _FactoryMainViewState extends State<FactoryMainView> {
                             Icons.info_outline,
                             color: AppColors.instance(context).iconColor,
                           ),
-                          title: Text('Informacje o aplikacji'),
+                          title: Text(AppString.labelInfoAboutApp),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => AboutUsView()));
                           },
@@ -84,7 +84,7 @@ class _FactoryMainViewState extends State<FactoryMainView> {
                             Icons.settings,
                             color: AppColors.instance(context).iconColor,
                           ),
-                          title: Text('Ustawienia'),
+                          title: Text(AppString.labelSettings),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => SettingsView()));
                           },
@@ -105,11 +105,11 @@ class _FactoryMainViewState extends State<FactoryMainView> {
                 child: ExtendedBanner(
                   location: BannerLocation.topEnd,
                   isVisible: !widget.appStartSettings.isOnline,
-                  message: "Offline",
+                  message: AppString.labelOffline,
                   color: AppColors.instance(context).primaryColor,
                   child: IndexedStack(
-                    children: screens,
                     index: provider.currentTabIndex,
+                    children: screens,
                   ),
                 ),
               ),
@@ -129,7 +129,7 @@ class _FactoryMainViewState extends State<FactoryMainView> {
   }
 
   void _showDialog(ResponseWelcomeDialog dialog) async {
-    await showDialog(
+    await showDialog<void>(
       context: context,
       builder: (ctx) => WelcomeDialog(dialog: dialog),
     );

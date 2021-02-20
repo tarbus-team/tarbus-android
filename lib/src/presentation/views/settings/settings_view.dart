@@ -13,7 +13,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  var lastUpdatedDate = '---';
+  String lastUpdatedDate = '---';
 
   @override
   void initState() {
@@ -33,28 +33,28 @@ class _SettingsViewState extends State<SettingsView> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
-          children: [AppBarTitle(title: 'Ustawienia')],
+          children: [AppBarTitle(title: AppString.labelSettings)],
         ),
       ),
       body: Column(
         children: [
           HorizontalLine(),
           ListTile(
-            title: Text('Polityka prywatności'),
-            subtitle: Text('Polityka prywatności'),
+            title: Text(AppString.labelPrivacyPolicy),
+            subtitle: Text(AppString.labelPrivacyPolicy),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => PolicyPrivacyView()));
             },
           ),
           HorizontalLine(),
           ListTile(
-            title: Text('Baza danych'),
-            subtitle: Text('Ostatnia aktualizacja: $lastUpdatedDate'),
+            title: Text(AppString.labelDatabase),
+            subtitle: Text('${AppString.labelLastUpdated}: $lastUpdatedDate'),
           ),
           HorizontalLine(),
           ListTile(
-            title: Text('Informacje o aplikacji tarBUS'),
-            subtitle: Text('Wersja ${AppString.appInfoVersion}'),
+            title: Text('${AppString.labelInfoAboutApp} ${AppString.appInfoApplicationName}'),
+            subtitle: Text('${AppString.labelVersion} ${AppString.appInfoVersion}'),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute<String>(builder: (context) => AboutUsView()));
             },

@@ -11,10 +11,10 @@ class ExtendedBanner extends StatelessWidget {
   final bool isVisible;
 
   const ExtendedBanner(
-      {Key key,
-      @required this.message,
-      this.textDirection,
+      {@required this.message,
       @required this.location,
+      Key key,
+      this.textDirection,
       this.layoutDirection,
       this.color,
       this.textStyle,
@@ -28,10 +28,10 @@ class ExtendedBanner extends StatelessWidget {
       return Banner(
         message: message,
         location: location,
-        child: child,
         //textDirection: textDirection,
         //layoutDirection: layoutDirection,
         color: color,
+        child: child,
         //textStyle: textStyle,
       );
     } else {

@@ -20,7 +20,7 @@ class BusLineListItem extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         onPressed: () {
           Navigator.of(context).push(
-            PageRouteBuilder(
+            PageRouteBuilder<void>(
               pageBuilder: (context, animation1, animation2) {
                 return BusRoutesView(busLine: busLine);
               },
@@ -38,7 +38,7 @@ class BusLineListItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/icons/icon_bus.svg",
+              'assets/icons/icon_bus.svg',
               color: Colors.white,
             ),
             Container(

@@ -21,7 +21,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     //const NEW_DB_VERSION = 4;
-    const NEW_DB_VERSION = 8;
+    const NEW_DB_VERSION = 5;
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, 'tarbus.db');
 
@@ -47,7 +47,7 @@ class DatabaseHelper {
     // open the database
     db = await openDatabase(path, readOnly: false);
     if (await db.getVersion() < NEW_DB_VERSION) {
-      db.close();
+      await db.close();
 
       //delete the old database so you can copy the new one
       await deleteDatabase(path);
@@ -57,13 +57,13 @@ class DatabaseHelper {
       } catch (_) {}
 
       //copy db from assets to database folder
-      ByteData data = await rootBundle.load(join('assets', 'tarbus.db'));
+      var data = await rootBundle.load(join('assets', 'tarbus.db'));
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
 
       db = await openDatabase(path, readOnly: false);
       //set the new version to the copied db so you do not need to do it manually on your bundled database.db
-      db.setVersion(NEW_DB_VERSION);
+      await db.setVersion(NEW_DB_VERSION);
     }
     return db;
   }
@@ -103,7 +103,7 @@ class DatabaseHelper {
     return true;
   }
 
-  Future<bool> checkIfAlertExist(var id) async {
+  Future<bool> checkIfAlertExist(String id) async {
     var query = 'SELECT id FROM AlertHistory WHERE id = $id';
     var response = await doSQL(query);
     if (response.isNotEmpty) {
@@ -112,17 +112,17 @@ class DatabaseHelper {
     return true;
   }
 
-  void addDialogToList(var id) async {
+  void addDialogToList(String id) async {
     var query = 'INSERT INTO AlertHistory (id) VALUES($id)';
     var response = await doSQL(query);
   }
 
   Future<List<BusStop>> getSearchedBusStops(List<String> patterns) async {
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
     var counter = 0;
-    for (String pattern in patterns) {
+    for (var pattern in patterns) {
       if (counter > 0) {
-        buffer.write(" AND ");
+        buffer.write(' AND ');
       }
       buffer.write(' bs_search_name LIKE "%$pattern%"');
       counter++;
@@ -131,16 +131,16 @@ class DatabaseHelper {
         'WHERE ${buffer.toString()} '
         'LIMIT 25';
     var response = await doSQL(query);
-    List<BusStop> busStops = response.map((c) => BusStop.fromJson(c)).toList();
+    var busStops = response.map((c) => BusStop.fromJson(c)).toList();
     return busStops;
   }
 
   Future<List<BusLine>> getSearchedBusLines(List<String> patterns) async {
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
     var counter = 0;
-    for (String pattern in patterns) {
+    for (var pattern in patterns) {
       if (counter > 0) {
-        buffer.write(" AND ");
+        buffer.write(' AND ');
       }
       buffer.write(' bl_name LIKE "%$pattern%"');
       counter++;
@@ -149,17 +149,17 @@ class DatabaseHelper {
         'WHERE ${buffer.toString()} '
         'LIMIT 25';
     var response = await doSQL(query);
-    List<BusLine> busLines = response.map((c) => BusLine.fromJson(c)).toList();
+    var busLines = response.map((c) => BusLine.fromJson(c)).toList();
     return busLines;
   }
 
   Future<List<Departure>> getNextDepartures(int busStopId, String dayTypes, int startFromTime) async {
-    var dayTypesQuery = dayTypes.split(" ");
+    var dayTypesQuery = dayTypes.split(' ');
     var queryFragment = StringBuffer();
     var isFirstIteration = true;
-    for (String dayType in dayTypesQuery) {
+    for (var dayType in dayTypesQuery) {
       if (!isFirstIteration) {
-        queryFragment.write("OR Track.t_day_types ");
+        queryFragment.write('OR Track.t_day_types ');
       }
       queryFragment.write('LIKE \'%$dayType%\' ');
       isFirstIteration = false;
@@ -177,54 +177,54 @@ class DatabaseHelper {
 
     print(query);
     var response = await doSQL(query);
-    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    var departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
   }
 
-  Future<List<RouteHolder>> getRouteDetailsByLineId(var lineId) async {
+  Future<List<RouteHolder>> getRouteDetailsByLineId(int lineId) async {
     var query = 'SELECT * FROM Route WHERE Route.r_bus_line_id = $lineId';
     var response = await doSQL(query);
-    List<TrackRoute> trackRoutes = response.map((c) => TrackRoute.fromJson(c)).toList();
-    List<RouteHolder> routeHolders = <RouteHolder>[];
-    for (TrackRoute trackRoute in trackRoutes) {
-      List<BusStop> busStops = await getBusStopsByRouteId(trackRoute.id);
+    var trackRoutes = response.map((c) => TrackRoute.fromJson(c)).toList();
+    var routeHolders = <RouteHolder>[];
+    for (var trackRoute in trackRoutes) {
+      var busStops = await getBusStopsByRouteId(trackRoute.id);
       routeHolders.add(RouteHolder(trackRoute: trackRoute, busStops: busStops));
     }
     return routeHolders;
   }
 
-  Future<List<Departure>> getDeparturesByTrackId(var id) async {
+  Future<List<Departure>> getDeparturesByTrackId(String id) async {
     var query = 'SELECT * FROM Departure '
         'JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id '
         'WHERE Departure.d_track_id = \'$id\' '
         'ORDER BY Departure.d_time_in_min';
 
     var response = await doSQL(query);
-    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    var departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
   }
 
   Future<List<BusStop>> getAllBusStops() async {
     var query = 'SELECT * FROM BusStop';
     var response = await doSQL(query);
-    List<BusStop> busStops = response.map((c) => BusStop.fromJson(c)).toList();
+    var busStops = response.map((c) => BusStop.fromJson(c)).toList();
     return busStops;
   }
 
   Future<List<BusLine>> getAllBusLines() async {
     var query = 'SELECT * FROM BusLine ORDER BY bl_name';
     var response = await doSQL(query);
-    List<BusLine> busLines = response.map((c) => BusLine.fromJson(c)).toList();
+    var busLines = response.map((c) => BusLine.fromJson(c)).toList();
     return busLines;
   }
 
-  Future<List<BusStop>> getBusStopsByRouteId(var routeId) async {
+  Future<List<BusStop>> getBusStopsByRouteId(int routeId) async {
     var query = 'SELECT * FROM RouteConnections '
         'JOIN BusStop ON BusStop.bs_id = RouteConnections.rc_bus_stop_id '
         'WHERE RouteConnections.rc_route_id = $routeId ORDER BY rc_lp';
 
     var response = await doSQL(query);
-    List<BusStop> busStops = response.map((c) => BusStop.fromJsonRoute(c)).toList();
+    var busStops = response.map((c) => BusStop.fromJsonRoute(c)).toList();
     return busStops;
   }
 
@@ -233,12 +233,12 @@ class DatabaseHelper {
     var response = await doSQL(query);
     if (response.isEmpty) {
       final db = await database;
-      var query = "INSERT INTO LastUpdated (id, year,month,day,hour,min) VALUES(1,0,0,0,0,0)";
+      var query = 'INSERT INTO LastUpdated (id, year,month,day,hour,min) VALUES(1,0,0,0,0,0)';
       var response = await db.rawQuery(query);
       return ResponseLastUpdated(year: 0, month: 0, day: 0, hour: 0, min: 0);
     } else {
-      List<ResponseLastUpdated> lastupdate = response.map((c) => ResponseLastUpdated.fromJson(c)).toList();
-      return lastupdate[0];
+      var lastUpdate = response.map((c) => ResponseLastUpdated.fromJson(c)).toList();
+      return lastUpdate[0];
     }
   }
 
@@ -246,7 +246,7 @@ class DatabaseHelper {
     var query = 'SELECT c_day_types FROM Calendar WHERE c_date = "$currentDateString"';
     var response = await doSQL(query);
     var currentDayTypeObject = response.elementAt(0);
-    return currentDayTypeObject["c_day_types"];
+    return currentDayTypeObject['c_day_types'] as String;
   }
 
   Future<List<TrackRoute>> getRoutesByBusStopId(int busStopId) async {
@@ -256,47 +256,47 @@ class DatabaseHelper {
         'WHERE RouteConnections.rc_bus_stop_id = $busStopId '
         'ORDER BY BusLine.bl_name';
     var response = await doSQL(query);
-    List<TrackRoute> routes = response.map((c) => TrackRoute.fromJson(c)).toList();
+    var routes = response.map((c) => TrackRoute.fromJson(c)).toList();
     return routes;
   }
 
   Future<List<Departure>> getDeparturesByRouteAndDay(List<String> dayTypes, TrackRoute trackRoute, int busStopId) async {
     var queryFragment = StringBuffer();
     var isFirstIteration = true;
-    for (String dayType in dayTypes) {
+    for (var dayType in dayTypes) {
       if (!isFirstIteration) {
-        queryFragment.write("OR Track.t_day_types");
+        queryFragment.write('OR Track.t_day_types');
       }
       queryFragment.write(' LIKE \'%$dayType%\' ');
       isFirstIteration = false;
     }
-    var query = "SELECT * FROM Departure "
-        "JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id "
-        "JOIN Track ON Departure.d_track_id = Track.t_id "
-        "JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id "
-        "JOIN Route ON Track.t_route_id = Route.r_id "
-        "JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id "
-        "WHERE Departure.d_bus_stop_id = $busStopId "
+    var query = 'SELECT * FROM Departure '
+        'JOIN BusStop ON BusStop.bs_id = Departure.d_bus_stop_id '
+        'JOIN Track ON Departure.d_track_id = Track.t_id '
+        'JOIN BusLine ON BusLine.bl_id = Departure.d_bus_line_id '
+        'JOIN Route ON Track.t_route_id = Route.r_id '
+        'JOIN Destinations ON Departure.d_symbols = Destinations.ds_symbol AND Destinations.ds_route_id = Route.r_id '
+        'WHERE Departure.d_bus_stop_id = $busStopId '
         'AND (Track.t_day_types $queryFragment) '
         'AND Route.r_id = ${trackRoute.id} '
-        "ORDER BY d_time_in_min";
+        'ORDER BY d_time_in_min';
 
     var response = await doSQL(query);
-    List<Departure> departures = response.map((c) => Departure.fromJson(c)).toList();
+    var departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
   }
 
-  Future<BusStop> getFavouritesBusStop(var busStopsId) async {
+  Future<BusStop> getFavouritesBusStop(String busStopsId) async {
     var query = 'SELECT * FROM BusStop WHERE bs_id = $busStopsId';
     var response = await doSQL(query);
-    List<BusStop> favourites = response.map((c) => BusStop.fromJson(c)).toList();
+    var favourites = response.map((c) => BusStop.fromJson(c)).toList();
     return favourites[0];
   }
 
-  Future<List<BusLine>> getFavouritesBusLines(var busLinesId) async {
+  Future<List<BusLine>> getFavouritesBusLines(String busLinesId) async {
     var query = 'SELECT * FROM BusLine WHERE bl_id IN($busLinesId)';
     var response = await doSQL(query);
-    List<BusLine> favourites = response.map((c) => BusLine.fromJson(c)).toList();
+    var favourites = response.map((c) => BusLine.fromJson(c)).toList();
     return favourites;
   }
 }

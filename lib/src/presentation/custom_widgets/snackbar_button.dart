@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SnackbarButton extends StatelessWidget {
-  final action;
+  final Function action;
 
   const SnackbarButton({Key key, this.action}) : super(key: key);
   @override

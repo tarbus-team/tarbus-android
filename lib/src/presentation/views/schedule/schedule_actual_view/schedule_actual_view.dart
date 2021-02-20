@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_Indicator.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_indicator.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/nothing.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/schedule_actual_view/schedule_actual_item.dart';
 
@@ -20,8 +21,8 @@ class ScheduleActualView extends StatefulWidget {
 
 class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticKeepAliveClientMixin {
   ScheduleActualViewController viewController = ScheduleActualViewController();
-  var isInitialized = false;
-  var filterLine;
+  bool isInitialized = false;
+  String filterLine;
   bool firstInitial = true;
 
   @override
@@ -29,7 +30,6 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
 
   @override
   void initState() {
-    print("Init");
     super.initState();
     firstInitial = false;
     filterLine = widget.busLineFilter;
@@ -49,7 +49,7 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
 
   void filter() {
     if (filterLine.isNotEmpty) {
-      List<String> filterList = filterLine.split(",");
+      var filterList = filterLine.split(',');
       viewController.visibleDeparturesList = viewController.departuresList.where((departure) {
         return filterList.contains(departure.busLine.name);
       }).toList();
@@ -83,16 +83,12 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
                       context: context,
                       builder: (ctx) => FilterDepartureDialog(allBusLines: allBusLines, filter: filterLine),
                     );
-                    if (filterLine == null) {
-                      filterLine = '';
-                    }
-                    setState(() {
-                      filter();
-                    });
+                    filterLine ??= '';
+                    setState(filter);
                   },
                   icon: Icon(Icons.filter_list),
                   label: Text(
-                    'Filtruj',
+                    AppString.labelFilter,
                     style: TextStyle(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -110,7 +106,7 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
 
   Widget _buildFilterBox() {
     if (filterLine.isNotEmpty) {
-      return Container(
+      return SizedBox(
         width: 250,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
@@ -125,7 +121,7 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
   }
 
   List<Widget> _buildChoiceList() {
-    List<Widget> choices = List();
+    var choices = <Widget>[];
     filterLine.split(',').forEach((item) {
       choices.add(
         Padding(
@@ -136,8 +132,8 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
             ),
             onDeleted: () {
               setState(() {
-                List<String> tmp = filterLine.split(',');
-                tmp.removeWhere((busLine) => busLine == item);
+                var tmp = filterLine.split(',')..removeWhere((busLine) => busLine == item);
+
                 filterLine = tmp.join(',');
                 filter();
               });
@@ -152,13 +148,13 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
 
   Widget _buildActualSchedule() {
     if (!isInitialized) {
-      return Container(
+      return SizedBox(
         height: MediaQuery.of(context).size.height / 1.6,
         child: AppCircularProgressIndicator(),
       );
     }
     if (viewController.departuresList.isEmpty) {
-      return Text("Brak odjazdów dzisiaj i jutro");
+      return Text(AppString.labelEmptyDepartures);
     } else {
       return ListView.builder(
         itemCount: viewController.visibleDeparturesList.length,

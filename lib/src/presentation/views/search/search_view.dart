@@ -33,14 +33,14 @@ class _SearchBusStopViewState extends State<SearchView> {
       body: Column(
         children: [
           HeaderTitle(
-            title: 'Wyszukaj',
+            title: AppString.labelDoSearch,
           ),
           Card(
             child: ListTile(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => SearchBusStopView(),
                   ),
                 );
@@ -51,8 +51,8 @@ class _SearchBusStopViewState extends State<SearchView> {
                   Icon(Icons.search_outlined, color: AppColors.instance(context).iconColor),
                 ],
               ),
-              title: Text('Wyszukaj przystanki'),
-              subtitle: Text('Kliknij aby wyszukać'),
+              title: Text(AppString.labelSearchBusStopsShort),
+              subtitle: Text(AppString.labelClickToSearch),
             ),
           ),
           Card(
@@ -60,7 +60,7 @@ class _SearchBusStopViewState extends State<SearchView> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => SearchBusLineView(),
                   ),
                 );
@@ -74,8 +74,8 @@ class _SearchBusStopViewState extends State<SearchView> {
                   ),
                 ],
               ),
-              title: Text('Wyszukaj linie autobusowe'),
-              subtitle: Text('Kliknij aby wyszukać'),
+              title: Text(AppString.labelSearchBusLine),
+              subtitle: Text(AppString.labelClickToSearch),
             ),
           ),
         ],

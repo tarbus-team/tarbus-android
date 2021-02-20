@@ -17,24 +17,28 @@ class ScheduleActualViewController {
   }
 
   Future<bool> getAllDepartures(int id) async {
-    var dateFormatter = new DateFormat('dd-MM-yyyy');
-    var dateToday = new DateTime.now();
-    var startFromTime = (TimeUtils.parseTimeToMin(dateToday) - 10);
+    var dateFormatter = DateFormat('dd-MM-yyyy');
+    var dateToday = DateTime.now();
+    var startFromTime = TimeUtils.parseTimeToMin(dateToday) - 10;
     if (dateToday.hour == 0) {
       dateToday = dateToday.subtract(Duration(days: 1));
       startFromTime = 1430 + dateToday.minute;
     }
 
-    String formattedDateToday = dateFormatter.format(dateToday);
+    var formattedDateToday = dateFormatter.format(dateToday);
     var currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
 
     departuresList = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, startFromTime);
 
+    print('Today is $formattedDateToday');
+
     if (departuresList.length < 13) {
-      dateToday.add(Duration(days: 1));
+      dateToday = dateToday.add(Duration(days: 1));
+
       formattedDateToday = dateFormatter.format(dateToday);
+      print('Tommorow is $formattedDateToday');
       currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
-      List<Departure> tommorowDepartures = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, 0);
+      var tommorowDepartures = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, 0);
       for (var departure in tommorowDepartures) {
         departure.isTommorow = true;
       }

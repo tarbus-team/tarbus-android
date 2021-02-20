@@ -22,7 +22,7 @@ class SearchBusLineView extends StatefulWidget {
 class _SearchBusLineViewState extends State<SearchBusLineView> {
   final SearchBusLineViewController viewController = SearchBusLineViewController();
   List<BusLine> busLineList = <BusLine>[];
-  var _inputNode = FocusNode();
+  final _inputNode = FocusNode();
 
   void openKeyboard() {
     FocusScope.of(context).requestFocus(_inputNode);
@@ -42,7 +42,10 @@ class _SearchBusLineViewState extends State<SearchBusLineView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: PreferredSize(child: _buildSearchField(), preferredSize: Size.fromHeight(kToolbarHeight)),
+        title: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: _buildSearchField(),
+        ),
       ),
       body: _buildBody(),
     );
@@ -65,7 +68,7 @@ class _SearchBusLineViewState extends State<SearchBusLineView> {
         ),
       );
     } else {
-      return Container(
+      return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

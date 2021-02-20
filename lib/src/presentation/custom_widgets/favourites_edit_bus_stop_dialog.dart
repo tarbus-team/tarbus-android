@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
@@ -19,9 +20,9 @@ class FavouritesEditBusStopDialog extends StatefulWidget {
 }
 
 class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialog> {
-  var _busStopNameController = TextEditingController();
-  var _inputNode = FocusNode();
-  var _isFirstOpen = true;
+  final _busStopNameController = TextEditingController();
+  final _inputNode = FocusNode();
+  final _isFirstOpen = true;
   var _validated = true;
 
   void openKeyboard() {
@@ -33,11 +34,11 @@ class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialo
   }
 
   String validate(String text) {
-    var textCharArray = text.split("");
-    for (String a in textCharArray) {
-      if (a == '\"' || a == ',' || a == '\'') {
+    var textCharArray = text.split('');
+    for (var a in textCharArray) {
+      if (a == '"' || a == ',' || a == '\'') {
         _validated = false;
-        return 'Pole nie może zawierać znaków (")(,)(\')';
+        return AppString.labelNameRequitments;
       }
     }
     _validated = true;
@@ -62,7 +63,7 @@ class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialo
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
           children: [
-            AppBarTitle(title: 'Edycja'),
+            AppBarTitle(title: AppString.labelEdit),
           ],
         ),
         actions: [
@@ -71,13 +72,16 @@ class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialo
               if (!_validated) {
                 return;
               }
+              if (_busStopNameController.text.isEmpty) {
+                _busStopNameController.text = widget.oldName;
+              }
               if (await SharedPreferencesUtils.editByIndex(
                   AppConsts.SharedPreferencesFavStop, widget.busStop.id.toString(), _busStopNameController.text, 0)) {
                 closeKeyboard();
                 Navigator.of(context).pop(true);
               }
             },
-            child: Text('ZAPISZ'),
+            child: Text(AppString.labelSaveUppercase),
           ),
         ],
       ),
@@ -93,20 +97,20 @@ class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialo
             ),
             Row(
               children: [
-                Text('Kierunki: '),
+                Text('${AppString.labelDestinations}: '),
                 Text(widget.busStop.destinations),
               ],
             ),
-            Text('Lokalizacja: ${widget.busStop.lat}, ${widget.busStop.lng}'),
+            Text('${AppString.labelLocation}: ${widget.busStop.lat}, ${widget.busStop.lng}'),
             Container(
               height: 10.0,
             ),
             Text(
-              'Stara nazwa: ${widget.oldName}',
+              '${AppString.labelOldName}: ${widget.oldName}',
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
-              child: Container(
+              child: SizedBox(
                 height: 65.0,
                 child: TextFormField(
                   autovalidateMode: AutovalidateMode.always,
@@ -114,17 +118,17 @@ class _FavouritesEditBusStopDialogState extends State<FavouritesEditBusStopDialo
                   focusNode: _inputNode,
                   autofocus: true,
                   controller: _busStopNameController,
-                  validator: (text) => validate(text),
+                  validator: validate,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(15),
                   ],
                   decoration: InputDecoration(
                     fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(8.0),
-                      borderSide: new BorderSide(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(),
                     ),
-                    labelText: 'Wpisz nową nazwę',
+                    labelText: AppString.labelTypeNewName,
                   ),
                 ),
               ),

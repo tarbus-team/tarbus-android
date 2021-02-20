@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ClearButton extends StatelessWidget {
-  final button;
+  final Widget button;
 
   const ClearButton({Key key, this.button}) : super(key: key);
 

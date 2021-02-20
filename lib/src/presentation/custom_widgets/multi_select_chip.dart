@@ -16,8 +16,8 @@ class MultiSelectChip extends StatefulWidget {
 class _MultiSelectChipState extends State<MultiSelectChip> {
   List<String> selectedChoices;
 
-  _buildChoiceList() {
-    List<Widget> choices = List();
+  List<Widget> _buildChoiceList() {
+    var choices = <Widget>[];
 
     widget.reportList.forEach((item) {
       choices.add(Container(

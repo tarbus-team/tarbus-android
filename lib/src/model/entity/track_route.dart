@@ -10,9 +10,9 @@ class TrackRoute {
 
   factory TrackRoute.fromJson(Map<String, dynamic> json) {
     return TrackRoute(
-      id: json['r_id'],
-      destinationName: json['r_destination_name'],
-      destinationDesc: json['r_destination_desc'],
+      id: json['r_id'] as int,
+      destinationName: json['r_destination_name'] as String,
+      destinationDesc: json['r_destination_desc'] as String,
       busLine: BusLine.fromJson(json),
     );
   }

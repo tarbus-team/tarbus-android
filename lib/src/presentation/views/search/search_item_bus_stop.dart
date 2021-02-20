@@ -35,7 +35,7 @@ class SearchItemBusStop extends StatelessWidget {
             ),
             Expanded(
                 child: Text(
-              busStop.destinations == null ? "-" : busStop.destinations,
+              busStop.destinations ?? '-',
               maxLines: 2,
               style: TextStyle(color: AppColors.instance(context).iconColor, fontStyle: FontStyle.italic),
             )),

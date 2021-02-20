@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tarbus2021/src/app/app_consts.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/favourites_bus_stop_dialog.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
@@ -46,7 +47,7 @@ class _FavouritesBusStopIconState extends State<FavouritesBusStopIcon> {
                 setState(() {
                   isFavourite = false;
                   Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('Usunięto przystanek z ulubionych!'),
+                    content: Text(AppString.labelRemovedBusStopFromFav),
                   ));
                 });
               }
@@ -58,7 +59,7 @@ class _FavouritesBusStopIconState extends State<FavouritesBusStopIcon> {
             onPressed: () async {
               var operationStatus = await Navigator.push(
                 context,
-                MaterialPageRoute(
+                MaterialPageRoute<bool>(
                   builder: (context) => FavouritesBusStopDialog(
                     busStop: widget.busStop,
                   ),
@@ -67,7 +68,7 @@ class _FavouritesBusStopIconState extends State<FavouritesBusStopIcon> {
               if (operationStatus) {
                 update();
                 Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text('Dodano przystanek do ulubionych!'),
+                  content: Text(AppString.labelAddedBusStopToFav),
                 ));
               }
             },

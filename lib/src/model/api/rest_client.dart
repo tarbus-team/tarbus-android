@@ -6,19 +6,19 @@ import 'package:tarbus2021/src/model/api/response/response_welcome_message.dart'
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: "https://dpajak99.github.io/tarbus-api/v2-1-1/")
+@RestApi(baseUrl: 'https://dpajak99.github.io/tarbus-api/v2-1-1/')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET("/last-update.json")
+  @GET('/last-update.json')
   Future<ResponseLastUpdated> getLastUpdateDate();
 
-  @GET("/database.json")
+  @GET('/database.json')
   Future<String> getNewDatabase();
 
-  @GET("/message.json")
+  @GET('/message.json')
   Future<ResponseWelcomeMessage> getWelcomeMessage();
 
-  @GET("/alert-dialog.json")
+  @GET('/alert-dialog.json')
   Future<ResponseWelcomeDialog> getAlertDialog();
 }

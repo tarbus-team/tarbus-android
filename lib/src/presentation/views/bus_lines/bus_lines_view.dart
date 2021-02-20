@@ -55,7 +55,7 @@ class BusLinesView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    title: Text('Michalus'),
+                    title: Text(AppString.companyMichalus),
                   ),
                   Padding(
                     padding: EdgeInsets.all(15),

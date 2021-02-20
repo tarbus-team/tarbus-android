@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/favourites_bus_stop_icon.dart';
@@ -27,13 +28,12 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
   @override
   void initState() {
     viewController = FactoryScheduleViewController();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("BusLineFilter: ${widget.busLineFilter} ");
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -43,11 +43,12 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
         title: Row(
           children: [
             AppBarTitle(
-              title: 'Rozkład jazdy',
+              title: AppString.titleSchedule,
             )
           ],
         ),
         bottom: PreferredSize(
+          preferredSize: Size.fromHeight(80),
           child: Column(
             children: [
               Padding(
@@ -69,13 +70,12 @@ class _FactoryScheduleViewState extends State<FactoryScheduleView> with SingleTi
                 ),
                 isScrollable: true,
                 tabs: [
-                  ScheduleTabItem(title: 'Najbliższe'),
-                  ScheduleTabItem(title: 'Wszystkie'),
+                  ScheduleTabItem(title: AppString.labelNextDepartures),
+                  ScheduleTabItem(title: AppString.labelAllDepartures),
                 ],
               ),
             ],
           ),
-          preferredSize: Size.fromHeight(80),
         ),
       ),
       body: TabBarView(

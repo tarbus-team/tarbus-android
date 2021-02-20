@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
+import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/app/app_dimens.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/appbar_title.dart';
 import 'package:tarbus2021/src/utils/web_page_utils.dart';
@@ -41,12 +42,12 @@ class PolicyPrivacyView extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  WebPageUtils.openURL("https://www.facebook.com/dpajak99");
+                  WebPageUtils.openURL(AppConsts.FACEBOOK_DEVELOPER);
                 },
                 child: RichText(
                   softWrap: true,
                   text: TextSpan(
-                    text: "1.2. Zabrania się wykorzystywanie aplikacji do celów komercyjnych bez wiedzy i pisemnej zgody",
+                    text: '1.2. Zabrania się wykorzystywanie aplikacji do celów komercyjnych bez wiedzy i pisemnej zgody',
                     style: TextStyle(fontWeight: FontWeight.normal, color: AppColors.instance(context).mainFontColor),
                     children: <TextSpan>[
                       TextSpan(text: ' osoby zarządzającej projektem\n', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
@@ -56,13 +57,13 @@ class PolicyPrivacyView extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  WebPageUtils.openURL("https://www.facebook.com/dpajak99");
+                  WebPageUtils.openURL(AppConsts.FACEBOOK_DEVELOPER);
                 },
                 child: RichText(
                   softWrap: true,
                   text: TextSpan(
                     text:
-                        "1.3. Zabrania się wykorzystywania bazy danych oraz API aplikacji do celów innych niż wyświelanie jej zawartości w aplikacji tarBUS, bez wiedzy i pisemnej zgody",
+                        '1.3. Zabrania się wykorzystywania bazy danych oraz API aplikacji do celów innych niż wyświelanie jej zawartości w aplikacji tarBUS, bez wiedzy i pisemnej zgody',
                     style: TextStyle(fontWeight: FontWeight.normal, color: AppColors.instance(context).mainFontColor),
                     children: <TextSpan>[
                       TextSpan(text: ' osoby zarządzającej projektem\n', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
@@ -85,13 +86,13 @@ class PolicyPrivacyView extends StatelessWidget {
               Text('2. Zbieranie i wykorzystywanie informacji\n', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               InkWell(
                 onTap: () async {
-                  WebPageUtils.openURL("https://policies.google.com/privacy");
+                  WebPageUtils.openURL('https://policies.google.com/privacy');
                 },
                 child: RichText(
                   softWrap: true,
                   text: TextSpan(
                     text:
-                        "2.1.  Aplikacja korzysta z usług stron trzecich, które mogą zbierać informacje używane do identyfikacji użytkownika. \nLinki do polityki prywatności dostawców usług zewnętrznych używanych przez aplikację:\n ",
+                        '2.1.  Aplikacja korzysta z usług stron trzecich, które mogą zbierać informacje używane do identyfikacji użytkownika. \nLinki do polityki prywatności dostawców usług zewnętrznych używanych przez aplikację:\n ',
                     style: TextStyle(fontWeight: FontWeight.normal, color: AppColors.instance(context).mainFontColor),
                     children: <TextSpan>[
                       TextSpan(text: '\n          - Usługi Google Play\n', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),

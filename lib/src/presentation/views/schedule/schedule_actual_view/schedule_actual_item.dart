@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/presentation/views/track_details/track_details_view.dart';
 
@@ -15,7 +16,7 @@ class ScheduleActualItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var busLineName = departure.busLine.name;
     if (busLineName.length == 3) {
-      busLineName = "$busLineName  ";
+      busLineName = '$busLineName  ';
     }
 
     return Card(
@@ -39,9 +40,9 @@ class ScheduleActualItem extends StatelessWidget {
     return Container(
       width: 75.0,
       height: 40.0,
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        borderRadius: new BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
       child: Padding(
         padding: EdgeInsets.all(7),
@@ -50,7 +51,7 @@ class ScheduleActualItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/icons/icon_bus.svg",
+              'assets/icons/icon_bus.svg',
               color: Colors.white,
               height: 15,
               width: 15,
@@ -80,7 +81,7 @@ class ScheduleActualItem extends StatelessWidget {
   }
 
   Widget _buildDepartureTimeBox(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 40,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -98,7 +99,7 @@ class ScheduleActualItem extends StatelessWidget {
             ),
             if (departure.isTommorow)
               Text(
-                'Jutro',
+                AppString.labelTommorow,
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

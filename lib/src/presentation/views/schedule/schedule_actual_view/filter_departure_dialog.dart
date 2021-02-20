@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/multi_select_chip.dart';
 
 class FilterDepartureDialog extends StatelessWidget {
@@ -10,11 +11,11 @@ class FilterDepartureDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> selectedChips = <String>[];
-    List<String> filterList = filter.split(',');
+    var selectedChips = <String>[];
+    var filterList = filter.split(',');
 
     return AlertDialog(
-      title: Text('Wybierz'),
+      title: Text(AppString.labelSelect),
       content: MultiSelectChip(
         allBusLines,
         selectedChoices: filterList,
@@ -25,9 +26,10 @@ class FilterDepartureDialog extends StatelessWidget {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
+            selectedChips = selectedChips.where((chip) => chip != '').toList();
             Navigator.of(context).pop(selectedChips.join(','));
           },
-          child: Text('Filtruj'),
+          child: Text(AppString.labelFilter),
         ),
       ],
     );

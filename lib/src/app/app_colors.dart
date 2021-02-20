@@ -25,9 +25,9 @@ class AppColors {
   Color lineColor;
   Color homeLinkColor;
 
-  static AppColors instance(context) {
+  static AppColors instance(BuildContext context) {
     var brightness = MediaQuery.platformBrightnessOf(context);
-    bool darkModeOn = brightness == Brightness.dark;
+    var darkModeOn = brightness == Brightness.dark;
     if (darkModeOn) {
       return AppColors.dark();
     }

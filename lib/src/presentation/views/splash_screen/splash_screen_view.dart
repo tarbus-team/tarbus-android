@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
-import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_Indicator.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_indicator.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/nothing.dart';
 
 import 'controller/splash_screen_view_controller.dart';
@@ -29,11 +29,11 @@ class _SplashScreenViewState extends State<SplashScreenView> {
 
   void update() async {
     isError = false;
-    errorMessage = "";
+    errorMessage = '';
     downloadingStatus = false;
 
     var onlineStatus = await viewController.init();
-    //TODO - If inside if insde if - if mess
+
     if (onlineStatus) {
       viewController.scheduleStatus = await viewController.checkForUpdates();
       if (viewController.scheduleStatus == ScheduleStatus.old) {
@@ -99,7 +99,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/logo_tarbus_main.svg",
+              'assets/logo_tarbus_main.svg',
               color: AppColors.instance(context).tommorowLabelColor,
               height: 200,
             ),
@@ -155,9 +155,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
           ),
           RaisedButton(
             onPressed: () {
-              setState(() {
-                update();
-              });
+              setState(update);
             },
             child: Text(AppString.labelCheckAgain),
           )

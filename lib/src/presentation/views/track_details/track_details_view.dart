@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/database/database_helper.dart';
 import 'package:tarbus2021/src/model/entity/departure.dart';
 import 'package:tarbus2021/src/model/entity/track.dart';
@@ -20,7 +21,7 @@ class TrackDetailsView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
-          children: [AppBarTitle(title: 'Trasa wybranego odjazdu')],
+          children: [AppBarTitle(title: AppString.labelSelectedDepartureTrack)],
         ),
       ),
       body: SingleChildScrollView(
@@ -32,7 +33,7 @@ class TrackDetailsView extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-                child: Text('Kierunek:'),
+                child: Text('${AppString.labelDestination}:'),
               ),
               ListTile(
                 title: Text(track.destination.directionBoardName, style: TextStyle(fontWeight: FontWeight.bold)),

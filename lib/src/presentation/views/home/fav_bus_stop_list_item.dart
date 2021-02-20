@@ -5,45 +5,51 @@ import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_consts.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop_arguments_holder.dart';
 import 'package:tarbus2021/src/model/entity/custop_popup_menu.dart';
+import 'package:tarbus2021/src/model/entity/favourite_bus_stop.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/favourites_edit_bus_stop_dialog.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/factory_schedule_view.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class FavBusStopListItem extends StatelessWidget {
-  final favBusStop;
-  final onUpdate;
+  final FavouriteBusStop favBusStop;
+  final Function onUpdate;
 
   const FavBusStopListItem({Key key, this.favBusStop, this.onUpdate}) : super(key: key);
 
+  static const String labelDelete = 'Usuń';
+  static const String labelSuccessfullyDeleted = 'Pomyślnie skasowano!';
+  static const String labelSuccessfullyEdited = 'Pomyślnie zedytowano!';
+  static const String labelEdit = 'Edytuj';
+
   @override
   Widget build(BuildContext context) {
-    List choices = [
+    var choices = [
       CustomPopupMenu(
-        title: 'Usuń',
+        title: labelDelete,
         icon: Icons.delete_outline,
         action: () {
           SharedPreferencesUtils.removeByIndex(AppConsts.SharedPreferencesFavStop, favBusStop.busStop.id.toString(), 0);
           Scaffold.of(context).showSnackBar(
             SnackBar(
-              content: Text('Pomyślnie skasowano!'),
+              content: Text(labelSuccessfullyDeleted),
             ),
           );
         },
       ),
       CustomPopupMenu(
-        title: 'Edytuj',
+        title: labelEdit,
         icon: Icons.edit,
         action: () async {
           var operationStatus = await Navigator.push(
             context,
-            MaterialPageRoute(
+            MaterialPageRoute<bool>(
               builder: (context) => FavouritesEditBusStopDialog(busStop: favBusStop.busStop, oldName: favBusStop.name),
             ),
           );
           if (operationStatus) {
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('Pomyślnie zedytowano!'),
+                content: Text(labelSuccessfullyEdited),
               ),
             );
           }
@@ -76,7 +82,7 @@ class FavBusStopListItem extends StatelessWidget {
         subtitle: Text(favBusStop.busStop.name),
         trailing: PopupMenuButton(
           elevation: 3.2,
-          onSelected: (value) {
+          onSelected: (dynamic value) {
             value.action();
           },
           itemBuilder: (BuildContext context) {

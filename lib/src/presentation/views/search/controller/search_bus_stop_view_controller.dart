@@ -17,10 +17,10 @@ class SearchBusLineViewController {
   }
 
   Future<List<BusLine>> getSearchedBusLineList(String text) {
-    String pattern = text;
+    var pattern = text;
     pattern = pattern.trim();
     pattern = pattern.toUpperCase();
-    List<String> patterns = pattern.split(' ');
+    var patterns = pattern.split(' ');
     return DatabaseHelper.instance.getSearchedBusLines(patterns);
   }
 }

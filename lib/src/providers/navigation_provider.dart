@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
+import 'package:tarbus2021/src/model/entity/app_start_settings.dart';
+import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/model/entity/bus_stop_arguments_holder.dart';
 import 'package:tarbus2021/src/model/entity/screen.dart';
 import 'package:tarbus2021/src/presentation/views/bus_lines/bus_lines_view.dart';
@@ -10,32 +12,31 @@ import 'package:tarbus2021/src/presentation/views/home/home_view.dart';
 import 'package:tarbus2021/src/presentation/views/schedule/factory_schedule_view.dart';
 import 'package:tarbus2021/src/presentation/views/search/search_view.dart';
 
-const FIRST_SCREEN = 0;
-const SECOND_SCREEN = 1;
-const THIRD_SCREEN = 2;
+const firstScreen = 0;
+const secondScreen = 1;
+const thirdScreen = 2;
 
 class NavigationProvider extends ChangeNotifier {
   static NavigationProvider of(BuildContext context) => Provider.of<NavigationProvider>(context, listen: false);
 
-  int _currentScreenIndex = FIRST_SCREEN;
+  int _currentScreenIndex = firstScreen;
 
   int get currentTabIndex => _currentScreenIndex;
 
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case HomeView.route:
-        return MaterialPageRoute(builder: (_) => HomeView());
+        return MaterialPageRoute<void>(builder: (_) => HomeView());
       case BusLinesView.route:
-        return MaterialPageRoute(builder: (_) => BusLinesView());
+        return MaterialPageRoute<void>(builder: (_) => BusLinesView());
       case SearchView.route:
-        return MaterialPageRoute(builder: (_) => SearchView());
+        return MaterialPageRoute<void>(builder: (_) => SearchView());
       case BusRoutesView.route:
-        return MaterialPageRoute(builder: (_) => BusRoutesView(busLine: settings.arguments));
+        return MaterialPageRoute<void>(builder: (_) => BusRoutesView(busLine: settings.arguments as BusLine));
       case FactoryScheduleView.route:
-        BusStopArgumentsHolder args = settings.arguments;
-        return PageRouteBuilder(
+        var args = settings.arguments as BusStopArgumentsHolder;
+        return PageRouteBuilder<void>(
             pageBuilder: (context, animation1, animation2) {
-              print("ARGS: ${args.busLineFilter}");
               return FactoryScheduleView(busStop: args.busStop, busLineFilter: args.busLineFilter);
             },
             transitionsBuilder: (context, animation1, animation2, child) {
@@ -46,14 +47,14 @@ class NavigationProvider extends ChangeNotifier {
             },
             transitionDuration: Duration(milliseconds: 0));
       case '/start':
-        return MaterialPageRoute(builder: (_) => FactoryMainView(appStartSettings: settings.arguments));
+        return MaterialPageRoute<void>(builder: (_) => FactoryMainView(appStartSettings: settings.arguments as AppStartSettings));
       default:
-        return MaterialPageRoute(builder: (_) => FactoryMainView());
+        return MaterialPageRoute<void>(builder: (_) => FactoryMainView());
     }
   }
 
   final Map<int, Screen> _screens = {
-    FIRST_SCREEN: Screen(
+    firstScreen: Screen(
       title: AppString.bottomNavigationHome,
       icon: Icons.home_outlined,
       child: HomeView(),
@@ -62,12 +63,12 @@ class NavigationProvider extends ChangeNotifier {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           default:
-            return MaterialPageRoute(builder: (_) => HomeView());
+            return MaterialPageRoute<void>(builder: (_) => HomeView());
         }
       },
       scrollController: ScrollController(),
     ),
-    SECOND_SCREEN: Screen(
+    secondScreen: Screen(
       title: AppString.bottomNavigationBusLines,
       icon: Icons.timeline_outlined,
       child: BusLinesView(),
@@ -76,12 +77,12 @@ class NavigationProvider extends ChangeNotifier {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           default:
-            return MaterialPageRoute(builder: (_) => BusLinesView());
+            return MaterialPageRoute<void>(builder: (_) => BusLinesView());
         }
       },
       scrollController: ScrollController(),
     ),
-    THIRD_SCREEN: Screen(
+    thirdScreen: Screen(
       title: AppString.bottomNavigationSearch,
       icon: Icons.search_outlined,
       child: SearchView(),
@@ -90,7 +91,7 @@ class NavigationProvider extends ChangeNotifier {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           default:
-            return MaterialPageRoute(builder: (_) => SearchView());
+            return MaterialPageRoute<void>(builder: (_) => SearchView());
         }
       },
       scrollController: ScrollController(),
@@ -128,8 +129,8 @@ class NavigationProvider extends ChangeNotifier {
       currentNavigatorState.pop();
       return false;
     } else {
-      if (currentTabIndex != FIRST_SCREEN) {
-        setTab(FIRST_SCREEN);
+      if (currentTabIndex != firstScreen) {
+        setTab(firstScreen);
         notifyListeners();
         return false;
       }

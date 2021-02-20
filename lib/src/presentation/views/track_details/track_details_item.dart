@@ -14,8 +14,7 @@ class TrackDetailsItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TrackDetailsViewController viewController = TrackDetailsViewController(index, currentIndex);
-    viewController.checkIfCurrentBusStop();
+    var viewController = TrackDetailsViewController(index, currentIndex)..checkIfCurrentBusStop();
 
     return ButtonTheme(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),

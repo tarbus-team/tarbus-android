@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus2021/src/app/app_string.dart';
 import 'package:tarbus2021/src/model/entity/bus_line.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/favourites_bus_line_icon.dart';
 import 'package:tarbus2021/src/presentation/custom_widgets/nothing.dart';
@@ -18,7 +19,7 @@ class SearchItemBusLine extends StatelessWidget {
         onTap: () {
           if (!showFavouritesButton) {
             Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
+              PageRouteBuilder<void>(
                 pageBuilder: (context, animation1, animation2) {
                   return BusRoutesView(busLine: busLine);
                 },
@@ -34,7 +35,7 @@ class SearchItemBusLine extends StatelessWidget {
           }
         },
         title: Text(busLine.name),
-        subtitle: Text('Michalus'),
+        subtitle: Text(AppString.companyMichalus),
         trailing: showFavouritesButton
             ? FavouritesBusLineIcon(
                 busLineId: busLine.id.toString(),

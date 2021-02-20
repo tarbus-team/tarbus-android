@@ -18,11 +18,11 @@ class SearchBusStopViewController {
   }
 
   Future<List<BusStop>> getSearchedBusStops(String text) {
-    String pattern = text;
+    var pattern = text;
     pattern = pattern.trim();
     pattern = pattern.toLowerCase();
     pattern = StringUtils.removeLowercasePolishLetters(pattern);
-    List<String> patterns = pattern.split(' ');
+    var patterns = pattern.split(' ');
     return DatabaseHelper.instance.getSearchedBusStops(patterns);
   }
 }

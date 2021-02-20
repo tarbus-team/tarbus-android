@@ -5,7 +5,7 @@ import 'package:tarbus2021/src/model/entity/favourite_bus_stop.dart';
 import 'package:tarbus2021/src/utils/shared_preferences_utils.dart';
 
 class HomeViewController {
-  void addDialogToList(var id) {
+  void addDialogToList(String id) {
     DatabaseHelper.instance.addDialogToList(id);
   }
 
@@ -13,7 +13,7 @@ class HomeViewController {
     var favourites = await SharedPreferencesUtils.getSharedListString(AppConsts.SharedPreferencesFavStop);
     var favList = <FavouriteBusStop>[];
 
-    for (String favourite in favourites) {
+    for (var favourite in favourites) {
       var favItem = favourite.split(', ');
       var _busStop = await DatabaseHelper.instance.getFavouritesBusStop(favItem[0]);
       favList.add(FavouriteBusStop(name: favItem[1], busStop: _busStop));
