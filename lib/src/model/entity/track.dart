@@ -14,9 +14,9 @@ class Track {
 
   factory Track.fromJson(Map<String, dynamic> json) {
     return Track(
-        id: json['t_id'],
-        companyDayName: json['t_day_string'],
-        dayType: json['t_day_types'],
+        id: json['t_id'] as String,
+        companyDayName: json['t_day_string'] as String,
+        dayType: json['t_day_types'] as String,
         destination: Destination.fromJson(json),
         route: TrackRoute.fromJson(json));
   }

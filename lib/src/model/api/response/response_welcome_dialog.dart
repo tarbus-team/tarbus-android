@@ -1,10 +1,10 @@
 class ResponseWelcomeDialog {
   int id = 0;
-  String title = "";
-  String imageHref = "";
-  String content = "";
-  String buttonLinkContent = "";
-  String buttonLinkHref = "";
+  String title = '';
+  String imageHref = '';
+  String content = '';
+  String buttonLinkContent = '';
+  String buttonLinkHref = '';
   bool hasButtonLink = false;
   bool hasButtonClose = false;
   bool hasButtonRemindMeLater = false;
@@ -36,12 +36,12 @@ class ResponseWelcomeDialog {
     }
 
     return ResponseWelcomeDialog(
-        id: json['id'],
-        title: json['title'],
-        imageHref: json['image_href'],
-        content: json['content'],
-        buttonLinkHref: json['button_link_href'],
-        buttonLinkContent: json['button_link_content'],
+        id: json['id'] as int,
+        title: json['title'] as String,
+        imageHref: json['image_href'] as String,
+        content: json['content'] as String,
+        buttonLinkHref: json['button_link_href'] as String,
+        buttonLinkContent: json['button_link_content'] as String,
         hasButtonLink: _hasButtonLink,
         hasButtonClose: _hasButtonClose,
         hasButtonRemindMeLater: _hasButtonRemindMeLater);

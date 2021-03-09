@@ -8,12 +8,12 @@ class ScheduleStaticItemController {
   List<String> dayTypes;
   TrackRoute trackRoute;
 
-  ScheduleStaticItemController({this.dayTypes, this.trackRoute, this.busStopId});
+  ScheduleStaticItemController({this.trackRoute, this.busStopId});
 
   List<Destination> selectUniqueDepartures(List<Departure> departures) {
-    List<Destination> allDestinations = <Destination>[];
-    List<String> existedSymbols = <String>[];
-    for (Departure departure in departures) {
+    var allDestinations = <Destination>[];
+    var existedSymbols = <String>[];
+    for (var departure in departures) {
       var symbol = departure.track.destination.symbol;
       if (!existedSymbols.contains(symbol) && symbol != '-') {
         existedSymbols.add(symbol);

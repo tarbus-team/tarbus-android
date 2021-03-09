@@ -3,20 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tarbus2021/src/app/app_colors.dart';
 import 'package:tarbus2021/src/app/app_string.dart';
-import 'package:tarbus2021/src/presentation/views/home/home_view.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/app_circular_progress_indicator.dart';
+import 'package:tarbus2021/src/presentation/custom_widgets/nothing.dart';
 
 import 'controller/splash_screen_view_controller.dart';
 
 class SplashScreenView extends StatefulWidget {
+  static const route = '/splash';
+
   @override
   _SplashScreenViewState createState() => _SplashScreenViewState();
 }
 
 class _SplashScreenViewState extends State<SplashScreenView> {
   SplashScreenViewController viewController = SplashScreenViewController();
-  bool isError = false;
-  String errorMessage = "";
-  bool downloadingStatus = false;
+  bool isError;
+  String errorMessage;
+  bool downloadingStatus;
 
   @override
   void initState() {
@@ -25,8 +28,12 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   }
 
   void update() async {
+    isError = false;
+    errorMessage = '';
+    downloadingStatus = false;
+
     var onlineStatus = await viewController.init();
-    //TODO - If inside if insde if - if mess
+
     if (onlineStatus) {
       viewController.scheduleStatus = await viewController.checkForUpdates();
       if (viewController.scheduleStatus == ScheduleStatus.old) {
@@ -52,30 +59,31 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   }
 
   void openHomeView() {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute<String>(builder: (context) => HomeView(appStartSettings: viewController.appStartSettings)));
+    Navigator.of(context).pushReplacementNamed('/start', arguments: viewController.settings);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildBody(),
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: Stack(
         children: [
-          Positioned(
-            left: 40,
-            bottom: 40,
-            child: FlatButton(
+          if (!downloadingStatus)
+            Positioned(
+              left: 40,
+              bottom: 40,
+              child: FlatButton(
                 onPressed: () async {
                   var status = viewController.setSettingsOffline();
                   openHomeView();
                 },
                 child: Text(
                   AppString.labelLaunchOffline,
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                )),
-          ),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.instance(context).mainFontColor),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -91,8 +99,8 @@ class _SplashScreenViewState extends State<SplashScreenView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/logo_tarbus_main.svg",
-              color: Colors.white,
+              'assets/logo_tarbus_main.svg',
+              color: AppColors.instance(context).tommorowLabelColor,
               height: 200,
             ),
           ],
@@ -108,11 +116,11 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
-            child: CircularProgressIndicator(),
+            child: AppCircularProgressIndicator(),
           ),
           Text(
             AppString.labelDownloadingSchedule,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.instance(context).mainFontColor),
           )
         ],
       );
@@ -121,10 +129,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       return _buildConnectionError();
     }
 
-    return Container(
-      width: 0,
-      height: 0,
-    );
+    return Nothing();
   }
 
   Widget _buildConnectionError() {
@@ -136,7 +141,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         children: [
           Text(
             errorMessage,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(color: AppColors.instance(context).mainFontColor, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           Container(
@@ -144,13 +149,13 @@ class _SplashScreenViewState extends State<SplashScreenView> {
           ),
           RaisedButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute<String>(builder: (context) => HomeView()));
+              openHomeView();
             },
             child: Text(AppString.labelContinue),
           ),
           RaisedButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute<String>(builder: (context) => SplashScreenView()));
+              setState(update);
             },
             child: Text(AppString.labelCheckAgain),
           )

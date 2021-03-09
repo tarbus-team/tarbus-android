@@ -7,4 +7,9 @@ class RouteHolder {
   List<BusStop> busStops;
 
   RouteHolder({this.trackRoute, this.busStops});
+
+  @override
+  String toString() {
+    return 'RouteHolder{trackRoute: $trackRoute, busStops: $busStops}';
+  }
 }

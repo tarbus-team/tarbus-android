@@ -1,8 +1,8 @@
 import 'package:tarbus2021/src/app/app_string.dart';
 
 class ResponseWelcomeMessage {
-  String message = "";
-  String href = "";
+  String message = '';
+  String href = '';
 
   ResponseWelcomeMessage({this.message, this.href});
 
@@ -10,5 +10,6 @@ class ResponseWelcomeMessage {
     message = AppString.labelOfflineMode;
   }
 
-  factory ResponseWelcomeMessage.fromJson(Map<String, dynamic> json) => ResponseWelcomeMessage(message: json['message'], href: json['href']);
+  factory ResponseWelcomeMessage.fromJson(Map<String, dynamic> json) =>
+      ResponseWelcomeMessage(message: json['message'] as String, href: json['href'] as String);
 }

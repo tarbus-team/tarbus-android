@@ -1,11 +1,70 @@
 import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
+
 class AppColors {
-  static const Color primaryColor = Color.fromRGBO(28, 81, 153, 1);
+  Color primaryColor;
 
-  static const Color gray = Color.fromRGBO(80, 80, 80, 1);
-  static const Color lightgray = Color.fromRGBO(235, 235, 235, 1);
+  Color mainFontColor;
 
-  static const Color lineColor = Color.fromRGBO(230, 230, 230, 1);
-  static const Color searchBarFill = Color.fromRGBO(78, 92, 201, 1);
+  Color gray;
+  Color lightGrey;
+  Color darkGrey;
+  Color darkGrey2;
+
+  Color iconColor;
+  Color listIconColor;
+  Color staticTabBarColor;
+  Color staticDeparturesNames;
+
+  Color staticTabBarFontColorActive;
+  Color staticTabBarFontColorUnactive;
+
+  Color tommorowLabelColor;
+
+  Color lineColor;
+  Color homeLinkColor;
+
+  static AppColors instance(BuildContext context) {
+    var brightness = MediaQuery.platformBrightnessOf(context);
+    var darkModeOn = brightness == Brightness.dark;
+    if (darkModeOn) {
+      return AppColors.dark();
+    }
+    return AppColors.light();
+  }
+
+  AppColors.light() {
+    primaryColor = Color.fromRGBO(28, 81, 153, 1);
+    mainFontColor = Color.fromRGBO(10, 10, 10, 1);
+    gray = Color.fromRGBO(80, 80, 80, 1);
+    lightGrey = Color.fromRGBO(230, 230, 230, 1);
+    darkGrey = Color.fromRGBO(20, 20, 20, 1);
+    darkGrey2 = Color.fromRGBO(50, 50, 50, 1);
+    iconColor = Color.fromRGBO(10, 10, 10, 1);
+    lineColor = Color.fromRGBO(230, 230, 230, 1);
+    staticTabBarColor = Color.fromRGBO(255, 255, 255, 1);
+    staticDeparturesNames = Color.fromRGBO(50, 50, 50, 1);
+    staticTabBarFontColorActive = Color.fromRGBO(10, 10, 10, 1);
+    staticTabBarFontColorUnactive = Color.fromRGBO(10, 10, 10, 1);
+    homeLinkColor = primaryColor;
+    tommorowLabelColor = primaryColor;
+  }
+
+  AppColors.dark() {
+    primaryColor = Color.fromRGBO(28, 81, 153, 1);
+    mainFontColor = Color.fromRGBO(240, 240, 240, 1);
+    gray = Color.fromRGBO(80, 80, 80, 1);
+    lightGrey = Color.fromRGBO(80, 80, 80, 1);
+    darkGrey = Color.fromRGBO(20, 20, 20, 1);
+    darkGrey2 = Color.fromRGBO(80, 80, 80, 1);
+    iconColor = Color.fromRGBO(255, 255, 255, 0.5);
+    staticTabBarColor = Color.fromRGBO(46, 46, 46, 1);
+    staticDeparturesNames = Color.fromRGBO(150, 150, 150, 1);
+    lineColor = Color.fromRGBO(230, 230, 230, 1);
+    homeLinkColor = mainFontColor;
+    tommorowLabelColor = Color.fromRGBO(250, 250, 250, 1);
+    staticTabBarFontColorActive = Color.fromRGBO(250, 250, 250, 1);
+    staticTabBarFontColorUnactive = Color.fromRGBO(250, 250, 250, 1);
+  }
 }
