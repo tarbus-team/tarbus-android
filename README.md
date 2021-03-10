@@ -1,6 +1,6 @@
 # tarbus2021
 
-Aplikacja autobusy gmina Tarnów
+Aplikacja z rozkładem jazdy w Tarnowie
 
 ## Getting Started
 
