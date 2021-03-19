@@ -18,24 +18,27 @@ class MiniScheduleItem extends StatelessWidget {
     if (busLineName.length == 3) {
       busLineName = '$busLineName  ';
     }
-
     return Container(
       child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute<String>(
-                builder: (context) => TrackDetailsView(track: departure.track, busStopId: busStopId)));
-          },
-          child: Column(
-            children: [_buildBusLineBox(context, busLineName), _buildDepartureTimeBox(context)],
-          )),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute<String>(
+              builder: (context) => TrackDetailsView(track: departure.track, busStopId: busStopId)));
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [_buildBusLineBox(context, busLineName), _buildDepartureTimeBox(context)],
+        ),
+      ),
     );
   }
 
   Widget _buildBusLineBox(BuildContext context, String busLineName) {
     return Container(
+      height: 25,
       color: AppConfig.of(context).brandColors.primary,
       child: Padding(
-        padding: EdgeInsets.all(4),
+        padding: EdgeInsets.all(2),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,16 +46,16 @@ class MiniScheduleItem extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/icon_bus.svg',
               color: Colors.white,
-              height: 13,
-              width: 13,
+              height: 11,
+              width: 11,
             ),
             Container(
-              width: 4,
+              width: 3,
             ),
             Text(
               busLineName,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),

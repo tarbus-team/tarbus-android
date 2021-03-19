@@ -36,13 +36,15 @@ class BusLineListItem extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/icon_bus.svg',
               color: Colors.white,
+              height: 15,
+              width: 15,
             ),
             Container(
-              width: 14,
+              width: 8,
             ),
             Text(
               busLine.name,
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
             ),
           ],
         ),

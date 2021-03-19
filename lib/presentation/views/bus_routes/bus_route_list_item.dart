@@ -38,13 +38,21 @@ class _BusRouteListItemState extends State<BusRouteListItem> with TickerProvider
             ListTileTheme(
               dense: true,
               child: ExpansionTile(
-                tilePadding: _isExpanded ? EdgeInsets.symmetric(vertical: 11, horizontal: 20) : EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                tilePadding: _isExpanded
+                    ? EdgeInsets.symmetric(vertical: 11, horizontal: 20)
+                    : EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [Text(AppString.labelDestinationShortcut)],
+                  children: [
+                    Text(
+                      AppString.labelDestinationShortcut,
+                      style: TextStyle(color: AppColors.instance(context).mainFontColor),
+                    ),
+                  ],
                 ),
-                title: Text(destinationName, style: TextStyle(fontSize: 20.0, color: AppColors.instance(context).mainFontColor)),
+                title: Text(destinationName,
+                    style: TextStyle(fontSize: 20.0, color: AppColors.instance(context).mainFontColor)),
                 onExpansionChanged: (status) {
                   setState(() {
                     _isExpanded = status;
@@ -101,7 +109,8 @@ class _BusRouteListItemState extends State<BusRouteListItem> with TickerProvider
                       context,
                       rootNavigator: true,
                     ).pushNamed(FactoryScheduleView.route,
-                        arguments: BusStopArgumentsHolder(busStop: busStop, busLineFilter: widget.routeHolder.trackRoute.busLine.name));
+                        arguments: BusStopArgumentsHolder(
+                            busStop: busStop, busLineFilter: widget.routeHolder.trackRoute.busLine.name));
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   padding: EdgeInsets.all(0),
@@ -110,13 +119,14 @@ class _BusRouteListItemState extends State<BusRouteListItem> with TickerProvider
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image(
-                          image: AssetImage(viewController.getBusStopIconPath(index, widget.routeHolder.busStops.length)),
+                          image:
+                              AssetImage(viewController.getBusStopIconPath(index, widget.routeHolder.busStops.length)),
                           height: 30,
                           fit: BoxFit.fitHeight),
                       Container(
                         width: 8,
                       ),
-                      _getBusStopName(busStop.name, busStop.isOptional),
+                      _getBusStopName(busStop.id, busStop.name, busStop.isOptional),
                     ],
                   ),
                 ),
@@ -128,11 +138,13 @@ class _BusRouteListItemState extends State<BusRouteListItem> with TickerProvider
     );
   }
 
-  Widget _getBusStopName(String name, bool isOptional) {
+  Widget _getBusStopName(int id, String name, bool isOptional) {
+    name = Settings.isDevelop ? '$id - $name' : name;
     if (isOptional) {
       return Text(
         '...$name',
-        style: TextStyle(fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, color: AppColors.instance(context).iconColor),
+        style: TextStyle(
+            fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, color: AppColors.instance(context).iconColor),
       );
     } else {
       return Text(

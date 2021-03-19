@@ -2,10 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tarbus2021/utils/theme_utils.dart';
+import 'package:tarbus2021/utils/theme_provider.dart';
 
 class AppColors {
   Color primaryColor;
+  Color primaryLightColor;
 
   Color mainFontColor;
 
@@ -28,7 +29,7 @@ class AppColors {
   Color homeLinkColor;
 
   static AppColors instance(BuildContext context) {
-    if (ThemeUtils.isDark(context)) {
+    if (MyTheme.isDark) {
       return AppColors.dark();
     }
     return AppColors.light();
@@ -36,6 +37,7 @@ class AppColors {
 
   AppColors.light() {
     primaryColor = Color.fromRGBO(28, 81, 153, 1);
+    primaryLightColor = Color.fromRGBO(28, 81, 153, 1);
     mainFontColor = Color.fromRGBO(10, 10, 10, 1);
     gray = Color.fromRGBO(80, 80, 80, 1);
     lightGrey = Color.fromRGBO(230, 230, 230, 1);
@@ -53,6 +55,7 @@ class AppColors {
 
   AppColors.dark() {
     primaryColor = Color.fromRGBO(28, 81, 153, 1);
+    primaryLightColor = Color.fromRGBO(115, 164, 229, 1);
     mainFontColor = Colors.grey[200];
     gray = Color.fromRGBO(80, 80, 80, 1);
     lightGrey = Color.fromRGBO(80, 80, 80, 1);

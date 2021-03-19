@@ -91,7 +91,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                     ),
                   ],
                 ),
-                title: Text(AppString.labelWeAreOnFacebook),
+                title: Text(
+                  AppString.labelWeAreOnFacebook,
+                  style: TextStyle(fontSize: 15),
+                ),
                 subtitle: Text(AppString.labelJoinUs),
                 trailing: ElevatedButton(
                   onPressed: () {
@@ -175,7 +178,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             },
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          return SizedBox(
+            height: 80.0,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         }
       },
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tarbus2021/app/app_colors.dart';
 import 'package:tarbus2021/app/app_consts.dart';
 import 'package:tarbus2021/app/app_dimens.dart';
 import 'package:tarbus2021/app/app_string.dart';
@@ -74,13 +75,16 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
               if (_busStopNameController.text.isEmpty) {
                 _busStopNameController.text = AppString.labelNewBusStopUppercase;
               }
-              if (await SharedPreferencesUtils.add(
-                  AppConsts.SharedPreferencesFavStop, '${widget.busStop.id.toString()}, ${_busStopNameController.text}')) {
+              if (await SharedPreferencesUtils.add(AppConsts.SharedPreferencesFavStop,
+                  '${widget.busStop.id.toString()}, ${_busStopNameController.text}')) {
                 closeKeyboard();
                 Navigator.of(context).pop(true);
               }
             },
-            child: Text(AppString.labelSaveUppercase),
+            child: Text(
+              AppString.labelSaveUppercase,
+              style: TextStyle(color: AppColors.instance(context).primaryLightColor),
+            ),
           ),
         ],
       ),
@@ -117,9 +121,18 @@ class _FavouritesBusStopDialogState extends State<FavouritesBusStopDialog> {
                   ],
                   decoration: InputDecoration(
                     fillColor: Colors.white,
+                    labelStyle: TextStyle(color: AppColors.instance(context).primaryLightColor),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(),
+                      borderSide: BorderSide(color: AppColors.instance(context).primaryLightColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: AppColors.instance(context).primaryLightColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: AppColors.instance(context).primaryLightColor),
                     ),
                     labelText: AppString.labelActionAddToFav,
                   ),

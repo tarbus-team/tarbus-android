@@ -33,7 +33,6 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
     super.initState();
     firstInitial = false;
     filterLine = widget.busLineFilter;
-    print(filterLine);
     WidgetsBinding.instance.addPostFrameCallback((_) => update());
   }
 
@@ -78,7 +77,8 @@ class _ScheduleActualViewState extends State<ScheduleActualView> with AutomaticK
                 _buildFilterBox(),
                 FlatButton.icon(
                   onPressed: () async {
-                    var allBusLines = viewController.departuresList.map((departure) => departure.busLine.name).toSet().toList();
+                    var allBusLines =
+                        viewController.departuresList.map((departure) => departure.busLine.name).toSet().toList();
                     filterLine = await showDialog(
                       context: context,
                       builder: (ctx) => FilterDepartureDialog(allBusLines: allBusLines, filter: filterLine),

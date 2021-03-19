@@ -30,13 +30,10 @@ class ScheduleActualViewController {
 
     departuresList = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, startFromTime);
 
-    print('Today is $formattedDateToday');
-
     if (departuresList.length < 13) {
       dateToday = dateToday.add(Duration(days: 1));
 
       formattedDateToday = dateFormatter.format(dateToday);
-      print('Tommorow is $formattedDateToday');
       currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
       List<Departure> tommorowDepartures = await DatabaseHelper.instance.getNextDepartures(id, currentDayTypes, 0);
       for (var departure in tommorowDepartures) {

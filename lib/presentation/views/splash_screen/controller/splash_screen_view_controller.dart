@@ -80,7 +80,6 @@ class SplashScreenViewController {
   }
 
   Future<bool> updateIfExpired() async {
-    print("Schedule status: $scheduleStatus");
     if (scheduleStatus == ScheduleStatus.noConnection) return false;
     if (scheduleStatus == ScheduleStatus.actual) {
       return true;

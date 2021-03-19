@@ -41,14 +41,15 @@ class TrackDetailsView extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.of(
                       context,
                       rootNavigator: true,
                     ).pushNamed(BusMapView.route, arguments: track);
                   },
-                  child: Text(
+                  icon: Icon(Icons.map),
+                  label: Text(
                     'Zobacz na mapie',
                     style: TextStyle(color: Colors.white),
                   ),

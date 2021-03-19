@@ -21,7 +21,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     //const NEW_DB_VERSION = 4;
-    const NEW_DB_VERSION = 5;
+    const NEW_DB_VERSION = 6;
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, 'tarbus.db');
 
@@ -175,7 +175,6 @@ class DatabaseHelper {
         'AND Departure.d_time_in_min > $startFromTime '
         'ORDER BY d_time_in_min';
 
-    print(query);
     var response = await doSQL(query);
     var departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
@@ -205,7 +204,6 @@ class DatabaseHelper {
         'ORDER BY d_time_in_min '
         'LIMIT $limit';
 
-    print(query);
     var response = await doSQL(query);
     var departures = response.map((c) => Departure.fromJson(c)).toList();
     return departures;
@@ -227,7 +225,6 @@ class DatabaseHelper {
     var query = 'SELECT bsc_coords_list FROM BusStopConnection WHERE bsc_from_bus_stop_id = $idFrom AND '
         'bsc_to_bus_stop_id = $idTo';
     var response = await doSQL(query);
-    //print("from: $idFrom, to: $idTo response: $response");
     return response[0]['bsc_coords_list'];
   }
 

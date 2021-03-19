@@ -60,7 +60,6 @@ class SharedPreferencesUtils {
   }
 
   static Future<bool> editByIndex(String key, String id, String newValue, int index) async {
-    print('$key $id $newValue, $index');
     var sharedList = await SharedPreferencesUtils.getSharedListString(key);
     var resultList = <String>[];
     for (var item in sharedList) {

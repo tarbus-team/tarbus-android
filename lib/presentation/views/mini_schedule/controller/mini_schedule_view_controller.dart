@@ -28,7 +28,7 @@ class MiniScheduleViewController {
     var formattedDateToday = dateFormatter.format(dateToday);
     var currentDayTypes = await DatabaseHelper.instance.getCurrentDayType(formattedDateToday);
 
-    departuresList = await DatabaseHelper.instance.getNextDeparturesWithLimit(id, currentDayTypes, startFromTime, 7);
+    departuresList = await DatabaseHelper.instance.getNextDeparturesWithLimit(id, currentDayTypes, startFromTime, 8);
 
     visibleDeparturesList = departuresList;
     return true;

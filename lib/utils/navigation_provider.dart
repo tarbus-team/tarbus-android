@@ -13,10 +13,12 @@ import 'package:tarbus2021/presentation/views/factory_main/factory_main_view.dar
 import 'package:tarbus2021/presentation/views/home/home_view.dart';
 import 'package:tarbus2021/presentation/views/schedule/factory_schedule_view.dart';
 import 'package:tarbus2021/presentation/views/search/search_view.dart';
+import 'package:tarbus2021/presentation/views/stop_map/stop_map_view.dart';
 
 const firstScreen = 0;
 const secondScreen = 1;
 const thirdScreen = 2;
+const fourthScreen = 3;
 
 class NavigationProvider extends ChangeNotifier {
   static NavigationProvider of(BuildContext context) => Provider.of<NavigationProvider>(context, listen: false);
@@ -53,6 +55,8 @@ class NavigationProvider extends ChangeNotifier {
             builder: (_) => FactoryMainView(appStartSettings: settings.arguments as AppStartSettings));
       case '/map':
         return MaterialPageRoute<void>(builder: (_) => BusMapView(track: settings.arguments as Track));
+      case '/stopMap':
+        return MaterialPageRoute<void>(builder: (_) => StopMapView());
       default:
         return MaterialPageRoute<void>(builder: (_) => FactoryMainView());
     }
@@ -88,6 +92,20 @@ class NavigationProvider extends ChangeNotifier {
       scrollController: ScrollController(),
     ),
     thirdScreen: Screen(
+      title: 'Mapa',
+      icon: Icons.map,
+      child: SearchView(),
+      initialRoute: StopMapView.route,
+      navigatorState: GlobalKey<NavigatorState>(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          default:
+            return MaterialPageRoute<void>(builder: (_) => StopMapView());
+        }
+      },
+      scrollController: ScrollController(),
+    ),
+    fourthScreen: Screen(
       title: AppString.bottomNavigationSearch,
       icon: Icons.search_outlined,
       child: SearchView(),

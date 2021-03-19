@@ -7,80 +7,48 @@ import 'package:latlong/latlong.dart';
 import 'package:tarbus2021/config/config.dart';
 import 'package:tarbus2021/model/database/database_helper.dart';
 import 'package:tarbus2021/model/entity/bus_stop_marker.dart';
-import 'package:tarbus2021/model/entity/departure.dart';
-import 'package:tarbus2021/model/entity/track.dart';
 import 'package:tarbus2021/presentation/custom_widgets/appbar_title.dart';
 import 'package:tarbus2021/presentation/views/mini_schedule/mini_schedule_view.dart';
 
-class BusMapView extends StatefulWidget {
-  static const route = '/map';
-  final Track track;
+class StopMapView extends StatefulWidget {
+  static const route = '/stopMap';
 
-  const BusMapView({Key key, this.track}) : super(key: key);
+  const StopMapView({Key key}) : super(key: key);
 
   @override
-  _BusMapViewState createState() => _BusMapViewState();
+  _StopMapViewState createState() => _StopMapViewState();
 }
 
-class _BusMapViewState extends State<BusMapView> {
+class _StopMapViewState extends State<StopMapView> {
   final PopupController _popupLayerController = PopupController();
   final MapController _mapController = MapController();
   final List<Marker> userLocationMarkers = <Marker>[];
-  bool isFirstLocationRequest = true;
   List<Marker> markers = <Marker>[];
   List<LatLng> polyPoints = <LatLng>[];
-  Track track;
 
   @override
   void initState() {
-    track = widget.track;
     fetchData();
     super.initState();
   }
 
   void fetchData() {
-    DatabaseHelper.instance.getDeparturesByTrackId(track.id).then((departureList) async {
-      int size = departureList.length;
-      for (int i = 0; i < size; i++) {
-        var departure = departureList[i];
+    DatabaseHelper.instance.getAllBusStops().then((busStopList) async {
+      busStopList.forEach((busStop) {
         markers.add(
           BusStopMarker(
-            busStop: departure.busStop,
+            busStop: busStop,
             bwidth: 50.0,
             bheight: 50.0,
-            bpoint: LatLng(departure.busStop.lat, departure.busStop.lng),
+            bpoint: LatLng(busStop.lat, busStop.lng),
             bbuilder: (ctx) => Container(
-              child: Image(image: getPinImage(i, size)),
+              child: Image(image: AssetImage('assets/icons/bs-point-0.png')),
             ),
           ),
         );
-      }
-      await getTrackList(departureList);
-    });
-  }
-
-  AssetImage getPinImage(int index, int size) {
-    if (index == 0) {
-      return AssetImage('assets/icons/bs-point-1.png');
-    } else if (index == size - 1) {
-      return AssetImage('assets/icons/bs-point-2.png');
-    } else {
-      return AssetImage('assets/icons/bs-point-0.png');
-    }
-  }
-
-  Future<void> getTrackList(List<Departure> departureList) async {
-    for (int i = 0; i < (departureList.length - 1); i++) {
-      await DatabaseHelper.instance
-          .getTrackCoords(departureList[i].busStop.id, departureList[i + 1].busStop.id)
-          .then((coordsString) {
-        List<String> unparsed = coordsString.split(',');
-        for (int i = 0; i < unparsed.length; i += 2) {
-          polyPoints.add(LatLng(double.parse(unparsed[i + 1]), double.parse(unparsed[i])));
-        }
       });
-    }
-    setState(() {});
+      setState(() {});
+    });
   }
 
   @override
@@ -89,36 +57,20 @@ class _BusMapViewState extends State<BusMapView> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: AppBarTitle(
-          title: 'Kurs',
+          title: 'Mapa przystanków',
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(53),
           child: Container(
             color: AppConfig.of(context).brandColors.primary,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 17),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      Text(track.route.busLine.name,
-                          style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'kierunek:',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Text(
-                              track.destination.directionBoardName,
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
+                      Text('Wszystkie przystanki',
+                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                     ],
                   )
                 ],
@@ -134,7 +86,8 @@ class _BusMapViewState extends State<BusMapView> {
           center: AppConfig.of(context).centerMapCoords,
           interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
           onTap: (_) => _popupLayerController.hidePopup(),
-          zoom: 13.0,
+          zoom: 14.0,
+          //minZoom: 10,
           maxZoom: 17,
         ),
         layers: [
@@ -157,15 +110,7 @@ class _BusMapViewState extends State<BusMapView> {
             popupController: _popupLayerController,
             popupBuilder: (context, marker) {
               if (marker is BusStopMarker) {
-                return Wrap(
-                  direction: Axis.vertical,
-                  runAlignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    MiniScheduleView(busStop: marker.busStop),
-                  ],
-                );
+                return MiniScheduleView(busStop: marker.busStop);
               }
               return Card(child: const Text('Not found'));
             },
@@ -179,11 +124,7 @@ class _BusMapViewState extends State<BusMapView> {
               if (ld == null || ld.location == null) {
                 return;
               }
-              if (isFirstLocationRequest) {
-                isFirstLocationRequest = false;
-              } else {
-                _mapController?.move(ld.location, 13.0);
-              }
+              _mapController?.move(ld.location, 14.0);
             },
             buttonBuilder: (BuildContext context, ValueNotifier<LocationServiceStatus> status, Function onPressed) {
               return Align(

@@ -10,7 +10,7 @@ class MyTheme extends ChangeNotifier {
     if (ThemeUtils.isDark(context)) {
       isDark = true;
     }
-    if (prefs.containsKey('dark_mode')) {
+    if (prefs.containsKey('dark_mode') && prefs.getBool('dark_mode') != null) {
       isDark = prefs.getBool('dark_mode');
     }
     return isDark ? ThemeMode.dark : ThemeMode.light;
