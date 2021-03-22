@@ -3,19 +3,17 @@
 <img src="/assets/icons/favicon.png" align="left"
 width="200" hspace="10" vspace="10">
 
-wallabag is a self-hosted read-it-later app.  
-Unlike other services, wallabag is free and open source.  
-wallabag for Android is a companion app for [wallabag](https://www.wallabag.org). You need a wallabag account first, which you are going to use in this app.
+Rozkład jazdy dla nowych linii autobusowych wyjeżdżających poza granice Tarnowa.
 
-wallabag is available on the Google Play Store and F-Droid.
+Aplikacja została stworzona z myślą o tych mieszkańcach okolic Tarnowa, którzy na co dzień przyzwyczajeni byli do nowoczesnych rozwiązań oferowanych przez linie miejskie, a przez zmianę na prywatnego przewoźnika - całkowicie stracili do nich dostęp.
 
 <p align="left">
-<a href="https://play.google.com/store/apps/details?id=fr.gaulupeau.apps.InThePoche">
+<a href="https://play.google.com/store/apps/details?id=com.dpajak99.tarbus2021">
     <img alt="Get it on Google Play"
         height="80"
-        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+        src="https://inspirationapps.com/wp-content/uploads/2020/01/google-play-badge.png" />
 </a>  
-<a href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/640px-Download_on_the_App_Store_Badge.svg.png">
+<a href="https://apps.apple.com/pl/app/tarbus/id1554556128">
     <img alt="Get it on F-Droid"
         height="80"
         src="https://inspirationapps.com/wp-content/uploads/2020/01/app-store-badge.png" />
