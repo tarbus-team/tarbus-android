@@ -1,4 +1,4 @@
-# tarBUS - Android App ![Build status](https://github.com/wallabag/android-app/workflows/CI/badge.svg?branch=master)
+# tarBUS - Android App
 
 <img src="/assets/icons/favicon.png" align="left"
 width="200" hspace="10" vspace="10">
@@ -15,10 +15,10 @@ wallabag is available on the Google Play Store and F-Droid.
         height="80"
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>  
-<a href="https://f-droid.org/app/fr.gaulupeau.apps.InThePoche">
+<a href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/640px-Download_on_the_App_Store_Badge.svg.png">
     <img alt="Get it on F-Droid"
         height="80"
-        src="https://f-droid.org/badge/get-it-on.png" />
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/640px-Download_on_the_App_Store_Badge.svg.png" />
         </a>
         </p>
 
