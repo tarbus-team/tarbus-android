@@ -14,7 +14,7 @@ Aplikacja została stworzona z myślą o tych mieszkańcach okolic Tarnowa, któ
         src="https://inspirationapps.com/wp-content/uploads/2020/01/google-play-badge.png" />
 </a>  
 <a href="https://apps.apple.com/pl/app/tarbus/id1554556128">
-    <img alt="Get it on F-Droid"
+    <img alt="Get it on AppStore"
         height="80"
         src="https://inspirationapps.com/wp-content/uploads/2020/01/app-store-badge.png" />
         </a>
@@ -33,15 +33,15 @@ wallabag is a creation from Nicolas Lœuillet released under the MIT License (Ex
 
 ## Features
 
-The android app lets you:
-- Connect to your self-hosted wallabag instance or connect to your [wallabag.it](https://wallabag.it) or [Framabag](https://framabag.org) account.
-- Supports wallabag 2.0 and higher.
-- Completely ad-free.
-- Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
-- Switch between numerous themes.
-- Possibility to cache images locally for offline reading.
-- Get articles read via Text-to-Speech feature.
-- Needs no special permissions on Android 6.0+.
+Aplikacja oferuje:
+- rozkład jazdy autobusów firmy Michalus,
+- najbliższe odjazdy,
+- mapy przystanków
+- filtrowanie odjazdów,
+- rozkłady jazdy dla poszczególnych przystanków z podziałem na: dni robocze, soboty, święta,
+- lista ulubionych przystanków,
+- lista ulubionych linii autobusowych,
+- wyszukiwanie przystanków i linii autobusowych.
 
 ## Screenshots
 
