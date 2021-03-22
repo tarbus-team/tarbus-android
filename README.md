@@ -1,4 +1,4 @@
-# wallabag - Android App ![Build status](https://github.com/wallabag/android-app/workflows/CI/badge.svg?branch=master)
+# tarBUS - Android App ![Build status](https://github.com/wallabag/android-app/workflows/CI/badge.svg?branch=master)
 
 <img src="/assets/icons/favicon.png" align="left"
 width="200" hspace="10" vspace="10">
