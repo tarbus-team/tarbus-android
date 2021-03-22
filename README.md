@@ -10,7 +10,7 @@ Aplikacja została stworzona z myślą o tych mieszkańcach okolic Tarnowa, któ
 <p align="left">
 <a href="https://play.google.com/store/apps/details?id=com.dpajak99.tarbus2021">
     <img alt="Get it on Google Play"
-        height="85"
+        height="83"
         src="https://inspirationapps.com/wp-content/uploads/2020/01/google-play-badge.png" />
 </a>  
 <a href="https://apps.apple.com/pl/app/tarbus/id1554556128">
