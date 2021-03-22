@@ -17,7 +17,7 @@ wallabag is available on the Google Play Store and F-Droid.
 </a>  
 <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/640px-Download_on_the_App_Store_Badge.svg.png">
     <img alt="Get it on F-Droid"
-        height="80"
+        height="50"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/640px-Download_on_the_App_Store_Badge.svg.png" />
         </a>
         </p>
