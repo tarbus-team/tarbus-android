@@ -71,10 +71,13 @@ class _BusMapViewState extends State<BusMapView> {
 
   Future<void> getTrackList(List<Departure> departureList) async {
     for (int i = 0; i < (departureList.length - 1); i++) {
+      print(" ${departureList[i].busStop.id}  | ${departureList[i + 1].busStop.id} ");
       await DatabaseHelper.instance
           .getTrackCoords(departureList[i].busStop.id, departureList[i + 1].busStop.id)
           .then((coordsString) {
         List<String> unparsed = coordsString.split(',');
+        print("${coordsString}");
+
         for (int i = 0; i < unparsed.length; i += 2) {
           polyPoints.add(LatLng(double.parse(unparsed[i + 1]), double.parse(unparsed[i])));
         }
