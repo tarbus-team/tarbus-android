@@ -61,6 +61,14 @@ width="200"
 
 
 
+
+
+
+
+
+
+
+
 ## Permissions
 
 On Android versions prior to Android 6.0, wallabag requires the following permissions:
