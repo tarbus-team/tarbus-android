@@ -62,7 +62,7 @@ Aplikacja wymaga uprawnień do:
 
 Ty również możesz zrobić coś dobrego dla naszego miasta! Zachęcamy do rozwijania aplikacji razem z nami! 
 
-#Uruchamianie aplikacji
+**Uruchamianie aplikacji**
 ```bash
 flutter run -t lib/config/may/tarbus_test.dart
 ```
