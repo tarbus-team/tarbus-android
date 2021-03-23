@@ -22,14 +22,7 @@ Aplikacja została stworzona z myślą o tych mieszkańcach okolic Tarnowa, któ
 
 ## About
 
-wallabag has been made for you to comfortably read and archive your articles.
-You can download wallabag from wallabag.org and follow the instructions to install it on your own server.
-Alternatively, you can directly sign up for [wallabag.it](https://wallabag.it) or [Framabag](https://framabag.org).
-
-This android application allows you to put a link in your wallabag instance, letting you read your wallabag links offline.
-
-This application was originally created by Jonathan GAULUPEAU and released under the GNU GPLv3.
-wallabag is a creation from Nicolas Lœuillet released under the MIT License (Expat License).
+Jesteśmy małą grupką uczniów i studentów z tarnowskich szkół. Chcemy pomóc mieszkańcom naszych miejscowości w codziennym życiu. Naszym pierwszym projektem jest aplikacja tarBUS, która  wspomaga i upraszcza podróże komunikacją zbiorową na terenie miasta i gmin ościennych. Nasza idea przewodnia: Razem możemy uczynić nasze miasto lepszym miejscem!  
 
 ## Features
 
@@ -41,35 +34,45 @@ Aplikacja oferuje:
 - rozkłady jazdy dla poszczególnych przystanków z podziałem na: dni robocze, soboty, święta,
 - lista ulubionych przystanków,
 - lista ulubionych linii autobusowych,
-- wyszukiwanie przystanków i linii autobusowych.
+- wyszukiwanie przystanków i linii autobusowych
+- rozkład jazdy w trybie online/offline
 
 ## Screenshots
 
-[<img src="/readme/Wallabag%20Reading%20List.png" align="left"
-width="200"
-    hspace="10" vspace="10">](/readme/Wallabag%20Reading%20List.png)
-[<img src="/readme/Wallabag%20Article%20View.png" align="center"
-width="200"
-    hspace="10" vspace="10">](/readme/Wallabag%20Article%20View.png)
+[<img src="/screenshots/pic1.jpg" align="center"
+width="100"
+    hspace="10" vspace="10">](/screenshots/pic1.jpg)
+    [<img src="/screenshots/pic2.jpg" align="center"
+width="100"
+    hspace="10" vspace="10">](/screenshots/pic2.jpg)
+    [<img src="/screenshots/pic3.jpg" align="center"
+width="100"
+    hspace="10" vspace="10">](/screenshots/pic3.jpg)
+    [<img src="/screenshots/pic4.jpg" align="center"
+width="100"
+    hspace="10" vspace="10">](/screenshots/pic4.jpg)
 
 ## Permissions
 
-On Android versions prior to Android 6.0, wallabag requires the following permissions:
-- Full Network Access.
-- View Network Connections.
-- Run at startup.
-- Read and write access to external storage.
-
-The "Run at startup" permission is only used if Auto-Sync feature is enabled and is not utilised otherwise. The network access permissions are made use of for downloading content. The external storage permission is used to cache article images for viewing offline.
+Aplikacja wymaga uprawnień do:
+- Internetu (aktualizacje rozkładu jazdy)
+- Lokalizacji (obecna pozycja użytkownika na mapie - dane te nie są w jakikolwiek sposób przez nas zbierane, ale nie możemy zagwarantować, że firmy trzecie, z których wtyczek korzystamy nie wykorzystują tych informacji) 
 
 ## Contributing
 
-wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
- * [Report bugs and make suggestions.](https://github.com/wallabag/android-app/issues)
- * [Translate the app](https://hosted.weblate.org/projects/wallabag/android-app/) (you don't have to create an account).
- * Write some code. Please follow the code style used in the project to make a review process faster.
+Ty również możesz zrobić coś dobrego dla naszego miasta! Zachęcamy do rozwijania aplikacji razem z nami! 
+
+**Uruchamianie aplikacji**
+```bash
+flutter run -t lib/config/may/tarbus_test.dart
+```
 
 ## License
 
-This application is released under GNU GPLv3 (see [LICENSE](LICENSE)).
-Some of the used libraries are released under different licenses.
+Nasza aplikacja podlega licencji GNU GPLv3
+Możesz dowolnie
+- Uruchamiać program w dowolnym celu
+- Analizować, jak program działa i dostosowywać go do swoich potrzeb
+- Rozpowszechniać niezmodyfikowaną kopiię programu
+- Doskonalania z nami aplikacji i publicznego rozpowszechniania własnych ulepszeń (w pull requestach na githubie), dzięki czemu może z nich skorzystać cała społeczność
+
