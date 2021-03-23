@@ -48,13 +48,13 @@ Aplikacja oferuje:
 [<img src="/screenshots/pic1.jpg" align="left"
 width="200"
     hspace="13" vspace="10">](/screenshots/pic1.jpg)
-    [<img src="/screenshots/pic2.jpg" align="left"
+    [<img src="/screenshots/pic2.jpg" align="center"
 width="200"
     hspace="13" vspace="10">](/screenshots/pic2.jpg)
-    [<img src="/screenshots/pic3.jpg" align="left"
+    [<img src="/screenshots/pic3.jpg" align="center"
 width="200"
     hspace="13" vspace="10">](/screenshots/pic3.jpg)
-    [<img src="/screenshots/pic4.jpg" align="left"
+    [<img src="/screenshots/pic4.jpg" align="right"
 width="200"
     hspace="15" vspace="10">](/screenshots/pic4.jpg)
 
