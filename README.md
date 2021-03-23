@@ -60,11 +60,16 @@ Aplikacja wymaga uprawnień do:
 
 ## Contributing
 
-Aplikacja 
+Ty również możesz zrobić coś dobrego dla naszego miasta! Zachęcamy do rozwijania aplikacji razem z nami! 
+
+#Uruchamianie aplikacji
+```bash
+flutter run -t lib/config/may/tarbus_test.dart
+```
 
 ## License
 
-Nasza aplikacja podlega licencji GNU GPLv3 (see [LICENSE](LICENSE)).
+Nasza aplikacja podlega licencji GNU GPLv3
 Możesz dowolnie
 - Uruchamiać program w dowolnym celu
 - Analizować, jak program działa i dostosowywać go do swoich potrzeb
