@@ -64,7 +64,7 @@ Ty również możesz zrobić coś dobrego dla naszego miasta! Zachęcamy do rozw
 
 **Uruchamianie aplikacji**
 ```bash
-flutter run -t lib/config/may/tarbus_test.dart
+flutter run -t lib/config/tarbus/tarbus_test.dart
 ```
 
 ## License
