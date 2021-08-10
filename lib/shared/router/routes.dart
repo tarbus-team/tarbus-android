@@ -1,0 +1,90 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:tarbus_app/views/pages/app_bus_lines_page/app_bus_lines_page.dart';
+import 'package:tarbus_app/views/pages/app_bus_lines_page/app_bus_lines_wrapper.dart';
+import 'package:tarbus_app/views/pages/app_home_page/app_home_page.dart';
+import 'package:tarbus_app/views/pages/app_map_page/app_map_page.dart';
+import 'package:tarbus_app/views/pages/app_menu_page/app_menu_page.dart';
+import 'package:tarbus_app/views/pages/app_search_page/app_search_page.dart';
+import 'package:tarbus_app/views/pages/app_wrapper.dart';
+import 'package:tarbus_app/views/pages/departure_details_page/departure_details_page.dart';
+import 'package:tarbus_app/views/pages/departures_page/departures_page.dart';
+import 'package:tarbus_app/views/pages/first_config_page/first_config_page.dart';
+import 'package:tarbus_app/views/pages/line_details_page/line_details_page.dart';
+import 'package:tarbus_app/views/pages/not_found.dart';
+import 'package:tarbus_app/views/pages/search_list_page/search_list_page.dart';
+import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dart';
+
+@AdaptiveAutoRouter(replaceInRouteName: 'Page,Route', routes: [
+  AutoRoute(
+    page: SplashScreenPage,
+    name: "InitialRoute",
+    initial: true,
+    path: "/",
+  ),
+  AutoRoute(
+    page: FirstConfigPage,
+    name: "FirstConfigRoute",
+    path: "/appConfig",
+  ),
+  AutoRoute(
+    page: SearchListPage,
+    name: "SearchListRoute",
+    path: "/search",
+  ),
+  AutoRoute(
+    page: DeparturesPage,
+    name: "DeparturesRoute",
+    path: "/departure",
+  ),
+  AutoRoute(
+    page: DepartureDetailsPage,
+    name: "DepartureDetailsRoute",
+    path: "/departure-details",
+  ),
+  AutoRoute(page: AppWrapper, name: "AppRoute", path: "/app", children: [
+    AutoRoute(
+      page: AppHomePage,
+      name: "AppHomeRoute",
+      path: "home",
+    ),
+    AutoRoute(
+      page: AppBusLinesWrapper,
+      name: "AppBusLinesWrapper",
+      path: "lines",
+      children: [
+        AutoRoute(
+          page: AppBusLinesPage,
+          name: "AppBusLinesRoute",
+          path: "all",
+        ),
+        AutoRoute(
+          page: LineDetailsPage,
+          name: "LineDetailsRoute",
+          path: "routes",
+        ),
+        RedirectRoute(path: "", redirectTo: "all"),
+      ],
+    ),
+    AutoRoute(
+      page: AppMapPage,
+      name: "AppMapRoute",
+      path: "map",
+    ),
+    AutoRoute(
+      page: AppSearchPage,
+      name: "AppSearchRoute",
+      path: "search",
+    ),
+    AutoRoute(
+      page: AppMenuPage,
+      name: "AppMenuRoute",
+      path: "menu",
+    ),
+  ]),
+
+  AutoRoute(
+      page: NotFoundPage, name: "NotFoundRoute", path: "/Not_Found_404_error"),
+  RedirectRoute(path: "*", redirectTo: "/Not_Found_404_error")
+  // AutoRoute()
+])
+class $AppRouter {}
