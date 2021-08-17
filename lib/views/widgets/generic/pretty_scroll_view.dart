@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/views/widgets/app_custom/pretty_title.dart';
 import 'package:tarbus_app/views/widgets/generic/no_glov_behaviour.dart';
 
 class PrettyScrollView extends StatefulWidget {
@@ -36,30 +36,6 @@ class _PrettyScrollView extends State<PrettyScrollView> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle widgetStyle =
-        CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle;
-
-    Widget _buildTitle(double bigSize, double smallSize) {
-      return RichText(
-        text: TextSpan(
-          text: widget.title,
-          style: widgetStyle.copyWith(
-            fontSize: bigSize,
-          ),
-          children: [
-            if (widget.subTitle != null)
-              TextSpan(
-                text: ' ${widget.subTitle}',
-                style: widgetStyle.copyWith(
-                  fontSize: smallSize,
-                  color: AppColors.of(context).primaryColor,
-                ),
-              )
-          ],
-        ),
-      );
-    }
-
     return NestedScrollView(
       controller: scrollController,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -79,7 +55,12 @@ class _PrettyScrollView extends State<PrettyScrollView> {
                     opacity: _visible ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 150),
                     // The green box must be a child of the AnimatedOpacity widget.
-                    child: _buildTitle(20, 10)),
+                    child: PrettyTitle(
+                      bigSize: 20,
+                      smallSize: 10,
+                      title: widget.title,
+                      subTitle: widget.subTitle,
+                    )),
                 backgroundColor: _visible
                     ? Colors.white
                     : Theme.of(context).scaffoldBackgroundColor,
@@ -92,7 +73,12 @@ class _PrettyScrollView extends State<PrettyScrollView> {
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    _buildTitle(22, 8),
+                    PrettyTitle(
+                      bigSize: 22,
+                      smallSize: 8,
+                      title: widget.title,
+                      subTitle: widget.subTitle,
+                    ),
                   ],
                 ),
               ),

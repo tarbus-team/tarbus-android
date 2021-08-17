@@ -30,9 +30,8 @@ class AppWrapper extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       showUnselectedLabels: true,
       selectedItemColor: Theme.of(context).primaryColor,
-      selectedLabelStyle: TextStyle(
-        fontSize: 12,
-      ),
+      unselectedFontSize: 11,
+      selectedFontSize: 14,
       unselectedItemColor: Color(0xFFBCC5D3),
       onTap: (index) {
         if (index == tabsRouter.activeIndex) {

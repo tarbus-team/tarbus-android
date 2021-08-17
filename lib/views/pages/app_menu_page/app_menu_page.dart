@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:tarbus_app/views/widgets/app_custom/action_tile.dart';
+import 'package:tarbus_app/views/widgets/app_custom/custom_card.dart';
 import 'package:tarbus_app/views/widgets/generic/pretty_scroll_view.dart';
 
 class AppMenuPage extends StatefulWidget {
@@ -12,7 +15,49 @@ class _AppMenuPage extends State<AppMenuPage> {
     return PrettyScrollView(
       subTitle: null,
       title: 'Menu',
-      body: Text('Menu'),
+      body: Column(
+        children: [
+          CustomCard(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: Text(
+                    'MENU',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
+                ActionTile(icon: Icons.settings, title: 'Ustawienia'),
+                ActionTile(
+                    icon: Icons.build_circle_outlined,
+                    title: 'Zmień przewoźników'),
+              ],
+            ),
+          ),
+          CustomCard(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: Text(
+                    'APLIKACJA',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
+                ActionTile(
+                    icon: Icons.bug_report_outlined, title: 'Zgłoś błąd'),
+                ActionTile(icon: Icons.messenger_outline, title: 'Feedback'),
+                ActionTile(title: 'O aplikacji'),
+                ActionTile(title: 'Polityka prywatności'),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

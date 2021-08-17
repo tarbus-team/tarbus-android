@@ -13,6 +13,7 @@ import 'package:tarbus_app/config/uni_links.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_line_model.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_stop_model.dart';
 import 'package:tarbus_app/data/storage_model/subscribed_version_model.dart';
+import 'package:tarbus_app/shared/guards/gps_guard.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 
 import 'generated/l10n.dart';
@@ -48,7 +49,7 @@ class CoreApp extends StatefulWidget {
 }
 
 class _CoreApp extends State<CoreApp> {
-  final appRouter = AppRouter();
+  final appRouter = AppRouter(gpsGuard: GpsGuard());
 
   @override
   void initState() {

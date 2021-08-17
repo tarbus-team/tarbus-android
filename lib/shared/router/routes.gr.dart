@@ -5,64 +5,69 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i1;
-import 'package:flutter/cupertino.dart' as _i17;
+import 'package:flutter/cupertino.dart' as _i19;
 import 'package:flutter/material.dart' as _i2;
-import 'package:tarbus_app/data/model/schedule/bus_line.dart' as _i19;
-import 'package:tarbus_app/data/model/schedule/bus_stop.dart' as _i18;
-import 'package:tarbus_app/data/model/schedule/departure.dart' as _i20;
+import 'package:tarbus_app/data/model/schedule/bus_line.dart' as _i21;
+import 'package:tarbus_app/data/model/schedule/bus_stop.dart' as _i20;
+import 'package:tarbus_app/data/model/schedule/departure.dart' as _i22;
+import 'package:tarbus_app/shared/guards/gps_guard.dart' as _i3;
 import 'package:tarbus_app/views/pages/app_bus_lines_page/app_bus_lines_page.dart'
-    as _i15;
+    as _i17;
 import 'package:tarbus_app/views/pages/app_bus_lines_page/app_bus_lines_wrapper.dart'
-    as _i11;
-import 'package:tarbus_app/views/pages/app_home_page/app_home_page.dart'
-    as _i10;
-import 'package:tarbus_app/views/pages/app_map_page/app_map_page.dart' as _i12;
-import 'package:tarbus_app/views/pages/app_menu_page/app_menu_page.dart'
-    as _i14;
-import 'package:tarbus_app/views/pages/app_search_page/app_search_page.dart'
     as _i13;
-import 'package:tarbus_app/views/pages/app_wrapper.dart' as _i8;
-import 'package:tarbus_app/views/pages/departure_details_page/departure_details_page.dart'
-    as _i7;
-import 'package:tarbus_app/views/pages/departures_page/departures_page.dart'
-    as _i6;
-import 'package:tarbus_app/views/pages/first_config_page/first_config_page.dart'
-    as _i4;
-import 'package:tarbus_app/views/pages/line_details_page/line_details_page.dart'
+import 'package:tarbus_app/views/pages/app_home_page/app_home_page.dart'
+    as _i12;
+import 'package:tarbus_app/views/pages/app_map_page/app_map_page.dart' as _i14;
+import 'package:tarbus_app/views/pages/app_menu_page/app_menu_page.dart'
     as _i16;
-import 'package:tarbus_app/views/pages/not_found.dart' as _i9;
-import 'package:tarbus_app/views/pages/search_list_page/search_list_page.dart'
+import 'package:tarbus_app/views/pages/app_search_page/app_search_page.dart'
+    as _i15;
+import 'package:tarbus_app/views/pages/app_wrapper.dart' as _i10;
+import 'package:tarbus_app/views/pages/departure_details_page/departure_details_page.dart'
+    as _i8;
+import 'package:tarbus_app/views/pages/departures_page/departures_page.dart'
+    as _i7;
+import 'package:tarbus_app/views/pages/first_config_page/first_config_page.dart'
     as _i5;
+import 'package:tarbus_app/views/pages/line_details_page/line_details_page.dart'
+    as _i18;
+import 'package:tarbus_app/views/pages/not_found.dart' as _i11;
+import 'package:tarbus_app/views/pages/permission_page.dart' as _i9;
+import 'package:tarbus_app/views/pages/search_list_page/search_list_page.dart'
+    as _i6;
 import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dart'
-    as _i3;
+    as _i4;
 
 class AppRouter extends _i1.RootStackRouter {
-  AppRouter([_i2.GlobalKey<_i2.NavigatorState>? navigatorKey])
+  AppRouter(
+      {_i2.GlobalKey<_i2.NavigatorState>? navigatorKey, required this.gpsGuard})
       : super(navigatorKey);
+
+  final _i3.GpsGuard gpsGuard;
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
     InitialRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i3.SplashScreenPage());
+          routeData: routeData, child: _i4.SplashScreenPage());
     },
     FirstConfigRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i4.FirstConfigPage());
+          routeData: routeData, child: _i5.FirstConfigPage());
     },
     SearchListRoute.name: (routeData) {
       final args = routeData.argsAs<SearchListRouteArgs>(
           orElse: () => const SearchListRouteArgs());
       return _i1.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i5.SearchListPage(
+          child: _i6.SearchListPage(
               key: args.key, onBusStopSelected: args.onBusStopSelected));
     },
     DeparturesRoute.name: (routeData) {
       final args = routeData.argsAs<DeparturesRouteArgs>();
       return _i1.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i6.DeparturesPage(
+          child: _i7.DeparturesPage(
               key: args.key,
               busStopName: args.busStopName,
               busStopId: args.busStopId,
@@ -72,46 +77,50 @@ class AppRouter extends _i1.RootStackRouter {
       final args = routeData.argsAs<DepartureDetailsRouteArgs>();
       return _i1.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i7.DepartureDetailsPage(
+          child: _i8.DepartureDetailsPage(
               key: args.key, departure: args.departure));
+    },
+    PermissionsRoute.name: (routeData) {
+      return _i1.AdaptivePage<dynamic>(
+          routeData: routeData, child: _i9.PermissionPage());
     },
     AppRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i8.AppWrapper());
+          routeData: routeData, child: _i10.AppWrapper());
     },
     NotFoundRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i9.NotFoundPage());
+          routeData: routeData, child: _i11.NotFoundPage());
     },
     AppHomeRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i10.AppHomePage());
+          routeData: routeData, child: _i12.AppHomePage());
     },
     AppBusLinesWrapper.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i11.AppBusLinesWrapper());
+          routeData: routeData, child: _i13.AppBusLinesWrapper());
     },
     AppMapRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i12.AppMapPage());
+          routeData: routeData, child: _i14.AppMapPage());
     },
     AppSearchRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i13.AppSearchPage());
+          routeData: routeData, child: _i15.AppSearchPage());
     },
     AppMenuRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i14.AppMenuPage());
+          routeData: routeData, child: _i16.AppMenuPage());
     },
     AppBusLinesRoute.name: (routeData) {
       return _i1.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i15.AppBusLinesPage());
+          routeData: routeData, child: _i17.AppBusLinesPage());
     },
     LineDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<LineDetailsRouteArgs>();
       return _i1.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i16.LineDetailsPage(
+          child: _i18.LineDetailsPage(
               key: args.key,
               busLineId: args.busLineId,
               busLineName: args.busLineName));
@@ -125,7 +134,10 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(SearchListRoute.name, path: '/search'),
         _i1.RouteConfig(DeparturesRoute.name, path: '/departure'),
         _i1.RouteConfig(DepartureDetailsRoute.name, path: '/departure-details'),
-        _i1.RouteConfig(AppRoute.name, path: '/app', children: [
+        _i1.RouteConfig(PermissionsRoute.name, path: '/allow-permissions'),
+        _i1.RouteConfig(AppRoute.name, path: '/app', guards: [
+          gpsGuard
+        ], children: [
           _i1.RouteConfig(AppHomeRoute.name, path: 'home'),
           _i1.RouteConfig(AppBusLinesWrapper.name, path: 'lines', children: [
             _i1.RouteConfig(AppBusLinesRoute.name, path: 'all'),
@@ -157,7 +169,7 @@ class FirstConfigRoute extends _i1.PageRouteInfo {
 
 class SearchListRoute extends _i1.PageRouteInfo<SearchListRouteArgs> {
   SearchListRoute(
-      {_i17.Key? key, dynamic Function(_i18.BusStop)? onBusStopSelected})
+      {_i19.Key? key, dynamic Function(_i20.BusStop)? onBusStopSelected})
       : super(name,
             path: '/search',
             args: SearchListRouteArgs(
@@ -169,17 +181,17 @@ class SearchListRoute extends _i1.PageRouteInfo<SearchListRouteArgs> {
 class SearchListRouteArgs {
   const SearchListRouteArgs({this.key, this.onBusStopSelected});
 
-  final _i17.Key? key;
+  final _i19.Key? key;
 
-  final dynamic Function(_i18.BusStop)? onBusStopSelected;
+  final dynamic Function(_i20.BusStop)? onBusStopSelected;
 }
 
 class DeparturesRoute extends _i1.PageRouteInfo<DeparturesRouteArgs> {
   DeparturesRoute(
-      {_i17.Key? key,
+      {_i19.Key? key,
       String? busStopName,
       required int busStopId,
-      _i19.BusLine? busLine})
+      _i21.BusLine? busLine})
       : super(name,
             path: '/departure',
             args: DeparturesRouteArgs(
@@ -195,18 +207,18 @@ class DeparturesRouteArgs {
   const DeparturesRouteArgs(
       {this.key, this.busStopName, required this.busStopId, this.busLine});
 
-  final _i17.Key? key;
+  final _i19.Key? key;
 
   final String? busStopName;
 
   final int busStopId;
 
-  final _i19.BusLine? busLine;
+  final _i21.BusLine? busLine;
 }
 
 class DepartureDetailsRoute
     extends _i1.PageRouteInfo<DepartureDetailsRouteArgs> {
-  DepartureDetailsRoute({_i17.Key? key, required _i20.Departure departure})
+  DepartureDetailsRoute({_i19.Key? key, required _i22.Departure departure})
       : super(name,
             path: '/departure-details',
             args: DepartureDetailsRouteArgs(key: key, departure: departure));
@@ -217,9 +229,15 @@ class DepartureDetailsRoute
 class DepartureDetailsRouteArgs {
   const DepartureDetailsRouteArgs({this.key, required this.departure});
 
-  final _i17.Key? key;
+  final _i19.Key? key;
 
-  final _i20.Departure departure;
+  final _i22.Departure departure;
+}
+
+class PermissionsRoute extends _i1.PageRouteInfo {
+  const PermissionsRoute() : super(name, path: '/allow-permissions');
+
+  static const String name = 'PermissionsRoute';
 }
 
 class AppRoute extends _i1.PageRouteInfo {
@@ -274,7 +292,7 @@ class AppBusLinesRoute extends _i1.PageRouteInfo {
 
 class LineDetailsRoute extends _i1.PageRouteInfo<LineDetailsRouteArgs> {
   LineDetailsRoute(
-      {_i17.Key? key, required int busLineId, required String busLineName})
+      {_i19.Key? key, required int busLineId, required String busLineName})
       : super(name,
             path: 'routes',
             args: LineDetailsRouteArgs(
@@ -287,7 +305,7 @@ class LineDetailsRouteArgs {
   const LineDetailsRouteArgs(
       {this.key, required this.busLineId, required this.busLineName});
 
-  final _i17.Key? key;
+  final _i19.Key? key;
 
   final int busLineId;
 
