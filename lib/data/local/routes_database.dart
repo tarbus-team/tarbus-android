@@ -19,8 +19,9 @@ class RoutesDatabase {
 
   static Future<List<TrackRoute>> getAllFromBusStop(int busStopId) async {
     String query =
-        'SELECT DISTINCT t.t_route_id FROM Departure d JOIN Track t ON t.t_id = d.d_track_id WHERE d.d_bus_stop_id = $busStopId AND d.d_is_last LIKE \'false\'';
+        'SELECT DISTINCT t.t_route_id FROM Departure d JOIN Track t ON t.t_id = d.d_track_id WHERE d.d_bus_stop_id = $busStopId AND d.d_is_last NOT LIKE \'true\'';
     final result = await DatabaseHelper.instance.doSQL(query);
+    print(result);
     List<int> routesIds = result.map((e) => e['t_route_id'] as int).toList();
     return findAllById(routesIds);
   }

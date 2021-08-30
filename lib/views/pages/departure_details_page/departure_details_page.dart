@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus_app/bloc/departure_details_cubit/departure_details_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
+import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
 import 'package:tarbus_app/views/widgets/app_custom/action_tile.dart';
 import 'package:tarbus_app/views/widgets/app_custom/custom_app_bar.dart';
@@ -108,7 +110,13 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
-                    ActionTile(title: 'Zobacz trasę na mapie'),
+                    ActionTile(
+                        title: 'Zobacz trasę na mapie',
+                        onTap: () {
+                          context.router.root.push(TrackMapRoute(
+                              busStop: widget.departure.busStop,
+                              track: widget.departure.track));
+                        }),
                   ],
                 ),
               ),

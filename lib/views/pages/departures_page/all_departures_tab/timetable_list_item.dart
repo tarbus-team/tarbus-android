@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/data/model/schedule/destination.dart';
 import 'package:tarbus_app/data/model/schedule/track_route.dart';
-import 'package:tarbus_app/views/pages/departures_page/time_grid_item.dart';
+import 'package:tarbus_app/views/pages/departures_page/all_departures_tab/time_grid_item.dart';
 
 class TimetableListItem extends StatefulWidget {
   final TrackRoute route;

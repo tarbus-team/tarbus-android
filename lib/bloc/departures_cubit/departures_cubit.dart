@@ -62,22 +62,23 @@ class DeparturesCubit extends Cubit<DeparturesState> {
     );
     daysAhead += 1;
     await Future.delayed(Duration(milliseconds: 150));
-    emit(DeparturesLoading());
-    emit(DeparturesLoaded(
-      daysAhead: daysAheadList,
-      lineFilters: busLineFilters,
-      departures: allDepartures,
-      busLinesFromBusStop: busLinesFromBusStop.toList(),
-    ));
-    if (allDepartures.length < 20) {
-      getAll(busStopId: busStopId);
+    if (allDepartures.length < 9 || departures.length == 0) {
+      await getAll(busStopId: busStopId);
+    } else {
+      emit(DeparturesLoading());
+      emit(DeparturesLoaded(
+        daysAhead: daysAheadList,
+        lineFilters: busLineFilters,
+        departures: allDepartures,
+        busLinesFromBusStop: busLinesFromBusStop.toList(),
+      ));
     }
   }
 
   Future<void> setFilters(int busStopId, List<BusLine> busLines) async {
     initDepartures();
     busLineFilters = busLines;
-    getAll(busStopId: busStopId);
+    // getAll(busStopId: busStopId);
   }
 
   Future<void> deleteFilter(

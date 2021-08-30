@@ -318,7 +318,7 @@ packages:
       name: flutter_map_marker_popup
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0+2"
+    version: "1.0.1"
   flutter_platform_widgets:
     dependency: "direct main"
     description:

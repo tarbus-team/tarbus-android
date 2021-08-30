@@ -4,9 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tarbus_app/bloc/departures_bloc/departures_cubit.dart';
+import 'package:tarbus_app/bloc/departures_cubit/departures_cubit.dart';
 import 'package:tarbus_app/data/model/schedule/bus_line.dart';
-import 'package:tarbus_app/views/pages/departures_page/departure_list_item.dart';
+import 'package:tarbus_app/views/pages/departures_page/next_departures_tab/departure_list_item.dart';
 import 'package:tarbus_app/views/widgets/generic/center_load_spinner.dart';
 import 'package:tarbus_app/views/widgets/generic/multiple_select.dart';
 
@@ -65,7 +65,7 @@ class _NextDeparturesTab extends State<NextDeparturesTab> {
   }
 
   bool onScrollNotification(ScrollEndNotification notification) {
-    if (notification.metrics.extentAfter == 0 &&
+    if (notification.metrics.extentAfter < 200 &&
         widget.parentTabController.index == 0) {
       print('reached bottom');
       fetchView();
@@ -182,6 +182,8 @@ class _NextDeparturesTab extends State<NextDeparturesTab> {
             isBreakpoint: index < departuresLength - 1 &&
                 state.daysAhead[index - 1] != state.daysAhead[index],
             daysAhead: state.daysAhead[index - 1],
+            nextDaysAhead:
+                index < state.daysAhead.length ? state.daysAhead[index] : null,
           );
         },
       ),

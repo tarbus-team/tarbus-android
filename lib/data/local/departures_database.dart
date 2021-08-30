@@ -10,14 +10,17 @@ class DeparturesDatabase {
     required int timeInMin,
     required List<String> dayTypes,
     List<int>? busLinesId,
+    int? limit,
   }) async {
     String query =
-        '$DEPARTURES_QUERY WHERE bs.bs_id = $busStopId AND (d.d_time_in_min > $timeInMin OR d.d_time_in_min < 60) ${dayTypes.map((day) => ' AND t.t_day_types LIKE \'%$day%\'').toList().join(' ')} AND d_is_last LIKE \'false\'';
-    print(busLinesId);
+        '$DEPARTURES_QUERY WHERE bs.bs_id = $busStopId AND (d.d_time_in_min > $timeInMin OR d.d_time_in_min < 60) AND (${dayTypes.map((day) => ' ${day != dayTypes[0] ? ' OR ' : ''} t.t_day_types LIKE \'%$day%\'').toList().join(' ')}) AND d_is_last NOT LIKE \'true\'';
     if (busLinesId != null && busLinesId.isNotEmpty) {
       query = '$query AND r.r_bus_line_id IN (${busLinesId.join(',')})';
     }
     query = '$query ORDER by d.d_time_in_min';
+    if (limit != null) {
+      query = '$query LIMIT $limit';
+    }
     final result = await DatabaseHelper.instance.doSQL(query);
 
     return result.map((e) => Departure.fromJson(e)).toList();
@@ -36,7 +39,7 @@ class DeparturesDatabase {
       required int busStopId,
       required String day}) async {
     String query =
-        '$DEPARTURES_QUERY WHERE r.r_id = $routeId AND bs.bs_id = $busStopId AND d.d_is_last LIKE \'false\' AND t.t_day_types LIKE \'%$day%\' ORDER BY d.d_time_in_min';
+        '$DEPARTURES_QUERY WHERE r.r_id = $routeId AND bs.bs_id = $busStopId AND d.d_is_last NOT LIKE \'true\' AND t.t_day_types LIKE \'%$day%\' ORDER BY d.d_time_in_min';
     final result = await DatabaseHelper.instance.doSQL(query);
     return result.map((e) => Departure.fromJson(e)).toList();
   }

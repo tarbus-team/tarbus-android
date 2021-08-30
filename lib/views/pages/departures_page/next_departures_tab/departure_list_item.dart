@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/config/app_icons.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
@@ -10,16 +10,23 @@ import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
 class DepartureListItem extends StatelessWidget {
   final Departure departure;
   final bool isBreakpoint;
-  final int? daysAhead;
+  final int daysAhead;
+  final int? nextDaysAhead;
 
   const DepartureListItem({
     Key? key,
     required this.departure,
     required this.isBreakpoint,
     this.daysAhead = 0,
+    this.nextDaysAhead,
   }) : super(key: key);
 
-  Widget _buildBreakpoint(BuildContext context, DateTime todayDate) {
+  Widget _buildBreakpoint(BuildContext context) {
+    if (nextDaysAhead == null) {
+      return SizedBox(height: 0);
+    }
+    var todayDate = DateTime.now();
+    todayDate = todayDate.add(Duration(days: nextDaysAhead!));
     return Container(
         margin: EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
@@ -31,7 +38,7 @@ class DepartureListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              DateTimeUtils.getNamedDate(todayDate),
+              DateTimeUtils.getNamedDate(todayDate.add(Duration(days: 0))),
               style: Theme.of(context).textTheme.headline3,
             ),
           ],
@@ -53,7 +60,7 @@ class DepartureListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var todayDate = DateTime.now();
-    todayDate = todayDate.add(Duration(days: daysAhead! + 1));
+    todayDate = todayDate.add(Duration(days: daysAhead));
 
     return Wrap(
       children: [
@@ -96,12 +103,7 @@ class DepartureListItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(
-                        'assets/icons/icon_bus.svg',
-                        color: Colors.white,
-                        width: 20,
-                        height: 20,
-                      ),
+                      AppIcons.busStopIcon,
                       SizedBox(
                         width: 43,
                         child: Text(
@@ -135,7 +137,7 @@ class DepartureListItem extends StatelessWidget {
                     ),
                     if (daysAhead != 0)
                       Text(
-                        _getDateUnderTime(todayDate),
+                        _getDateUnderTime(todayDate.add(Duration(days: 1))),
                         style: Theme.of(context).textTheme.headline3!.copyWith(
                               color: Theme.of(context).primaryColor,
                             ),
@@ -146,7 +148,7 @@ class DepartureListItem extends StatelessWidget {
             ),
           ),
         ),
-        if (isBreakpoint) _buildBreakpoint(context, todayDate),
+        if (isBreakpoint) _buildBreakpoint(context),
       ],
     );
   }

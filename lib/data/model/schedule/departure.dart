@@ -5,7 +5,7 @@ import 'bus_stop.dart';
 
 class Departure {
   int id;
-  String? busStopLp;
+  int? busStopLp;
   int timeInMin;
   String timeInString;
   BusStop busStop;

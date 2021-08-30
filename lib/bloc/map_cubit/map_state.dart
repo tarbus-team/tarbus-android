@@ -14,12 +14,16 @@ class MapLoading extends MapState {}
 class MapLoaded extends MapState {
   final MapOptions mapOptions;
   final MapController mapController;
-  final List<Widget> layers;
+  final List<Marker> markers;
   final bool permission;
+  final PopupController popupLayerController;
+  final List<LatLng> polypoints;
 
   MapLoaded(
       {required this.permission,
-      required this.layers,
+      required this.popupLayerController,
+      required this.markers,
+      required this.polypoints,
       required this.mapOptions,
       required this.mapController});
 }

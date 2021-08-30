@@ -4,7 +4,8 @@ import 'package:provider/single_child_widget.dart';
 import 'package:tarbus_app/bloc/app_cubit/app_cubit.dart';
 import 'package:tarbus_app/bloc/bus_lines_cubit/bus_lines_cubit.dart';
 import 'package:tarbus_app/bloc/departure_details_cubit/departure_details_cubit.dart';
-import 'package:tarbus_app/bloc/departures_bloc/departures_cubit.dart';
+import 'package:tarbus_app/bloc/departures_cubit/departures_cubit.dart';
+import 'package:tarbus_app/bloc/departures_mini_cubit/departures_mini_cubit.dart';
 import 'package:tarbus_app/bloc/favourite_bus_stops_cubit/favourite_bus_stops_cubit.dart';
 import 'package:tarbus_app/bloc/first_config_cubit/first_config_cubit.dart';
 import 'package:tarbus_app/bloc/gps_cubit/gps_cubit.dart';
@@ -51,6 +52,10 @@ final List<SingleChildWidget> appProviders = [
     lazy: false,
     create: (context) => DeparturesCubit(),
   ),
+  BlocProvider<DeparturesMiniCubit>(
+    lazy: false,
+    create: (context) => DeparturesMiniCubit(),
+  ),
   BlocProvider<BusLinesCubit>(
     lazy: false,
     create: (context) => BusLinesCubit(),
@@ -79,6 +84,12 @@ final List<SingleChildWidget> appProviders = [
   BlocProvider<BusStopsMapCubit>(
     lazy: false,
     create: (context) => BusStopsMapCubit(
+      gpsCubit: BlocProvider.of<GpsCubit>(context),
+    ),
+  ),
+  BlocProvider<TrackMapCubit>(
+    lazy: false,
+    create: (context) => TrackMapCubit(
       gpsCubit: BlocProvider.of<GpsCubit>(context),
     ),
   ),

@@ -15,6 +15,7 @@ import 'package:tarbus_app/views/pages/not_found.dart';
 import 'package:tarbus_app/views/pages/permission_page.dart';
 import 'package:tarbus_app/views/pages/search_list_page/search_list_page.dart';
 import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dart';
+import 'package:tarbus_app/views/pages/track_map_page/track_map_page.dart';
 
 @AdaptiveAutoRouter(replaceInRouteName: 'Page,Route', routes: [
   AutoRoute(
@@ -32,6 +33,11 @@ import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dar
     page: SearchListPage,
     name: "SearchListRoute",
     path: "/search",
+  ),
+  AutoRoute(
+    page: TrackMapPage,
+    name: "TrackMapRoute",
+    path: "/track-map",
   ),
   AutoRoute(
     page: DeparturesPage,

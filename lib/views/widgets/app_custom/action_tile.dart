@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 class ActionTile extends StatelessWidget {
   final String title;
   final IconData? icon;
+  final Function? onTap;
 
   const ActionTile({
     Key? key,
     required this.title,
     this.icon,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        if (onTap != null) {
+          onTap!();
+        }
+      },
       child: Container(
         decoration: BoxDecoration(
             border: Border(
