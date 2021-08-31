@@ -33,7 +33,7 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
     return Card(
       child: InkWell(
         onTap: () {
-          context.router.push(DepartureDetailsRoute(departure: departure));
+          context.router.navigate(DepartureDetailsRoute(departure: departure));
         },
         child: Column(
           children: [
@@ -155,7 +155,7 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
                     SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
-                        context.router.push(DeparturesRoute(
+                        context.router.navigate(DeparturesRoute(
                           busStopId: widget.busStop.id,
                           busStopName: widget.busStop.name,
                         ));

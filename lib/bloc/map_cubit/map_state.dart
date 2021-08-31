@@ -12,20 +12,19 @@ class MapInitial extends MapState {}
 class MapLoading extends MapState {}
 
 class MapLoaded extends MapState {
-  final MapOptions mapOptions;
-  final MapController mapController;
+  final LatLng mapCenter;
   final List<Marker> markers;
   final bool permission;
-  final PopupController popupLayerController;
+  final double zoom;
   final List<LatLng> polypoints;
 
-  MapLoaded(
-      {required this.permission,
-      required this.popupLayerController,
-      required this.markers,
-      required this.polypoints,
-      required this.mapOptions,
-      required this.mapController});
+  MapLoaded({
+    required this.permission,
+    required this.markers,
+    required this.zoom,
+    required this.polypoints,
+    required this.mapCenter,
+  });
 }
 
 class MapFailure extends MapState {

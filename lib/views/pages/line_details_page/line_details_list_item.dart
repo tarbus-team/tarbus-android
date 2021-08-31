@@ -180,24 +180,30 @@ class _LineDetailsListItem extends State<LineDetailsListItem> {
                                       )),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.map,
-                                color: AppColors.of(context).primaryColor,
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Text(
-                                'Mapa',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                          GestureDetector(
+                            onTap: () {
+                              context.router.root.push(
+                                  MapRouteStopsRoute(route: widget.trackRoute));
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.map,
                                   color: AppColors.of(context).primaryColor,
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  'Mapa',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: AppColors.of(context).primaryColor,
+                                  ),
+                                )
+                              ],
+                            ),
                           )
                         ],
                       ),

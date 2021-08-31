@@ -87,6 +87,18 @@ final List<SingleChildWidget> appProviders = [
       gpsCubit: BlocProvider.of<GpsCubit>(context),
     ),
   ),
+  BlocProvider<BusStopsLineMapCubit>(
+    lazy: false,
+    create: (context) => BusStopsLineMapCubit(
+      gpsCubit: BlocProvider.of<GpsCubit>(context),
+    ),
+  ),
+  BlocProvider<BusStopsRouteMapCubit>(
+    lazy: false,
+    create: (context) => BusStopsRouteMapCubit(
+      gpsCubit: BlocProvider.of<GpsCubit>(context),
+    ),
+  ),
   BlocProvider<TrackMapCubit>(
     lazy: false,
     create: (context) => TrackMapCubit(

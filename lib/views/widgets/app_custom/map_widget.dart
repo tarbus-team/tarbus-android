@@ -17,9 +17,14 @@ class MapWidget<T extends MapCubit> extends StatefulWidget {
 }
 
 class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
+  MapController mapController = MapController();
+  PopupController popupController = PopupController();
+
+  int locationRequestCounter = 0;
+
   @override
   void initState() {
-    context.read<T>().initMap();
+    context.read<T>().initMap(mapController, popupController);
     super.initState();
   }
 
@@ -34,8 +39,15 @@ class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
       builder: (context, state) {
         if (state is MapLoaded) {
           return FlutterMap(
-            mapController: state.mapController,
-            options: state.mapOptions,
+            mapController: mapController,
+            options: MapOptions(
+              center: state.mapCenter,
+              zoom: state.zoom,
+              plugins: <MapPlugin>[LocationPlugin()],
+              interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+              onTap: (_) => popupController.hidePopup(),
+              maxZoom: 19,
+            ),
             children: [
               TileLayerWidget(
                 options: TileLayerOptions(
@@ -55,8 +67,11 @@ class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
               ),
               PopupMarkerLayerWidget(
                 options: PopupMarkerLayerOptions(
-                  popupController: state.popupLayerController,
+                  popupController: popupController,
                   markers: state.markers,
+                  // markerCenterAnimation: MarkerCenterAnimation(
+                  //   duration: Duration(milliseconds: 500),
+                  // ),
                   popupBuilder: (BuildContext context, Marker marker) {
                     if (marker is BusStopMarker) {
                       return MiniScheduleView(
@@ -81,10 +96,12 @@ class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
                   );
                 },
                 onLocationRequested: (LatLngData? ld) {
-                  if (ld == null) {
+                  if (ld == null || locationRequestCounter == 0) {
+                    locationRequestCounter += 1;
                     return;
                   }
-                  state.mapController.move(ld.location, 14.0);
+                  locationRequestCounter += 1;
+                  mapController.move(ld.location, 15.0);
                 },
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tarbus_app/bloc/routes_cubit/routes_cubit.dart';
 import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
 import 'package:tarbus_app/data/model/schedule/track_route.dart';
+import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/views/widgets/app_custom/action_tile.dart';
 import 'package:tarbus_app/views/widgets/app_custom/custom_app_bar.dart';
 import 'package:tarbus_app/views/widgets/app_custom/custom_card.dart';
@@ -63,7 +65,12 @@ class _LineDetailsPage extends State<LineDetailsPage> {
                     style: Theme.of(context).textTheme.headline3),
               ),
               ActionTile(
-                title: 'Zobacz całą trasę linii na mapie',
+                title: 'Zobacz przystanki linii na mapie',
+                onTap: () {
+                  context.router.root.push(MapLineStopsRoute(
+                      busLineId: widget.busLineId,
+                      busLineName: widget.busLineName));
+                },
               )
             ],
           )),
