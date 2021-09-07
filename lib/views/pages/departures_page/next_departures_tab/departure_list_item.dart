@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tarbus_app/config/app_colors.dart';
-import 'package:tarbus_app/config/app_icons.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
+import 'package:tarbus_app/views/widgets/app_custom/bus_line_container.dart';
+import 'package:tarbus_app/views/widgets/app_custom/departures_day_breakpoint.dart';
 
 class DepartureListItem extends StatelessWidget {
   final Departure departure;
@@ -22,39 +22,8 @@ class DepartureListItem extends StatelessWidget {
   }) : super(key: key);
 
   Widget _buildBreakpoint(BuildContext context) {
-    if (nextDaysAhead == null) {
-      return SizedBox(height: 0);
-    }
-    var todayDate = DateTime.now();
-    todayDate = todayDate.add(Duration(days: nextDaysAhead!));
-    return Container(
-        margin: EdgeInsets.symmetric(vertical: 15),
-        decoration: BoxDecoration(
-            border: Border(
-          bottom: BorderSide(width: 1, color: Colors.grey.shade400),
-        )),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              DateTimeUtils.getNamedDate(todayDate.add(Duration(days: 0))),
-              style: Theme.of(context).textTheme.headline3,
-            ),
-          ],
-        ));
-  }
-
-  String _getDateUnderTime(DateTime todayDate) {
-    switch (daysAhead) {
-      case 1:
-        return 'Jutro';
-      case 2:
-        return 'Pojutrze';
-      default:
-        todayDate = todayDate.add(Duration(days: -1));
-        return DateTimeUtils.parseDate('dd.MM', todayDate);
-    }
+    if (nextDaysAhead == null) return SizedBox(height: 0);
+    return DeparturesDayBreakpoint(daysAhead: nextDaysAhead!);
   }
 
   @override
@@ -64,17 +33,11 @@ class DepartureListItem extends StatelessWidget {
 
     return Wrap(
       children: [
-        Container(
+        SizedBox(
           height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          ),
           child: Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: InkWell(
               onTap: () {
@@ -92,32 +55,8 @@ class DepartureListItem extends StatelessWidget {
                       // fontWeight: FontWeight.w500,
                       color: Colors.black,
                     )),
-                leading: Container(
-                  width: 80,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      AppIcons.busStopIcon,
-                      SizedBox(
-                        width: 43,
-                        child: Text(
-                          departure.track.route.busLine.name,
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.headline3!.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                        ),
-                      )
-                    ],
-                  ),
+                leading: BusLineContainer(
+                  busLineName: departure.track.route.busLine.name,
                 ),
                 trailing: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +76,8 @@ class DepartureListItem extends StatelessWidget {
                     ),
                     if (daysAhead != 0)
                       Text(
-                        _getDateUnderTime(todayDate.add(Duration(days: 1))),
+                        DateTimeUtils.getDepartureDayShortcut(
+                            todayDate.add(Duration(days: 1)), daysAhead),
                         style: Theme.of(context).textTheme.headline3!.copyWith(
                               color: Theme.of(context).primaryColor,
                             ),

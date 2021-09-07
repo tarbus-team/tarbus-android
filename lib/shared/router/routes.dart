@@ -17,6 +17,7 @@ import 'package:tarbus_app/views/pages/map_track_page/track_map_page.dart';
 import 'package:tarbus_app/views/pages/not_found.dart';
 import 'package:tarbus_app/views/pages/permission_page.dart';
 import 'package:tarbus_app/views/pages/search_list_page/search_list_page.dart';
+import 'package:tarbus_app/views/pages/settings_page/settings_page.dart';
 import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dart';
 
 @AdaptiveAutoRouter(replaceInRouteName: 'Page,Route', routes: [
@@ -42,6 +43,11 @@ import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dar
     path: "/track-map",
   ),
   AutoRoute(
+    page: SettingsPage,
+    name: "SettingsRoute",
+    path: "/settings",
+  ),
+  AutoRoute(
     page: MapLineStopsPage,
     name: "MapLineStopsRoute",
     path: "/lines-stops-map",
@@ -56,7 +62,7 @@ import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dar
     name: "DeparturesRoute",
     path: "/departure",
   ),
-  AutoRoute(
+  CustomRoute(
     page: DepartureDetailsPage,
     name: "DepartureDetailsRoute",
     path: "/departure-details",

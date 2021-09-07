@@ -188,11 +188,11 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
 
     return InkWell(
       onTap: () {
-        // context.router.push(DeparturesRoute(
-        //   busStopId: stopId!,
-        //   busStopName: text,
-        //   busLine: widget.trackRoute.busLine,
-        // ));
+        context.router.navigate(DeparturesRoute(
+          busStopId: departure.busStop.id,
+          busStopName: departure.busStop.name,
+          busLine: departure.track.route.busLine,
+        ));
       },
       child: Container(
         color: isTheSameBusStop ? AppColors.of(context).primaryLight : null,

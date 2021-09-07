@@ -27,4 +27,16 @@ class DateTimeUtils {
   static String getNamedDate(DateTime date) {
     return DateFormat('EEEE, d MMM, yyyy').format(date);
   }
+
+  static String getDepartureDayShortcut(DateTime todayDate, int daysAhead) {
+    switch (daysAhead) {
+      case 1:
+        return 'Jutro';
+      case 2:
+        return 'Pojutrze';
+      default:
+        todayDate = todayDate.add(Duration(days: -1));
+        return DateTimeUtils.parseDate('dd.MM', todayDate);
+    }
+  }
 }

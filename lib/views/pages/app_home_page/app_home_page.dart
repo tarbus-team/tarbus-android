@@ -174,7 +174,7 @@ class _AppHomePage extends State<AppHomePage> {
                       ImageCard(
                         logo: SvgPicture.asset(
                           'assets/images/logo_facebook.svg',
-                          color: Colors.white,
+                          color: AppColors.of(context).fontColor,
                         ),
                         title: 'Jesteśmy na facebooku',
                         description:

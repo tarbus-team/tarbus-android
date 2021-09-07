@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,6 +29,8 @@ Future main() async {
   Hive.registerAdapter(SubscribedVersionModelAdapter());
   Hive.registerAdapter(SavedBusStopModelAdapter());
   Hive.registerAdapter(SavedBusLineModelAdapter());
+
+  GestureBinding.instance!.resamplingEnabled = true;
 
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'pl_PL';

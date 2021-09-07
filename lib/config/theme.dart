@@ -24,6 +24,7 @@ CupertinoAppData getCupertinoAppData(context, __) => CupertinoAppData(
 
 class Palette {
   static Color primaryColor = Color(0xff014F9D);
+  static Color primaryColorDark = Color(0xff006edb);
 }
 
 class Dimensions {
@@ -112,21 +113,22 @@ ThemeData lightTheme = ThemeData(
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: Palette.primaryColor,
+  primaryColor: Palette.primaryColorDark,
   textTheme: TextTheme(
-    headline1: TextStyle(
+    headline1: GoogleFonts.roboto(
       color: Colors.white,
-      fontSize: 20.0,
-      fontWeight: FontWeight.w500,
+      fontSize: 24.0,
+      fontWeight: FontWeight.w700,
     ),
     headline2: TextStyle(fontSize: 16),
-    headline3: TextStyle(
-      fontSize: 14.0,
-      fontWeight: FontWeight.w500,
+    headline3: GoogleFonts.poppins(
+      fontSize: 12.0,
+      color: Color(0xffffffff),
+      fontWeight: FontWeight.w700,
     ),
-    bodyText1: TextStyle(
+    bodyText1: GoogleFonts.roboto(
+      color: Colors.white,
       fontSize: 14.0,
-      fontWeight: FontWeight.w400,
     ),
     bodyText2: TextStyle(
       fontSize: 16.0,
@@ -139,6 +141,42 @@ ThemeData darkTheme = ThemeData(
     subtitle2: TextStyle(
       fontSize: 12.0,
       fontWeight: FontWeight.w400,
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      textStyle: MaterialStateProperty.all(
+        TextStyle(
+          fontSize: 14.0,
+          color: Palette.primaryColorDark,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(Palette.primaryColorDark),
+      textStyle: MaterialStateProperty.all(
+        GoogleFonts.poppins(
+          fontSize: 14.0,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  ),
+  tabBarTheme: TabBarTheme(
+    labelColor: Palette.primaryColorDark,
+    unselectedLabelColor: Colors.white,
+  ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.black,
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
+    actionsIconTheme: IconThemeData(
+      color: Palette.primaryColorDark,
     ),
   ),
 );

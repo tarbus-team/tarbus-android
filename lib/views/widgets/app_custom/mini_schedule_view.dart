@@ -46,7 +46,7 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    AppIcons.busStopIcon,
+                    AppIcons.of(context).busStopIcon,
                     Text(
                       departure.track.route.busLine.name,
                       style: Theme.of(context).textTheme.headline3!.copyWith(

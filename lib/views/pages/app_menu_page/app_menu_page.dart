@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/views/widgets/app_custom/action_tile.dart';
 import 'package:tarbus_app/views/widgets/app_custom/custom_card.dart';
 import 'package:tarbus_app/views/widgets/generic/pretty_scroll_view.dart';
@@ -29,7 +31,13 @@ class _AppMenuPage extends State<AppMenuPage> {
                     style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
-                ActionTile(icon: Icons.settings, title: 'Ustawienia'),
+                ActionTile(
+                  icon: Icons.settings,
+                  title: 'Ustawienia',
+                  onTap: () {
+                    context.router.root.navigate(SettingsRoute());
+                  },
+                ),
                 ActionTile(
                     icon: Icons.build_circle_outlined,
                     title: 'Zmień przewoźników'),

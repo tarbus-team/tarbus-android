@@ -9,7 +9,7 @@ abstract class _GetAppConfigUseCase {
 
   Future changeLang(String? lang);
 
-  Future updateTheme(bool isDarkTheme);
+  Future updateTheme(ThemeMode mode);
 }
 
 class GetAppConfigUseCaseImpl extends ChangeNotifier
@@ -30,6 +30,7 @@ class GetAppConfigUseCaseImpl extends ChangeNotifier
   Future initConfig() async {
     try {
       await getConfig();
+      updateTheme(ThemeMode.light);
       notifyListeners();
     } catch (err) {
       print("Error located at loading the configuration : $err");
@@ -43,14 +44,25 @@ class GetAppConfigUseCaseImpl extends ChangeNotifier
     try {
       prefs = Hive.box('configuration');
       locale = prefs!.get("language", defaultValue: "en");
-      isDarkTheme = prefs!.get("isDarkTheme", defaultValue: false);
-      themeData = isDarkTheme ? darkTheme : lightTheme;
+      await refreshListeners();
       notifyListeners();
     } catch (err) {
       print("Error located at getting configuration : $err");
 
       return err;
     }
+  }
+
+  Future<void> refreshListeners() async {
+    String themeModeString = prefs!.get("theme_mode", defaultValue: false);
+    late ThemeMode themeMode;
+    ThemeMode.values.forEach((e) {
+      if (e.toString() == themeModeString) {
+        themeMode = e;
+      }
+    });
+    isDarkTheme = themeMode == ThemeMode.dark;
+    themeData = isDarkTheme ? darkTheme : lightTheme;
   }
 
   @override
@@ -67,13 +79,11 @@ class GetAppConfigUseCaseImpl extends ChangeNotifier
   }
 
   @override
-  Future updateTheme(bool isDarkTheme) async {
+  Future updateTheme(ThemeMode mode) async {
     try {
       prefs = Hive.box('configuration');
-      prefs!.put("isDarkTheme", isDarkTheme);
-
-      this.isDarkTheme = isDarkTheme;
-      themeData = isDarkTheme ? darkTheme : lightTheme;
+      prefs!.put("theme_mode", mode.toString());
+      refreshListeners();
       notifyListeners();
     } catch (err) {
       print("Error located at updating the theme : $err");

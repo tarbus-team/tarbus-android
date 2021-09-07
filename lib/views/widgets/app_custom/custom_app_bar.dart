@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSize {
   final Widget? leading;
@@ -74,7 +75,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSize {
         style: GoogleFonts.poppins(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: AppColors.of(context).fontColor,
         ),
       ),
       actions: actions,

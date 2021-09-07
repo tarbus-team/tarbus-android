@@ -27,6 +27,7 @@ class PrettyTitle extends StatelessWidget {
         text: title,
         style: widgetStyle.copyWith(
           fontSize: bigSize,
+          color: AppColors.of(context).fontColor,
         ),
         children: [
           if (subTitle != null)
