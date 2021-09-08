@@ -13,6 +13,8 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
+            android:allowBackup="false"
+            android:fullBackupContent="false"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"

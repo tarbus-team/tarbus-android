@@ -1,6 +1,7 @@
+import 'package:tarbus_app/data/model/schedule/schedule_model.dart';
 import 'package:tarbus_app/data/model/schedule/version.dart';
 
-class BusLine {
+class BusLine extends ScheduleModel {
   int id;
   String name;
   Version version;

@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:tarbus_app/shared/location_controller.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
-import 'package:tarbus_app/views/widgets/app_custom/custom_app_bar.dart';
+import 'package:tarbus_app/views/widgets/app_bars/custom_app_bar.dart';
 
 class PermissionPage extends StatefulWidget {
   @override

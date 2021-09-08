@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tarbus_app/config/app_colors.dart';
 
 class AppIcons {
   final BuildContext context;
@@ -10,9 +9,9 @@ class AppIcons {
   factory AppIcons.of(BuildContext context) {
     return AppIcons(context);
   }
-  get busStopIcon => SvgPicture.asset(
+  SvgPicture get busStopIcon => SvgPicture.asset(
         'assets/icons/icon_bus.svg',
-        color: AppColors.of(context).fontColor,
+        color: Colors.white,
         width: 20,
         height: 20,
       );

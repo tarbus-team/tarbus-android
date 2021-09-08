@@ -1,4 +1,6 @@
-class BusStop {
+import 'package:tarbus_app/data/model/schedule/schedule_model.dart';
+
+class BusStop extends ScheduleModel {
   int id;
   double? lat;
   double? lng;

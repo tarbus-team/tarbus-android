@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tarbus_app/bloc/map_cubit/map_cubit.dart';
-import 'package:tarbus_app/views/widgets/app_custom/map_widget.dart';
-import 'package:tarbus_app/views/widgets/app_custom/pretty_title.dart';
+import 'package:tarbus_app/views/widgets/app_bars/pretty_title.dart';
+import 'package:tarbus_app/views/widgets/map/map_widget.dart';
 
 class AppMapPage extends StatefulWidget {
   @override

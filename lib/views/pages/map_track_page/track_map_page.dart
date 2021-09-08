@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:tarbus_app/bloc/map_cubit/map_cubit.dart';
 import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
 import 'package:tarbus_app/data/model/schedule/track.dart';
-import 'package:tarbus_app/views/widgets/app_custom/map_widget.dart';
-import 'package:tarbus_app/views/widgets/app_custom/pretty_title.dart';
+import 'package:tarbus_app/views/widgets/app_bars/pretty_title.dart';
+import 'package:tarbus_app/views/widgets/map/map_widget.dart';
 
 class TrackMapPage extends StatefulWidget {
   final Track track;

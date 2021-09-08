@@ -7,8 +7,8 @@ import 'package:tarbus_app/bloc/routes_cubit/routes_cubit.dart';
 import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
 import 'package:tarbus_app/data/model/schedule/track_route.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
+import 'package:tarbus_app/views/widgets/app_bars/custom_app_bar.dart';
 import 'package:tarbus_app/views/widgets/app_custom/action_tile.dart';
-import 'package:tarbus_app/views/widgets/app_custom/custom_app_bar.dart';
 import 'package:tarbus_app/views/widgets/app_custom/custom_card.dart';
 
 import 'line_details_list_item.dart';

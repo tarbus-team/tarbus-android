@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/data/model/schedule/bus_line.dart';
 import 'package:tarbus_app/views/pages/departures_page/all_departures_tab/all_departures_tab.dart';
 import 'package:tarbus_app/views/pages/departures_page/next_departures_tab/next_departures_tab.dart';
@@ -50,7 +51,7 @@ class _DeparturesPage extends State<DeparturesPage>
             style: GoogleFonts.poppins(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: AppColors.of(context).headlineColor,
             ),
           ),
           leading: IconButton(
@@ -79,7 +80,7 @@ class _DeparturesPage extends State<DeparturesPage>
                     style: Theme.of(context).textTheme.headline3!.copyWith(
                           fontFamily: 'Roboto',
                           fontSize: 14,
-                          color: Colors.black,
+                          color: AppColors.of(context).fontColor,
                         ),
                   ),
                 ),

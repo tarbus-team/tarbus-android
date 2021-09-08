@@ -20,19 +20,22 @@ class SavedBusLineModelAdapter extends TypeAdapter<SavedBusLineModel> {
       id: fields[0] as int?,
       realLineName: fields[1] as String?,
       realCompanyName: fields[2] as String?,
+      identity: fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SavedBusLineModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.realLineName)
       ..writeByte(2)
-      ..write(obj.realCompanyName);
+      ..write(obj.realCompanyName)
+      ..writeByte(3)
+      ..write(obj.identity);
   }
 
   @override

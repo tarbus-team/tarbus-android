@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tarbus_app/config/app_colors.dart';
-import 'package:tarbus_app/views/widgets/app_custom/pretty_title.dart';
+import 'package:tarbus_app/views/widgets/app_bars/pretty_title.dart';
 import 'package:tarbus_app/views/widgets/generic/no_glov_behaviour.dart';
 
 class PrettyScrollView extends StatefulWidget {

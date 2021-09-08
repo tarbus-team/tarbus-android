@@ -7,7 +7,7 @@ class BusLinesDatabase {
 
   static Future<List<BusLine>> getAllBusLines(
       {String name = '', int? limit}) async {
-    String query = '$BUS_LINE_QUERY WHERE bl.bl_name LIKE(%$name%)';
+    String query = '$BUS_LINE_QUERY WHERE bl.bl_name LIKE \'%$name%\'';
     if (limit != null) {
       query += ' LIMIT $limit';
     }

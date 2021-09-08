@@ -9,18 +9,15 @@ abstract class SearchState extends Equatable {
 
 class SearchInitial extends SearchState {}
 
-class SearchInProgress extends SearchState {}
+class SearchRefresh extends SearchState {}
 
-class SearchFoundBusStops extends SearchState {
-  final List<BusStop> busStops;
+class SearchLoading extends SearchState {}
 
-  SearchFoundBusStops({required this.busStops});
+class SearchFound extends SearchState {
+  final List<ScheduleModel> result;
 
-  @override
-  List<Object> get props => [busStops];
+  SearchFound({required this.result});
 }
-
-class SearchFoundBusLines extends SearchState {}
 
 class SearchFailure extends SearchState {
   final String error;

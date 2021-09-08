@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/data/model/schedule/bus_line.dart';
 
 class LinesSortDialog extends StatefulWidget {
@@ -20,7 +21,12 @@ class _LinesSortDialog extends State<LinesSortDialog> {
       itemBuilder: (context, index) {
         BusLine busLine = widget.availableBusLines[index];
         return ListTile(
-          title: Text(busLine.name),
+          title: Text(
+            busLine.name,
+            style: TextStyle(
+              color: AppColors.of(context).fontColor,
+            ),
+          ),
         );
       },
     );

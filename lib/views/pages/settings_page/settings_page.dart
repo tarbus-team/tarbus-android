@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tarbus_app/views/pages/settings_page/theme_mode_sheet.dart';
-import 'package:tarbus_app/views/widgets/app_custom/custom_app_bar.dart';
+import 'package:tarbus_app/views/widgets/app_bars/custom_app_bar.dart';
 
 class SettingsPage extends StatelessWidget {
   @override

@@ -13,10 +13,12 @@ class SearchTab extends StatelessWidget {
   final Widget? titleWidget;
   final bool isPrimary;
   final SearchTabType type;
+  final Function onTap;
 
   const SearchTab({
     Key? key,
     this.title,
+    required this.onTap,
     this.titleWidget,
     this.isPrimary = false,
     required this.type,
@@ -38,37 +40,40 @@ class SearchTab extends StatelessWidget {
     return Card(
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              getBackgroundSrc(),
-              fit: BoxFit.cover,
-              colorBlendMode: !isPrimary ? BlendMode.lighten : null,
-              color: !isPrimary ? Colors.white.withOpacity(0.4) : null,
+      child: InkWell(
+        onTap: () => onTap(),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                getBackgroundSrc(),
+                fit: BoxFit.cover,
+                colorBlendMode: !isPrimary ? BlendMode.lighten : null,
+                color: !isPrimary ? Colors.white.withOpacity(0.4) : null,
+              ),
             ),
-          ),
-          Positioned.fill(
-            child: Container(
-              color: AppColors.of(context).primaryColor.withOpacity(
-                    isPrimary ? 0.55 : 0.25,
+            Positioned.fill(
+              child: Container(
+                color: AppColors.of(context).primaryColor.withOpacity(
+                      isPrimary ? 0.55 : 0.25,
+                    ),
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              left: 10,
+              child: titleWidget ??
+                  Text(
+                    title!,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
                   ),
             ),
-          ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: titleWidget ??
-                Text(
-                  title!,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                ),
-          ),
-        ],
+          ],
+        ),
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),

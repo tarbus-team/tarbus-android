@@ -171,7 +171,7 @@ ThemeData darkTheme = ThemeData(
     unselectedLabelColor: Colors.white,
   ),
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.black,
+    backgroundColor: Color(0xff212121),
     iconTheme: IconThemeData(
       color: Colors.white,
     ),

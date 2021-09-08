@@ -5,10 +5,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus_app/bloc/app_cubit/app_cubit.dart';
-import 'package:tarbus_app/bloc/favourite_bus_stops_cubit/favourite_bus_stops_cubit.dart';
+import 'package:tarbus_app/bloc/favourite_cubit/favourite_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/data/storage_model/saved_bus_line_model.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_stop_model.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
+import 'package:tarbus_app/views/pages/app_home_page/favourite_bus_line_list_item.dart';
 import 'package:tarbus_app/views/pages/app_home_page/favourite_bus_stop_list_item.dart';
 import 'package:tarbus_app/views/widgets/app_custom/custom_card.dart';
 import 'package:tarbus_app/views/widgets/generic/image_card.dart';
@@ -23,6 +25,7 @@ class _AppHomePage extends State<AppHomePage> {
   @override
   void initState() {
     context.read<FavouriteBusStopsCubit>().getFavourites();
+    context.read<FavouriteBusLinesCubit>().getFavourites();
     super.initState();
   }
 
@@ -34,7 +37,7 @@ class _AppHomePage extends State<AppHomePage> {
         decoration: BoxDecoration(
             border: Border(
                 top: BorderSide(
-          color: AppColors.of(context).primaryLight,
+          color: AppColors.of(context).borderColor,
           width: 1,
         ))),
         child: ListTile(
@@ -78,12 +81,32 @@ class _AppHomePage extends State<AppHomePage> {
                     style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
+                BlocBuilder<FavouriteBusLinesCubit, FavouriteState>(
+                  builder: (context, state) {
+                    if (state is FavouriteBusLinesLoaded) {
+                      List<SavedBusLineModel> lines = state.busLines;
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: lines.length,
+                          itemBuilder: (context, index) {
+                            return FavouriteBusLineListItem(
+                              busLine: lines[index],
+                              isLast: index == lines.length - 1,
+                            );
+                          });
+                    }
+                    return SizedBox();
+                  },
+                ),
                 _buildListItem(
                   icon: SvgPicture.asset(
                     'assets/icons/icon_circle_add.svg',
                   ),
                   title: 'Dodaj',
-                  onTap: () {},
+                  onTap: () {
+                    context.router.navigate(SearchListRoute(type: 'bus_line'));
+                  },
                 ),
                 _buildListItem(
                   icon:
@@ -106,9 +129,9 @@ class _AppHomePage extends State<AppHomePage> {
                     style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
-                BlocBuilder<FavouriteBusStopsCubit, FavouriteBusStopsState>(
+                BlocBuilder<FavouriteBusStopsCubit, FavouriteState>(
                     builder: (context, state) {
-                  if (state is FavouriteBusStopsFound) {
+                  if (state is FavouriteBusStopLoaded) {
                     List<SavedBusStopModel> stops = state.busStops;
                     return ListView.builder(
                         shrinkWrap: true,
@@ -129,12 +152,9 @@ class _AppHomePage extends State<AppHomePage> {
                   ),
                   title: 'Dodaj',
                   onTap: () {
-                    context.router
-                        .navigate(SearchListRoute(onBusStopSelected: (item) {
-                      context
-                          .read<FavouriteBusStopsCubit>()
-                          .addToFavourites(item, "TEST");
-                    }));
+                    context.router.navigate(
+                      SearchListRoute(type: 'bus_stop'),
+                    );
                   },
                 ),
                 _buildListItem(
@@ -174,7 +194,7 @@ class _AppHomePage extends State<AppHomePage> {
                       ImageCard(
                         logo: SvgPicture.asset(
                           'assets/images/logo_facebook.svg',
-                          color: AppColors.of(context).fontColor,
+                          color: Colors.white,
                         ),
                         title: 'Jesteśmy na facebooku',
                         description:

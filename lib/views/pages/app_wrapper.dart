@@ -1,9 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tarbus_app/bloc/gps_cubit/gps_cubit.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 
-class AppWrapper extends StatelessWidget {
+class AppWrapper extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _AppWrapper();
+}
+
+class _AppWrapper extends State<AppWrapper> {
+  @override
+  void initState() {
+    context.read<GpsCubit>().initGps();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +25,7 @@ class AppWrapper extends StatelessWidget {
           bottomNavigationBuilder: _buildBottomNav,
           routes: [
             AppHomeRoute(),
-            AppBusLinesWrapper(),
+            AppBusLinesRoute(),
             AppMapRoute(),
             AppSearchRoute(),
             AppMenuRoute(),

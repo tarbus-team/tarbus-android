@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:tarbus_app/shared/guards/gps_guard.dart';
+import 'package:tarbus_app/views/pages/add_favourite_bus_stop_page/add_favourite_bus_stop_page.dart';
 import 'package:tarbus_app/views/pages/app_bus_lines_page/app_bus_lines_page.dart';
-import 'package:tarbus_app/views/pages/app_bus_lines_page/app_bus_lines_wrapper.dart';
 import 'package:tarbus_app/views/pages/app_home_page/app_home_page.dart';
 import 'package:tarbus_app/views/pages/app_map_page/app_map_page.dart';
 import 'package:tarbus_app/views/pages/app_menu_page/app_menu_page.dart';
@@ -72,6 +72,16 @@ import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dar
     name: "PermissionsRoute",
     path: "/allow-permissions",
   ),
+  AutoRoute(
+    page: AddFavouriteBusStopPage,
+    name: "AddFavouriteBusStopRoute",
+    path: "/add-favourite-bus-stop",
+  ),
+  AutoRoute(
+    page: LineDetailsPage,
+    name: "LineDetailsRoute",
+    path: "routes",
+  ),
   AutoRoute(page: AppWrapper, name: "AppRoute", path: "/app", guards: [
     GpsGuard
   ], children: [
@@ -81,22 +91,9 @@ import 'package:tarbus_app/views/pages/splash_screen_page/splash_screen_page.dar
       path: "home",
     ),
     AutoRoute(
-      page: AppBusLinesWrapper,
-      name: "AppBusLinesWrapper",
+      page: AppBusLinesPage,
+      name: "AppBusLinesRoute",
       path: "lines",
-      children: [
-        AutoRoute(
-          page: AppBusLinesPage,
-          name: "AppBusLinesRoute",
-          path: "all",
-        ),
-        AutoRoute(
-          page: LineDetailsPage,
-          name: "LineDetailsRoute",
-          path: "routes",
-        ),
-        RedirectRoute(path: "", redirectTo: "all"),
-      ],
     ),
     AutoRoute(
       page: AppMapPage,

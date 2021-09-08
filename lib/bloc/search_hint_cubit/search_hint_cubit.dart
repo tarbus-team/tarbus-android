@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
@@ -15,15 +16,24 @@ class SearchHintCubit extends Cubit<SearchHintState> {
   SearchHintCubit({required this.gpsCubit}) : super(SearchHintInitial());
 
   Future<void> init() async {
+    Timer.periodic(new Duration(seconds: 2), (timer) {
+      search();
+    });
+    search();
+  }
+
+  Future<void> search() async {
     Position? position = gpsCubit.currentPosition;
     if (position == null) {
       print('BRAK GPS');
+      return;
     }
     List<BusStop> nearestBusStops = await BusStopsDatabase.getAllBusStops();
     nearestBusStops.sort((a, b) {
-      return (calcBusStopDestination(a, position!)
+      return (calcBusStopDestination(a, position)
           .compareTo(calcBusStopDestination(b, position)));
     });
+    emit(SearchHintLoading());
     emit(SearchHintLoaded(nearestBusStops.sublist(0, 6)));
   }
 

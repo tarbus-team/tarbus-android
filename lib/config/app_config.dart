@@ -23,14 +23,13 @@ class GetAppConfigUseCaseImpl extends ChangeNotifier
   bool isDarkTheme = false;
   late Box? prefs;
   late Map<String, dynamic> appConfig;
-  late ThemeData themeData;
+  ThemeData themeData = lightTheme;
   String? locale;
 
   @override
   Future initConfig() async {
     try {
       await getConfig();
-      updateTheme(ThemeMode.light);
       notifyListeners();
     } catch (err) {
       print("Error located at loading the configuration : $err");

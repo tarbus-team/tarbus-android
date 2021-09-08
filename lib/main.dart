@@ -10,7 +10,6 @@ import 'package:tarbus_app/config/app_config.dart';
 import 'package:tarbus_app/config/locator.dart';
 import 'package:tarbus_app/config/providers.dart';
 import 'package:tarbus_app/config/theme.dart';
-import 'package:tarbus_app/config/uni_links.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_line_model.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_stop_model.dart';
 import 'package:tarbus_app/data/storage_model/subscribed_version_model.dart';
@@ -19,16 +18,26 @@ import 'package:tarbus_app/shared/router/routes.gr.dart';
 
 import 'generated/l10n.dart';
 
-Future main() async {
-  await initLocator();
+Future<void> setUpHive() async {
   await Hive.initFlutter();
-  await Hive.openBox("configuration");
-  await initUniLinks();
-  // var res = await Hive.openBox<TokenModel>('token');
-  // res.clear();
+
   Hive.registerAdapter(SubscribedVersionModelAdapter());
   Hive.registerAdapter(SavedBusStopModelAdapter());
   Hive.registerAdapter(SavedBusLineModelAdapter());
+
+  await Hive.openBox("configuration");
+  await Hive.openBox<SavedBusStopModel>('favourite_bus_stops');
+  await Hive.openBox<SavedBusLineModel>('favourite_bus_lines');
+}
+
+Future main() async {
+  await initLocator();
+  // await initUniLinks();
+  // var res = await Hive.openBox<TokenModel>('token');
+  // res.clear();
+
+  // TODO - If error
+  await setUpHive();
 
   GestureBinding.instance!.resamplingEnabled = true;
 

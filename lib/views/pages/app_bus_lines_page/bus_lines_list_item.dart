@@ -37,10 +37,8 @@ class BusLinesListItem extends StatelessWidget {
             dense: true,
             title: Text(
               company.name,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline3!
-                  .copyWith(fontSize: 16, color: Colors.black),
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                  fontSize: 16, color: AppColors.of(context).headlineColor),
             ),
             subtitle: Text(
               "Jodłówka-Wałki, Śmigno, Pleśna, Kosz...",
@@ -67,7 +65,7 @@ class BusLinesListItem extends StatelessWidget {
                   .map(
                     (busLine) => InkWell(
                       onTap: () {
-                        context.router.push(LineDetailsRoute(
+                        context.router.root.push(LineDetailsRoute(
                             busLineId: busLine.id, busLineName: busLine.name));
                       },
                       child: Container(

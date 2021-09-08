@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 
 class ImageCard extends StatelessWidget {
   final String title;
@@ -41,10 +42,9 @@ class ImageCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(fontSize: 16, color: Colors.black)),
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                          fontSize: 16,
+                          color: AppColors.of(context).headlineColor)),
                   SizedBox(
                     height: 4,
                   ),
@@ -52,7 +52,8 @@ class ImageCard extends StatelessWidget {
                     height: 90,
                     child: Text(
                       description,
-                      style: TextStyle(fontSize: 13, color: Color(0xff767676)),
+                      style: TextStyle(
+                          fontSize: 13, color: AppColors.of(context).fontColor),
                     ),
                   ),
                   Row(

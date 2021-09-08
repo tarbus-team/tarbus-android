@@ -3,27 +3,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus_app/config/app_colors.dart';
-import 'package:tarbus_app/data/storage_model/saved_bus_stop_model.dart';
+import 'package:tarbus_app/data/storage_model/saved_bus_line_model.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 
-class FavouriteBusStopListItem extends StatelessWidget {
-  final SavedBusStopModel busStop;
+class FavouriteBusLineListItem extends StatelessWidget {
+  final SavedBusLineModel busLine;
   final bool isLast;
 
-  const FavouriteBusStopListItem(
-      {Key? key, required this.busStop, required this.isLast})
+  const FavouriteBusLineListItem(
+      {Key? key, required this.busLine, required this.isLast})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.router.navigate(
-          DeparturesRoute(
-            busStopId: busStop.id!,
-            busStopName: busStop.realBusStopName,
-          ),
-        );
+        context.router.root.push(LineDetailsRoute(
+            busLineId: busLine.id!, busLineName: busLine.realLineName!));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -43,25 +39,22 @@ class FavouriteBusStopListItem extends StatelessWidget {
             size: 15,
           ),
           title: Text(
-            '${busStop.userBusStopName != null && busStop.userBusStopName != '' ? busStop.userBusStopName! : busStop.realBusStopName}',
+            busLine.realLineName!,
             style: Theme.of(context).textTheme.headline3!.copyWith(
                 fontSize: 16, color: AppColors.of(context).headlineColor),
           ),
-          subtitle:
-              busStop.userBusStopName != null && busStop.userBusStopName != ''
-                  ? Text(
-                      busStop.realBusStopName!,
-                      style: TextStyle(fontSize: 14),
-                    )
-                  : null,
+          subtitle: Text(
+            busLine.realCompanyName!,
+            style: TextStyle(fontSize: 14),
+          ),
           leading: SizedBox(
             width: 30,
             child: Center(
               child: SvgPicture.asset(
-                'assets/icons/icon_bus_stop.svg',
-                width: 26,
-                height: 26,
+                'assets/icons/icon_bus.svg',
                 color: AppColors.of(context).fontColor,
+                width: 20,
+                height: 20,
               ),
             ),
           ),

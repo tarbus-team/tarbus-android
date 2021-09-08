@@ -6,7 +6,7 @@ import 'package:tarbus_app/bloc/bus_lines_cubit/bus_lines_cubit.dart';
 import 'package:tarbus_app/bloc/departure_details_cubit/departure_details_cubit.dart';
 import 'package:tarbus_app/bloc/departures_cubit/departures_cubit.dart';
 import 'package:tarbus_app/bloc/departures_mini_cubit/departures_mini_cubit.dart';
-import 'package:tarbus_app/bloc/favourite_bus_stops_cubit/favourite_bus_stops_cubit.dart';
+import 'package:tarbus_app/bloc/favourite_cubit/favourite_cubit.dart';
 import 'package:tarbus_app/bloc/first_config_cubit/first_config_cubit.dart';
 import 'package:tarbus_app/bloc/gps_cubit/gps_cubit.dart';
 import 'package:tarbus_app/bloc/init_app_cubit/init_app_cubit.dart';
@@ -63,6 +63,10 @@ final List<SingleChildWidget> appProviders = [
   BlocProvider<FavouriteBusStopsCubit>(
     lazy: false,
     create: (context) => FavouriteBusStopsCubit(),
+  ),
+  BlocProvider<FavouriteBusLinesCubit>(
+    lazy: false,
+    create: (context) => FavouriteBusLinesCubit(),
   ),
   BlocProvider<FirstConfigCubit>(
     lazy: false,

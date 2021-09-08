@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/data/model/schedule/destination.dart';
 import 'package:tarbus_app/data/model/schedule/track_route.dart';
@@ -58,7 +59,7 @@ class _TimetableListItem extends State<TimetableListItem> {
                   children: [
                     Icon(
                       _buildDropdownIcon(),
-                      color: Colors.black,
+                      color: AppColors.of(context).fontColor,
                     ),
                   ],
                 ),
@@ -83,7 +84,7 @@ class _TimetableListItem extends State<TimetableListItem> {
   Widget _buildDestinationNameBox(String destinationName) {
     return Text(
       destinationName,
-      style: TextStyle(fontSize: 15, color: Colors.black),
+      style: TextStyle(fontSize: 15, color: AppColors.of(context).fontColor),
     );
   }
 
@@ -167,7 +168,7 @@ class _TimetableListItem extends State<TimetableListItem> {
             style: Theme.of(context)
                 .textTheme
                 .headline3!
-                .copyWith(color: Colors.black),
+                .copyWith(color: AppColors.of(context).headlineColor),
           ),
           if (widget.destinations.isEmpty)
             Text(
@@ -182,7 +183,8 @@ class _TimetableListItem extends State<TimetableListItem> {
               var destination = widget.destinations[index];
               return Text(
                 destination.scheduleName,
-                style: TextStyle(color: Colors.black, fontSize: 14),
+                style: TextStyle(
+                    color: AppColors.of(context).fontColor, fontSize: 14),
               );
             },
           ),

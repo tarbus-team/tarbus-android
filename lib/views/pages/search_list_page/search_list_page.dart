@@ -4,39 +4,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tarbus_app/bloc/search_cubit/search_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/data/model/schedule/bus_line.dart';
 import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
+import 'package:tarbus_app/views/pages/search_list_page/search_list_item_line.dart';
 import 'package:tarbus_app/views/pages/search_list_page/search_list_item_stop.dart';
 
 class SearchListPage extends StatefulWidget {
-  final Function(BusStop item)? onBusStopSelected;
+  final String type;
+  final bool wantsFavourite;
 
-  const SearchListPage({Key? key, this.onBusStopSelected}) : super(key: key);
+  const SearchListPage(
+      {Key? key, required this.type, this.wantsFavourite = false})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SearchListPage();
 }
 
 class _SearchListPage extends State<SearchListPage> {
-  Widget _buildBusStopsList(List<BusStop> stops) {
+  int buildCount = 0;
+  @override
+  void initState() {
+    context.read<SearchCubit>().search('', widget.type);
+    super.initState();
+  }
+
+  Widget _buildResultList(List<dynamic> items) {
     return ListView.builder(
-      itemCount: stops.length,
+      itemCount: items.length,
       itemBuilder: (context, index) {
-        return SearchListItemStop(
-          busStop: stops[index],
-          onBusStopSelected: widget.onBusStopSelected ?? (item) {},
-        );
+        final item = items[index];
+        if (item is BusStop) {
+          return SearchListItemStop(
+            key: PageStorageKey('$buildCount-${item.id}'),
+            busStop: item,
+            wantsFavourite: widget.wantsFavourite,
+          );
+        }
+        if (item is BusLine) {
+          return SearchListItemLine(
+            key: PageStorageKey('$buildCount-${item.id}'),
+            busLine: item,
+            wantsFavourite: widget.wantsFavourite,
+          );
+        }
+        return Text('undefined');
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    buildCount += 1;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: TextField(
           onChanged: (value) {
-            context.read<SearchCubit>().searchBusStops(value);
+            context.read<SearchCubit>().search(value, widget.type);
           },
           cursorWidth: 2,
           autofocus: true,
@@ -54,10 +79,16 @@ class _SearchListPage extends State<SearchListPage> {
           },
         ),
       ),
-      body: BlocBuilder<SearchCubit, SearchState>(
+      body: BlocConsumer<SearchCubit, SearchState>(
+        listener: (context, state) {
+          if (state is SearchRefresh) {
+            setState(() {});
+            print(buildCount);
+          }
+        },
         builder: (context, state) {
-          if (state is SearchFoundBusStops) {
-            return _buildBusStopsList(state.busStops);
+          if (state is SearchFound) {
+            return _buildResultList(state.result);
           }
           return Text('Initial');
         },

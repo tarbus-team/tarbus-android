@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
-import 'package:tarbus_app/views/widgets/app_custom/bus_line_container.dart';
-import 'package:tarbus_app/views/widgets/app_custom/departures_day_breakpoint.dart';
+import 'package:tarbus_app/views/widgets/schedule/bus_line_container.dart';
+import 'package:tarbus_app/views/widgets/schedule/departures_day_breakpoint.dart';
 
 class DepartureListItem extends StatelessWidget {
   final Departure departure;
@@ -53,7 +54,7 @@ class DepartureListItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       // fontWeight: FontWeight.w500,
-                      color: Colors.black,
+                      color: AppColors.of(context).fontColor,
                     )),
                 leading: BusLineContainer(
                   busLineName: departure.track.route.busLine.name,
@@ -69,7 +70,7 @@ class DepartureListItem extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: AppColors.of(context).fontColor,
                           fontSize: 16,
                         ),
                       ),

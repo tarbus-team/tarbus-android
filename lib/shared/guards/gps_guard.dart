@@ -12,7 +12,7 @@ class GpsGuard extends AutoRouteGuard {
         permission == LocationPermission.whileInUse) {
       return true;
     } else {
-      router.root.replace(PermissionsRoute(), onFailure: (err) {
+      router.root.navigate(PermissionsRoute(), onFailure: (err) {
         print('Guard Error => $err');
       });
       return false;
