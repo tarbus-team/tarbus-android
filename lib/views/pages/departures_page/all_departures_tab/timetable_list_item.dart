@@ -40,34 +40,31 @@ class _TimetableListItem extends State<TimetableListItem> {
       ),
       child: Column(
         children: [
-          ListTileTheme(
-            dense: true,
-            child: ExpansionTile(
-              onExpansionChanged: (status) {
-                setState(() {
-                  _isExpanded = status;
-                });
-              },
-              tilePadding: EdgeInsets.all(0),
-              leading: _buildBusLineBox(widget.route.busLine.name),
-              title: _buildDestinationNameBox(widget.route.destinationName),
-              trailing: SizedBox(
-                width: 40,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _buildDropdownIcon(),
-                      color: AppColors.of(context).fontColor,
-                    ),
-                  ],
-                ),
+          ExpansionTile(
+            onExpansionChanged: (status) {
+              setState(() {
+                _isExpanded = status;
+              });
+            },
+            tilePadding: EdgeInsets.all(0),
+            leading: _buildBusLineBox(widget.route.busLine.name),
+            title: _buildDestinationNameBox(widget.route.destinationName),
+            trailing: SizedBox(
+              width: 40,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    _buildDropdownIcon(),
+                    color: AppColors.of(context).fontColor,
+                  ),
+                ],
               ),
-              children: [
-                _buildScheduleTable(),
-              ],
             ),
+            children: [
+              _buildScheduleTable(),
+            ],
           ),
         ],
       ),
@@ -97,14 +94,16 @@ class _TimetableListItem extends State<TimetableListItem> {
     }
     return Container(
       width: 85.0,
-      height: 50.0,
+      height: 60.0,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
       child: Padding(
-        padding: EdgeInsets.all(7),
+        padding: EdgeInsets.symmetric(horizontal: 7),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,

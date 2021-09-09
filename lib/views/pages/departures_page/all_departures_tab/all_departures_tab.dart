@@ -85,7 +85,8 @@ class _AllDeparturesTab extends State<AllDeparturesTab>
                         onHorizontalDragEnd: onDaysTabBarNotification,
                         child: KeepAlivePage(
                           child: ListView(
-                            controller: ScrollController(),
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
                             children: [
                               ...state.finalResult[dayName].map((e) {
                                 if (e['departures'].isNotEmpty)

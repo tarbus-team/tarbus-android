@@ -61,8 +61,8 @@ class DeparturesCubit extends Cubit<DeparturesState> {
       List.generate(departures.length, (index) => daysAhead),
     );
     daysAhead += 1;
-    await Future.delayed(Duration(milliseconds: 150));
-    if (allDepartures.length < 9 || departures.length == 0) {
+    // await Future.delayed(Duration(milliseconds: 150));
+    if (allDepartures.length < 50 || departures.length == 0) {
       await getAll(busStopId: busStopId);
     } else {
       emit(DeparturesLoading());

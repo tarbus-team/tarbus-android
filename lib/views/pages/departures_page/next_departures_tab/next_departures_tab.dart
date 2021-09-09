@@ -43,13 +43,38 @@ class _NextDeparturesTab extends State<NextDeparturesTab> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DeparturesCubit, DeparturesState>(
-      builder: (context, state) {
-        if (state is DeparturesLoaded) {
-          return _buildDeparturesList(state);
-        }
-        return CenterLoadSpinner();
-      },
+    return Stack(
+      children: [
+        NotificationListener<ScrollUpdateNotification>(
+          onNotification: onScrollNotification,
+          child: Scrollbar(
+            isAlwaysShown: false,
+            child: CustomScrollView(
+              key: PageStorageKey<String>('1st'),
+              physics: ClampingScrollPhysics(),
+              slivers: <Widget>[
+                BlocBuilder<DeparturesCubit, DeparturesState>(
+                  builder: (context, state) {
+                    if (state is DeparturesLoaded) {
+                      return _buildDeparturesList(state);
+                    }
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return new ListTile(
+                            title: Text('Ładowanie...'),
+                          );
+                        },
+                        childCount: 1,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -77,31 +102,26 @@ class _NextDeparturesTab extends State<NextDeparturesTab> {
   Widget _buildDeparturesList(DeparturesLoaded state) {
     final departuresLength = state.departures.length;
 
-    return NotificationListener<ScrollUpdateNotification>(
-      onNotification: onScrollNotification,
-      child: Scrollbar(
-        isAlwaysShown: false,
-        child: ListView.builder(
-          itemCount: (departuresLength + 2),
-          physics: const ClampingScrollPhysics(),
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return SortListItem(
-                state: state,
-                busStopId: widget.busStopId,
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          if (index == 0) {
+            return SortListItem(
+              state: state,
+              busStopId: widget.busStopId,
+            );
+          }
+          if (index >= departuresLength) {
+            if (index == departuresLength) return SizedBox();
+            if (index == departuresLength + 1)
+              return Container(
+                height: 100,
+                child: CenterLoadSpinner(),
               );
-            }
-            if (index >= departuresLength) {
-              if (index == departuresLength) return SizedBox();
-              if (index == departuresLength + 1)
-                return Container(
-                  height: 100,
-                  child: CenterLoadSpinner(),
-                );
-            }
-            return _buildListItem(state, index, departuresLength);
-          },
-        ),
+          }
+          return _buildListItem(state, index, departuresLength);
+        },
+        childCount: (departuresLength + 2),
       ),
     );
   }
