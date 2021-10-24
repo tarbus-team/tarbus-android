@@ -26,13 +26,13 @@ class NextDeparturesTab extends StatefulWidget {
 }
 
 class _NextDeparturesTab extends State<NextDeparturesTab> {
-  bool isSearching = true;
+  bool isSearching = false;
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     context.read<DeparturesCubit>().initNewView(initialFilter: widget.busLine);
-    fetchView(null);
+    context.read<DeparturesCubit>().getAll(busStopId: widget.busStopId);
     super.initState();
   }
 
@@ -43,94 +43,60 @@ class _NextDeparturesTab extends State<NextDeparturesTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        NotificationListener<ScrollUpdateNotification>(
-          onNotification: onScrollNotification,
-          child: Scrollbar(
-            isAlwaysShown: false,
-            child: CustomScrollView(
-              key: PageStorageKey<String>('1st'),
-              physics: ClampingScrollPhysics(),
-              slivers: <Widget>[
-                BlocBuilder<DeparturesCubit, DeparturesState>(
-                  builder: (context, state) {
-                    if (state is DeparturesLoaded) {
-                      return _buildDeparturesList(state);
-                    }
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return new ListTile(
-                            title: Text('Ładowanie...'),
-                          );
-                        },
-                        childCount: 1,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+    return Scrollbar(
+      isAlwaysShown: false,
+      child: BlocBuilder<DeparturesCubit, DeparturesState>(
+        builder: (context, state) {
+          if (state is DeparturesLoaded) {
+            return _buildDeparturesList(state);
+          }
+          return Text('Ładowanie...');
+        },
+      ),
     );
   }
 
   bool onScrollNotification(ScrollUpdateNotification notification) {
     fetchView(notification);
-
     return true;
-  }
-
-  Widget _buildListItem(
-      DeparturesLoaded state, int index, int departuresLength) {
-    final departure = state.departures[index - 1];
-    final currentDaysAhead = state.daysAhead[index - 1];
-    final nextDaysAhead = state.daysAhead[index];
-
-    return DepartureListItem(
-      departure: departure,
-      isBreakpoint:
-          index < departuresLength - 1 && currentDaysAhead != nextDaysAhead,
-      daysAhead: currentDaysAhead,
-      nextDaysAhead: index < state.daysAhead.length ? nextDaysAhead : null,
-    );
   }
 
   Widget _buildDeparturesList(DeparturesLoaded state) {
     final departuresLength = state.departures.length;
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: onScrollNotification,
+      child: ListView.builder(
+        padding: EdgeInsets.zero,
+        itemCount: (departuresLength + 2),
+        itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
             return SortListItem(
               state: state,
               busStopId: widget.busStopId,
             );
           }
-          if (index >= departuresLength) {
-            if (index == departuresLength) return SizedBox();
-            if (index == departuresLength + 1)
-              return Container(
-                height: 100,
-                child: CenterLoadSpinner(),
-              );
+          if (index == departuresLength + 1) {
+            return Container(
+              height: 70,
+              child: CenterLoadSpinner(),
+            );
           }
-          return _buildListItem(state, index, departuresLength);
+          return DepartureListItem(
+            departureWrapper: state.departures[index - 1],
+          );
         },
-        childCount: (departuresLength + 2),
       ),
     );
   }
 
   Future<void> fetchView(ScrollUpdateNotification? notification) async {
-    if (notification == null ||
-        (!isSearching &&
-            notification.metrics.extentAfter < 1500 &&
-            widget.parentTabController.index == 0)) {
+    print(notification != null);
+    if (!isSearching &&
+        notification != null &&
+        notification.metrics.extentAfter == 0 &&
+        notification.metrics.maxScrollExtent != 0 &&
+        widget.parentTabController.index == 0) {
       isSearching = true;
       await context.read<DeparturesCubit>().getAll(busStopId: widget.busStopId);
       isSearching = false;

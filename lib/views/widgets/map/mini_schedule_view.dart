@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tarbus_app/bloc/departures_mini_cubit/departures_mini_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/config/app_icons.dart';
+import 'package:tarbus_app/data/model/departure_wrapper.dart';
 import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
@@ -33,7 +34,13 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
     return Card(
       child: InkWell(
         onTap: () {
-          context.router.navigate(DepartureDetailsRoute(departure: departure));
+          context.router.navigate(DepartureDetailsRoute(
+            departureWrapper: DepartureWrapper(
+              departure: departure,
+              daysAhead: 0,
+              departureDate: DateTime.now(),
+            ),
+          ));
         },
         child: Column(
           children: [

@@ -40,21 +40,27 @@ class SearchListItemLine extends StatelessWidget {
           color: AppColors.of(context).primaryLight,
         ))),
         child: ListTile(
-            title: Text(
-              busLine.name,
-              style: TextStyle(fontSize: 16),
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: Text(
-              busLine.version.company.name,
-              style: TextStyle(fontSize: 13),
-              overflow: TextOverflow.ellipsis,
-            ),
-            dense: true,
-            trailing: FavHeartBusLine(
-              controller: wantsFavourite ? controller : null,
-              busLine: busLine,
-            )),
+          title: Text(
+            busLine.name,
+            style: TextStyle(fontSize: 16),
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            busLine.version.company.name,
+            style: TextStyle(fontSize: 13),
+            overflow: TextOverflow.ellipsis,
+          ),
+          dense: true,
+          trailing: wantsFavourite
+              ? FavHeartBusLine(
+                  controller: controller,
+                  busLine: busLine,
+                )
+              : Icon(
+                  Icons.arrow_forward_ios,
+                  size: 15,
+                ),
+        ),
       ),
     );
   }

@@ -28,6 +28,7 @@ Future<void> setUpHive() async {
   await Hive.openBox("configuration");
   await Hive.openBox<SavedBusStopModel>('favourite_bus_stops');
   await Hive.openBox<SavedBusLineModel>('favourite_bus_lines');
+  await Hive.openBox<SubscribedVersionModel>('subscribed_versions');
 }
 
 Future main() async {

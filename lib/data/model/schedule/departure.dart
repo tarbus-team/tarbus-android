@@ -6,6 +6,7 @@ import 'bus_stop.dart';
 class Departure {
   int id;
   int? busStopLp;
+  String? externalUuid;
   int timeInMin;
   String timeInString;
   BusStop busStop;
@@ -16,6 +17,7 @@ class Departure {
   Departure({
     required this.id,
     this.busStopLp,
+    this.externalUuid,
     required this.timeInMin,
     required this.timeInString,
     required this.busStop,
@@ -28,6 +30,7 @@ class Departure {
     return Departure(
       id: json['d_id'],
       busStopLp: json['d_bus_stop_lp'],
+      externalUuid: json['d_external_uuid'],
       timeInMin: json['d_time_in_min'],
       timeInString: json['d_time_string'],
       busStop: BusStop.fromJson(json),

@@ -5,17 +5,17 @@ import 'package:tarbus_app/shared/router/routes.gr.dart';
 
 class GpsGuard extends AutoRouteGuard {
   @override
-  Future<bool> canNavigate(
-      List<PageRouteInfo<dynamic>> pendingRoutes, StackRouter router) async {
+  Future<void> onNavigation(
+      NavigationResolver resolver, StackRouter router) async {
     LocationPermission permission = await LocationController.checkPermission();
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
-      return true;
+      resolver.next(true);
     } else {
       router.root.navigate(PermissionsRoute(), onFailure: (err) {
         print('Guard Error => $err');
       });
-      return false;
+      resolver.next(false);
     }
   }
 }

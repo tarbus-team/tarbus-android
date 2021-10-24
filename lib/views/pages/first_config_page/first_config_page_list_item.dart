@@ -36,6 +36,7 @@ class _FirstConfigPageListItem extends State<FirstConfigPageListItem> {
       title: Container(
         width: TILE_SIZE,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image.network(
               widget.versionModel.avatarSrc!,
@@ -46,6 +47,8 @@ class _FirstConfigPageListItem extends State<FirstConfigPageListItem> {
               width: 15,
             ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.versionModel.companyName,

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/config/app_config.dart';
 
 class AnimatedAppHeader extends StatefulWidget {
   final ScrollController scrollController;
@@ -18,7 +21,7 @@ class _AnimatedAppHeader extends State<AnimatedAppHeader> {
   @override
   void initState() {
     widget.scrollController.addListener(() {
-      if (widget.scrollController.offset == 50) {
+      if (widget.scrollController.offset > 50 && !isCollapsed) {
         setState(() {
           isCollapsed = true;
         });
@@ -31,20 +34,28 @@ class _AnimatedAppHeader extends State<AnimatedAppHeader> {
     super.initState();
   }
 
+  Color getFontColor() {
+    bool isDarkTheme = context.read<GetAppConfigUseCaseImpl>().isDarkTheme;
+    if (!isDarkTheme && !isCollapsed) {
+      return Colors.black;
+    }
+    return Colors.white;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       width: MediaQuery.of(context).size.width,
       height: 32,
-      color: !isCollapsed ? Colors.white : Theme.of(context).primaryColor,
+      color: !isCollapsed
+          ? AppColors.of(context).backgroundDark
+          : Theme.of(context).primaryColor,
       duration: Duration(milliseconds: 250),
       child: Center(
         child: Text(
           widget.busStopName,
           style: Theme.of(context).textTheme.headline3!.copyWith(
-              fontFamily: 'Roboto',
-              fontSize: 14,
-              color: !isCollapsed ? Colors.black : Colors.white),
+              fontFamily: 'Roboto', fontSize: 14, color: getFontColor()),
         ),
       ),
     );

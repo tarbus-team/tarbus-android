@@ -62,6 +62,7 @@ class SearchTab extends StatelessWidget {
             Positioned(
               bottom: 10,
               left: 10,
+              right: 10,
               child: titleWidget ??
                   Text(
                     title!,

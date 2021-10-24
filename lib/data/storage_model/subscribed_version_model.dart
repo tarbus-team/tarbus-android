@@ -22,4 +22,9 @@ class SubscribedVersionModel {
       updateDate: 0,
     );
   }
+
+  @override
+  String toString() {
+    return 'SubscribedVersionModel{subscribeCode: $subscribeCode, updateDate: $updateDate}';
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:tarbus_app/config/app_config.dart';
+import 'package:tarbus_app/data/remote/mpk_repository.dart';
 import 'package:tarbus_app/data/remote/schedule_version_repository.dart';
 import 'package:tarbus_app/manager/api.dart';
 import 'package:tarbus_app/manager/query_controller.dart';
@@ -13,4 +14,5 @@ Future initLocator() async {
   // globalLocator.registerFactory(() => AuthRepo());
   getIt.registerLazySingleton(() => QueryController());
   getIt.registerLazySingleton(() => RemoteScheduleVersionRepository());
+  getIt.registerLazySingleton(() => RemoteMpkRepository());
 }

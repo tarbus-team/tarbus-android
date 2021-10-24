@@ -38,34 +38,30 @@ class _TimetableListItem extends State<TimetableListItem> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Column(
-        children: [
-          ExpansionTile(
-            onExpansionChanged: (status) {
-              setState(() {
-                _isExpanded = status;
-              });
-            },
-            tilePadding: EdgeInsets.all(0),
-            leading: _buildBusLineBox(widget.route.busLine.name),
-            title: _buildDestinationNameBox(widget.route.destinationName),
-            trailing: SizedBox(
-              width: 40,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    _buildDropdownIcon(),
-                    color: AppColors.of(context).fontColor,
-                  ),
-                ],
-              ),
-            ),
+      child: ExpansionTile(
+        onExpansionChanged: (status) {
+          setState(() {
+            _isExpanded = status;
+          });
+        },
+        tilePadding: EdgeInsets.all(0),
+        leading: _buildBusLineBox(widget.route.busLine.name),
+        title: _buildDestinationNameBox(widget.route.destinationName),
+        trailing: SizedBox(
+          width: 40,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildScheduleTable(),
+              Icon(
+                _buildDropdownIcon(),
+                color: AppColors.of(context).fontColor,
+              ),
             ],
           ),
+        ),
+        children: [
+          _buildScheduleTable(),
         ],
       ),
     );
@@ -81,7 +77,7 @@ class _TimetableListItem extends State<TimetableListItem> {
   Widget _buildDestinationNameBox(String destinationName) {
     return Text(
       destinationName,
-      style: TextStyle(fontSize: 15, color: AppColors.of(context).fontColor),
+      style: TextStyle(fontSize: 14, color: AppColors.of(context).fontColor),
     );
   }
 
@@ -94,7 +90,7 @@ class _TimetableListItem extends State<TimetableListItem> {
     }
     return Container(
       width: 85.0,
-      height: 60.0,
+      // height: 45.0,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -180,6 +176,9 @@ class _TimetableListItem extends State<TimetableListItem> {
             itemCount: widget.destinations.length,
             itemBuilder: (BuildContext context, int index) {
               var destination = widget.destinations[index];
+              if (destination.symbol.contains('-')) {
+                return SizedBox.shrink();
+              }
               return Text(
                 destination.scheduleName,
                 style: TextStyle(

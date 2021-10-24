@@ -1,16 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarbus_app/config/app_colors.dart';
 
 class ActionTile extends StatelessWidget {
   final String title;
   final IconData? icon;
   final Function? onTap;
+  final bool isLast;
 
   const ActionTile({
     Key? key,
     required this.title,
     this.icon,
     this.onTap,
+    this.isLast = false,
   }) : super(key: key);
 
   @override
@@ -22,12 +25,14 @@ class ActionTile extends StatelessWidget {
         }
       },
       child: Container(
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-          width: 1,
-          color: Colors.grey.shade200,
-        ))),
+        decoration: !isLast
+            ? BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                width: 1,
+                color: AppColors.of(context).breakpoint,
+              )))
+            : null,
         child: ListTile(
           leading: icon != null ? Icon(icon) : null,
           title: Text(

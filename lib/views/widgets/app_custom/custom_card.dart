@@ -15,7 +15,7 @@ class CustomCard extends StatelessWidget {
         border: Border(
             bottom: BorderSide(
           width: 10,
-          color: AppColors.of(context).primaryLight,
+          color: AppColors.of(context).breakpoint,
         )),
       ),
       child: child,

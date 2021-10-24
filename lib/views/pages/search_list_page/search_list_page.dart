@@ -11,10 +11,9 @@ import 'package:tarbus_app/views/pages/search_list_page/search_list_item_stop.da
 
 class SearchListPage extends StatefulWidget {
   final String type;
-  final bool wantsFavourite;
+  final bool? wantsFavourite;
 
-  const SearchListPage(
-      {Key? key, required this.type, this.wantsFavourite = false})
+  const SearchListPage({Key? key, required this.type, this.wantsFavourite})
       : super(key: key);
 
   @override
@@ -25,6 +24,7 @@ class _SearchListPage extends State<SearchListPage> {
   int buildCount = 0;
   @override
   void initState() {
+    print(widget.wantsFavourite);
     context.read<SearchCubit>().search('', widget.type);
     super.initState();
   }
@@ -38,14 +38,14 @@ class _SearchListPage extends State<SearchListPage> {
           return SearchListItemStop(
             key: PageStorageKey('$buildCount-${item.id}'),
             busStop: item,
-            wantsFavourite: widget.wantsFavourite,
+            wantsFavourite: widget.wantsFavourite ?? false,
           );
         }
         if (item is BusLine) {
           return SearchListItemLine(
             key: PageStorageKey('$buildCount-${item.id}'),
             busLine: item,
-            wantsFavourite: widget.wantsFavourite,
+            wantsFavourite: widget.wantsFavourite ?? false,
           );
         }
         return Text('undefined');

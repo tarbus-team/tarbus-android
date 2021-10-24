@@ -23,8 +23,7 @@ class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
     List<SubscribedVersionModel> removedVersions = List.empty(growable: true);
     emit(ScheduleChecking());
     final remoteVersions = await _scheduleVersionRepository.getLatestUpdate();
-    final localVersions =
-        await SubscribedScheduleStorage.getSubscribedVersions();
+    final localVersions = SubscribedScheduleStorage.getSubscribedVersions();
     if (localVersions.isEmpty) {
       print('scheduleEmpty');
       emit(ScheduleEmpty());
@@ -71,10 +70,19 @@ class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
   Future<void> downloadVersions() async {
     try {
       emit(ScheduleDownloading());
-      List<dynamic> dbData = await _scheduleVersionRepository
-          .getVersionDatabase("template2-mich001");
+      List<SubscribedVersionModel> activeVersions =
+          SubscribedScheduleStorage.getSubscribedVersions();
+      print(activeVersions);
+      List<List<dynamic>> downloadedDatabases = List.empty(growable: true);
+      for (SubscribedVersionModel version in activeVersions) {
+        downloadedDatabases.add(await _scheduleVersionRepository
+            .getVersionDatabase("template2-mpktarnow"));
+      }
       await DatabaseHelper.instance.clearAllDatabase();
-      await JsonDatabaseParser.parse(dbData);
+      for (List<dynamic> dbData in downloadedDatabases) {
+        await JsonDatabaseParser.parse(dbData);
+      }
+
       emit(ScheduleUpToDate());
     } on ErrorExceptions {
       emit(ScheduleFailure(

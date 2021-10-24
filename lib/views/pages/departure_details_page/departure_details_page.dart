@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus_app/bloc/departure_details_cubit/departure_details_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/data/model/departure_wrapper.dart';
 import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
 import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
@@ -15,9 +16,9 @@ import 'package:tarbus_app/views/widgets/generic/center_load_spinner.dart';
 import 'package:tarbus_app/views/widgets/generic/no_glov_behaviour.dart';
 
 class DepartureDetailsPage extends StatefulWidget {
-  final Departure departure;
+  final DepartureWrapper departureWrapper;
 
-  const DepartureDetailsPage({Key? key, required this.departure})
+  const DepartureDetailsPage({Key? key, required this.departureWrapper})
       : super(key: key);
 
   @override
@@ -25,9 +26,12 @@ class DepartureDetailsPage extends StatefulWidget {
 }
 
 class _DepartureDetailsPage extends State<DepartureDetailsPage> {
+  late final Departure departure;
+
   @override
   void initState() {
-    context.read<DepartureDetailsCubit>().getTrackDepartures(widget.departure);
+    departure = widget.departureWrapper.departure;
+    context.read<DepartureDetailsCubit>().getTrackDepartures(departure);
     super.initState();
   }
 
@@ -59,11 +63,10 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         leading: Icon(
                           Icons.near_me_outlined,
                           size: 28,
-                          color: AppColors.of(context).primaryLightDarker,
+                          color: AppColors.of(context).primaryColor,
                         ),
                         visualDensity: VisualDensity.compact,
-                        title: Text(
-                            widget.departure.destination.directionBoardName),
+                        title: Text(departure.destination.directionBoardName),
                       ),
                       Text(
                         'Linia',
@@ -75,9 +78,9 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         visualDensity: VisualDensity.compact,
                         leading: SvgPicture.asset(
                           'assets/icons/icon_bus.svg',
-                          color: AppColors.of(context).primaryLightDarker,
+                          color: AppColors.of(context).primaryColor,
                         ),
-                        title: Text(widget.departure.track.route.busLine.name),
+                        title: Text(departure.track.route.busLine.name),
                       ),
                       Text(
                         'Wybrany przystanek',
@@ -89,9 +92,9 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         visualDensity: VisualDensity.compact,
                         leading: SvgPicture.asset(
                           'assets/icons/icon_bus_stop.svg',
-                          color: AppColors.of(context).primaryLightDarker,
+                          color: AppColors.of(context).primaryColor,
                         ),
-                        title: Text(widget.departure.busStop.name),
+                        title: Text(departure.busStop.name),
                       ),
                     ],
                   ),
@@ -114,8 +117,8 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         title: 'Zobacz trasę na mapie',
                         onTap: () {
                           context.router.root.push(TrackMapRoute(
-                              busStop: widget.departure.busStop,
-                              track: widget.departure.track));
+                              busStop: departure.busStop,
+                              track: departure.track));
                         }),
                   ],
                 ),
@@ -170,7 +173,8 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
   }
 
   Widget _buildListItem(Departure departure, int indexValue) {
-    bool isTheSameBusStop = widget.departure.busStop.id == departure.busStop.id;
+    bool isTheSameBusStop =
+        departure.busStop.id == widget.departureWrapper.departure.busStop.id;
     Map<int, Widget> imageValues = {
       0: SvgPicture.asset(
         'assets/icons/icon_pin_start.svg',

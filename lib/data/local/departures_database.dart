@@ -13,7 +13,7 @@ class DeparturesDatabase {
     int? limit,
   }) async {
     String query =
-        '$DEPARTURES_QUERY WHERE bs.bs_id = $busStopId AND (d.d_time_in_min > $timeInMin OR d.d_time_in_min < 60) AND (${dayTypes.map((day) => ' ${day != dayTypes[0] ? ' OR ' : ''} t.t_day_types LIKE \'%$day%\'').toList().join(' ')}) AND d_is_last NOT LIKE \'true\'';
+        '$DEPARTURES_QUERY WHERE bs.bs_id = $busStopId AND (d.d_time_in_min > $timeInMin OR d.d_time_in_min < 60) AND (${dayTypes.map((day) => ' ${day != dayTypes[0] ? ' OR ' : ''} t.t_day_types LIKE \'%$day%\'').toList().join(' ')}) AND d_is_last LIKE \'false\'';
     if (busLinesId != null && busLinesId.isNotEmpty) {
       query = '$query AND r.r_bus_line_id IN (${busLinesId.join(',')})';
     }
@@ -29,7 +29,7 @@ class DeparturesDatabase {
   static Future<List<Departure>> getTrackDepartures(
       {required String trackId}) async {
     String query =
-        '$DEPARTURES_QUERY WHERE d.d_track_id = $trackId ORDER BY d.d_time_in_min';
+        '$DEPARTURES_QUERY WHERE d.d_track_id = \'$trackId\' ORDER BY d.d_time_in_min';
     final result = await DatabaseHelper.instance.doSQL(query);
     return result.map((e) => Departure.fromJson(e)).toList();
   }

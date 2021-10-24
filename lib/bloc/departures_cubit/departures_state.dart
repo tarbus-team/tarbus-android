@@ -12,15 +12,15 @@ class DeparturesInitial extends DeparturesState {}
 class DeparturesLoading extends DeparturesState {}
 
 class DeparturesLoaded extends DeparturesState {
-  final List<Departure> departures;
-  final List<int> daysAhead;
+  final List<DepartureWrapper> departures;
   final List<BusLine> busLinesFromBusStop;
   final List<BusLine> lineFilters;
-  DeparturesLoaded(
-      {required this.daysAhead,
-      required this.departures,
-      required this.lineFilters,
-      required this.busLinesFromBusStop});
+
+  DeparturesLoaded({
+    required this.departures,
+    required this.lineFilters,
+    required this.busLinesFromBusStop,
+  });
 
   @override
   List<Object> get props => [departures];

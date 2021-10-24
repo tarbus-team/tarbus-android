@@ -51,10 +51,15 @@ class SearchListItemStop extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           dense: true,
-          trailing: FavHeartBusStop(
-            busStop: busStop,
-            controller: wantsFavourite ? controller : null,
-          ),
+          trailing: wantsFavourite
+              ? FavHeartBusStop(
+                  busStop: busStop,
+                  controller: controller,
+                )
+              : Icon(
+                  Icons.arrow_forward_ios,
+                  size: 15,
+                ),
         ),
       ),
     );

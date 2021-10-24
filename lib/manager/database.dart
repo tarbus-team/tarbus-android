@@ -14,7 +14,7 @@ class DatabaseHelper {
   static late Database db;
 
   Future<Database> get database async {
-    const NEW_DB_VERSION = 6;
+    const NEW_DB_VERSION = 11;
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, 'tarbus.db');
 
@@ -81,7 +81,6 @@ class DatabaseHelper {
       'Departure',
       'Calendar',
       'Destinations',
-      'RoadType',
       'Route',
       'RouteConnections',
       'Track',

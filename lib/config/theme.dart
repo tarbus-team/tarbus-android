@@ -24,7 +24,7 @@ CupertinoAppData getCupertinoAppData(context, __) => CupertinoAppData(
 
 class Palette {
   static Color primaryColor = Color(0xff014F9D);
-  static Color primaryColorDark = Color(0xff006edb);
+  static Color primaryColorDark = Color(0xff4f7acf);
 }
 
 class Dimensions {

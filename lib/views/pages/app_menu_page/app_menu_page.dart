@@ -40,6 +40,10 @@ class _AppMenuPage extends State<AppMenuPage> {
                 ),
                 ActionTile(
                     icon: Icons.build_circle_outlined,
+                    isLast: true,
+                    onTap: () {
+                      context.router.push(FirstConfigRoute());
+                    },
                     title: 'Zmień przewoźników'),
               ],
             ),
@@ -60,7 +64,7 @@ class _AppMenuPage extends State<AppMenuPage> {
                     icon: Icons.bug_report_outlined, title: 'Zgłoś błąd'),
                 ActionTile(icon: Icons.messenger_outline, title: 'Feedback'),
                 ActionTile(title: 'O aplikacji'),
-                ActionTile(title: 'Polityka prywatności'),
+                ActionTile(title: 'Polityka prywatności', isLast: true),
               ],
             ),
           ),

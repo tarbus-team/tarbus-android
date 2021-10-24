@@ -36,7 +36,7 @@ class BusStopsDatabase {
 
   static Future<List<BusStop>> getBusStopsForTrack(String trackId) async {
     String query =
-        "SELECT DISTINCT d.d_bus_stop_id FROM Departure d WHERE d.d_track_id = $trackId ORDER BY d.d_time_in_min";
+        "SELECT DISTINCT d.d_bus_stop_id FROM Departure d WHERE d.d_track_id = \'$trackId\' ORDER BY d.d_time_in_min";
     final result = await DatabaseHelper.instance.doSQL(query);
     List<int> busStopsIds =
         result.map((e) => e['d_bus_stop_id'] as int).toList();

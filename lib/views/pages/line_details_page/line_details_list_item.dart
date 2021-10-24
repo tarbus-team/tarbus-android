@@ -95,7 +95,7 @@ class _LineDetailsListItem extends State<LineDetailsListItem> {
             isCollapsed ? 'Zwiń' : 'Rozwiń',
             style: Theme.of(context).textTheme.headline3!.copyWith(
                   fontSize: 13,
-                  color: Colors.black,
+                  color: AppColors.of(context).headlineColor,
                 ),
           ),
           if (isCollapsed)
@@ -167,8 +167,7 @@ class _LineDetailsListItem extends State<LineDetailsListItem> {
                                       .headline3!
                                       .copyWith(
                                         fontSize: 12,
-                                        color: AppColors.of(context)
-                                            .primaryLightDarker,
+                                        color: AppColors.of(context).fontColor,
                                       )),
                               Text(widget.trackRoute.destinationName,
                                   style: Theme.of(context)
@@ -176,45 +175,19 @@ class _LineDetailsListItem extends State<LineDetailsListItem> {
                                       .headline3!
                                       .copyWith(
                                         fontSize: 16,
-                                        color: Colors.black,
+                                        color:
+                                            AppColors.of(context).headlineColor,
                                       )),
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              context.router.root.push(
-                                  MapRouteStopsRoute(route: widget.trackRoute));
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.map,
-                                  color: AppColors.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  'Mapa',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: AppColors.of(context).primaryColor,
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
                         ],
                       ),
                       Text('Przez',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3!
-                              .copyWith(
-                                fontSize: 12,
-                                color: AppColors.of(context).primaryLightDarker,
-                              )),
+                          style:
+                              Theme.of(context).textTheme.headline3!.copyWith(
+                                    fontSize: 12,
+                                    color: AppColors.of(context).fontColor,
+                                  )),
                       SizedBox(
                         height: 5,
                       ),

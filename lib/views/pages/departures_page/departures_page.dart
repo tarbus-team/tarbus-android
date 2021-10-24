@@ -1,11 +1,16 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:extended_tabs/extended_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/data/model/schedule/bus_line.dart';
+import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
 import 'package:tarbus_app/views/pages/departures_page/all_departures_tab/all_departures_tab.dart';
+import 'package:tarbus_app/views/widgets/app_bars/animated_app_header.dart';
+import 'package:tarbus_app/views/widgets/favourite/fav_heart_bus_stop.dart';
 
 import 'next_departures_tab/next_departures_tab.dart';
 
@@ -48,15 +53,21 @@ class _DeparturesPage extends State<DeparturesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(
+      body: ExtendedNestedScrollView(
         controller: _scrollController,
+        onlyOneScrollInBody: true,
         physics: BouncingScrollPhysics(),
         dragStartBehavior: DragStartBehavior.start,
+        pinnedHeaderSliverHeightBuilder: () {
+          return 80;
+        },
         headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
             pinned: true,
             floating: true,
-            expandedHeight: 100,
+            expandedHeight: 130,
+            elevation: 0.5,
+            forceElevated: true,
             title: Text(
               'Rozkład jazdy',
               style: GoogleFonts.poppins(
@@ -72,50 +83,55 @@ class _DeparturesPage extends State<DeparturesPage>
               },
             ),
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(CupertinoIcons.heart),
-              ),
+              FavHeartBusStop(
+                  busStop: BusStop(
+                id: widget.busStopId,
+                name: widget.busStopName!,
+              )),
               IconButton(
                 onPressed: () {},
                 icon: Icon(Icons.info),
               ),
             ],
-            bottom: TabBar(
-              controller: _tabController,
-              tabs: <Widget>[
-                Tab(
-                  text: 'Najbliższe',
-                ),
-                Tab(
-                  text: 'Wszystkie',
-                ),
-              ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(80),
+              child: Column(
+                children: [
+                  AnimatedAppHeader(
+                      scrollController: _scrollController,
+                      busStopName: widget.busStopName!),
+                  // TabBar(),
+                  TabBar(
+                    controller: _tabController,
+                    indicatorColor: AppColors.of(context).primaryColor,
+                    tabs: <Tab>[
+                      Tab(
+                        text: 'Najbliższe',
+                      ),
+                      Tab(
+                        text: 'Wszystkie',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
-        body: TabBarView(
+        body: ExtendedTabBarView(
           controller: _tabController,
           children: <Widget>[
-            SafeArea(
-              top: false,
-              bottom: false,
-              child: NextDeparturesTab(
-                busLine: widget.busLine,
-                busStopName: widget.busStopName,
-                busStopId: widget.busStopId,
-                parentTabController: _tabController,
-              ),
+            NextDeparturesTab(
+              busLine: widget.busLine,
+              busStopName: widget.busStopName,
+              busStopId: widget.busStopId,
+              parentTabController: _tabController,
             ),
-            SafeArea(
-              top: false,
-              bottom: false,
-              child: AllDeparturesTab(
-                busLine: widget.busLine,
-                busStopName: widget.busStopName,
-                busStopId: widget.busStopId,
-                parentTabController: _tabController,
-              ),
+            AllDeparturesTab(
+              busLine: widget.busLine,
+              busStopName: widget.busStopName,
+              busStopId: widget.busStopId,
+              parentTabController: _tabController,
             ),
           ],
         ),
@@ -123,78 +139,3 @@ class _DeparturesPage extends State<DeparturesPage>
     );
   }
 }
-
-// @override
-// Widget build(BuildContext context) {
-//   return WillPopScope(
-//     onWillPop: () async {
-//       if (_tabController.index != 0) {
-//         _tabController.animateTo(0);
-//         return Future.value(false);
-//       }
-//       return Future.value(true);
-//     },
-//     child: Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Rozkład jazdy',
-//           style: GoogleFonts.poppins(
-//             fontSize: 18,
-//             fontWeight: FontWeight.bold,
-//             color: AppColors.of(context).headlineColor,
-//           ),
-//         ),
-
-//         bottom: PreferredSize(
-//           preferredSize: Size.fromHeight(70),
-//           child: Column(
-//             children: [
-//               Center(
-//                 child: Text(
-//                   '${widget.busStopName}',
-//                   style: Theme.of(context).textTheme.headline3!.copyWith(
-//                     fontFamily: 'Roboto',
-//                     fontSize: 14,
-//                     color: AppColors.of(context).fontColor,
-//                   ),
-//                 ),
-//               ),
-//               TabBar(
-//                 controller: _tabController,
-//                 tabs: [
-//                   Tab(
-//                     text: 'Najbliższe',
-//                   ),
-//                   Tab(text: 'Wszystkie'),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//       body: SafeArea(
-//         child: TabBarView(
-//           controller: _tabController,
-//           children: [
-//             KeepAlivePage(
-//               child: NextDeparturesTab(
-//                 busLine: widget.busLine,
-//                 busStopName: widget.busStopName,
-//                 busStopId: widget.busStopId,
-//                 parentTabController: _tabController,
-//               ),
-//             ),
-//             KeepAlivePage(
-//               child: AllDeparturesTab(
-//                 busLine: widget.busLine,
-//                 busStopName: widget.busStopName,
-//                 busStopId: widget.busStopId,
-//                 parentTabController: _tabController,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ),
-//   );
-// }

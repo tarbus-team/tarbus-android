@@ -3,18 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
 
 class DeparturesDayBreakpoint extends StatelessWidget {
-  final int daysAhead;
+  final DateTime time;
 
   const DeparturesDayBreakpoint({
     Key? key,
-    required this.daysAhead,
+    required this.time,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var todayDate = DateTime.now();
-    todayDate = todayDate.add(Duration(days: daysAhead));
-
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
@@ -26,7 +23,7 @@ class DeparturesDayBreakpoint extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            DateTimeUtils.getNamedDate(todayDate.add(Duration(days: 0))),
+            DateTimeUtils.getNamedDate(time),
             style: Theme.of(context).textTheme.headline3,
           ),
         ],

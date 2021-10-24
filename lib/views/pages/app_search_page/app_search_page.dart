@@ -44,11 +44,11 @@ class _AppSearchPage extends State<AppSearchPage> {
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: Row(
                   children: [
-                    Icon(Icons.search),
+                    Icon(Icons.search, color: Colors.black),
                     SizedBox(
                       width: 15,
                     ),
-                    Text('Szukaj'),
+                    Text('Szukaj', style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),
@@ -68,8 +68,8 @@ class _AppSearchPage extends State<AppSearchPage> {
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(4.0),
-                mainAxisSpacing: 4.0,
-                crossAxisSpacing: 4.0,
+                mainAxisSpacing: 3.5,
+                crossAxisSpacing: 3.5,
                 children: [
                   SearchTab(
                     title: 'Przystanki',
@@ -100,6 +100,7 @@ class _AppSearchPage extends State<AppSearchPage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
                                 e.name,
@@ -108,7 +109,7 @@ class _AppSearchPage extends State<AppSearchPage> {
                                     .headline3!
                                     .copyWith(
                                   color: Colors.white,
-                                  fontSize: 10.5,
+                                  fontSize: 14,
                                   shadows: <Shadow>[
                                     Shadow(
                                       blurRadius: 10.0,
@@ -129,20 +130,6 @@ class _AppSearchPage extends State<AppSearchPage> {
                                   shadows: <Shadow>[
                                     Shadow(
                                       blurRadius: 10.0,
-                                      color: Colors.black87,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text(
-                                'Blisko Ciebie',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                      blurRadius: 2.0,
                                       color: Colors.black87,
                                     ),
                                   ],

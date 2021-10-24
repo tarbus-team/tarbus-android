@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tarbus_app/bloc/app_cubit/app_cubit.dart';
 import 'package:tarbus_app/bloc/favourite_cubit/favourite_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
+import 'package:tarbus_app/config/app_config.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_line_model.dart';
 import 'package:tarbus_app/data/storage_model/saved_bus_stop_model.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
@@ -37,7 +38,7 @@ class _AppHomePage extends State<AppHomePage> {
         decoration: BoxDecoration(
             border: Border(
                 top: BorderSide(
-          color: AppColors.of(context).borderColor,
+          color: AppColors.of(context).breakpoint,
           width: 1,
         ))),
         child: ListTile(
@@ -101,16 +102,22 @@ class _AppHomePage extends State<AppHomePage> {
                 ),
                 _buildListItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_circle_add.svg',
+                    context.read<GetAppConfigUseCaseImpl>().isDarkTheme
+                        ? 'assets/icons/icon_circle_add_dark.svg'
+                        : 'assets/icons/icon_circle_add.svg',
                   ),
                   title: 'Dodaj',
                   onTap: () {
-                    context.router.navigate(SearchListRoute(type: 'bus_line'));
+                    context.router.navigate(SearchListRoute(
+                        type: 'bus_line', wantsFavourite: true));
                   },
                 ),
                 _buildListItem(
-                  icon:
-                      SvgPicture.asset('assets/icons/icon_circle_details.svg'),
+                  icon: SvgPicture.asset(
+                    context.read<GetAppConfigUseCaseImpl>().isDarkTheme
+                        ? 'assets/icons/icon_circle_details_dark.svg'
+                        : 'assets/icons/icon_circle_details.svg',
+                  ),
                   title: 'Zobacz wszystkie',
                   onTap: () {},
                 ),
@@ -148,18 +155,23 @@ class _AppHomePage extends State<AppHomePage> {
                 }),
                 _buildListItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_circle_add.svg',
+                    context.read<GetAppConfigUseCaseImpl>().isDarkTheme
+                        ? 'assets/icons/icon_circle_add_dark.svg'
+                        : 'assets/icons/icon_circle_add.svg',
                   ),
                   title: 'Dodaj',
                   onTap: () {
                     context.router.navigate(
-                      SearchListRoute(type: 'bus_stop'),
+                      SearchListRoute(type: 'bus_stop', wantsFavourite: true),
                     );
                   },
                 ),
                 _buildListItem(
-                  icon:
-                      SvgPicture.asset('assets/icons/icon_circle_details.svg'),
+                  icon: SvgPicture.asset(
+                    context.read<GetAppConfigUseCaseImpl>().isDarkTheme
+                        ? 'assets/icons/icon_circle_details_dark.svg'
+                        : 'assets/icons/icon_circle_details.svg',
+                  ),
                   title: 'Zobacz wszystkie',
                   onTap: () {},
                 ),
