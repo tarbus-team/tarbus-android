@@ -24,9 +24,10 @@ class DeparturesCubit extends Cubit<DeparturesState> {
   List<RemoteDeparture> remoteDepartures = List.empty(growable: true);
   List<BusLine> busLineFilters = List.empty(growable: true);
   int daysAhead = 0;
+  int latestBusStopId = 0;
 
   void initNewView({List<BusLine>? initialFilters, BusLine? initialFilter}) {
-    emit(DeparturesLoading());
+    latestBusStopId = 0;
     initDepartures(
         initialFilters: initialFilters, initialFilter: initialFilter);
   }
@@ -57,11 +58,16 @@ class DeparturesCubit extends Cubit<DeparturesState> {
   }
 
   Future<void> getAll({required int busStopId}) async {
+    latestBusStopId = busStopId;
     DateTime departuresDate = DateTime.now().add(Duration(days: daysAhead));
     if (daysAhead == 0) {
-      if (_wantsRemoteDepartures()) {
-        remoteDepartures =
-            await getIt<RemoteMpkRepository>().getLiveDepartures(busStopId);
+      try {
+        if (_wantsRemoteDepartures()) {
+          remoteDepartures =
+              await getIt<RemoteMpkRepository>().getLiveDepartures(busStopId);
+        }
+      } on Exception {
+        remoteDepartures = List.empty(growable: true);
       }
       busLinesFromBusStop = await BusLinesDatabase.getAllFromBusStop(busStopId);
     }
@@ -114,24 +120,25 @@ class DeparturesCubit extends Cubit<DeparturesState> {
 
   Future<List<String>> getDayTypes() async {
     String timestamp =
-        DateTimeUtils.getDate("dd-MM-yyyy", daysAhead: daysAhead);
+        DateTimeUtils.getDate("dd-MM-yyyy", daysAhead: daysAhead + 1);
 
     List<String> dayTypes = _getDayTypesFromCalendarList(
         await CalendarDatabase.getCurrentDays(timestamp));
     return dayTypes;
   }
 
-  Future<void> setFilters(int busStopId, List<BusLine> busLines) async {
-    initDepartures();
+  Future<void> setFilters(List<BusLine> busLines) async {
+    emit(DeparturesLoading());
     busLineFilters = busLines;
-    // getAll(busStopId: busStopId);
+    initDepartures(initialFilters: busLineFilters);
+    getAll(busStopId: latestBusStopId);
   }
 
-  Future<void> deleteFilter(
-      {required int busStopId, required BusLine busLine}) async {
+  Future<void> deleteFilter({required BusLine busLine}) async {
+    emit(DeparturesLoading());
     initDepartures(initialFilters: busLineFilters);
     busLineFilters.remove(busLine);
-    getAll(busStopId: busStopId);
+    getAll(busStopId: latestBusStopId);
   }
 
   List<String> _getDayTypesFromCalendarList(List<Calendar> calendars) {

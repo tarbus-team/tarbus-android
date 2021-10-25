@@ -17,17 +17,20 @@ class RemoteMpkRepository extends MpkRepository {
       queryParam: {"busStopId": busStopId},
       header: {},
     );
-    print(_response);
-    List<RemoteDeparture> root = XmlDocument.parse(_response)
-        .firstElementChild!
-        .firstElementChild!
-        .firstElementChild!
-        .findElements('R')
-        .map<RemoteDeparture>(
-          (e) => RemoteDeparture.fromElement(e),
-        )
-        .toList();
-    print(root);
-    return root;
+    print("RESPONSE $_response");
+    if (_response != null && _response.isNotEmpty) {
+      List<RemoteDeparture> root = XmlDocument.parse(_response)
+          .firstElementChild!
+          .firstElementChild!
+          .firstElementChild!
+          .findElements('R')
+          .map<RemoteDeparture>(
+            (e) => RemoteDeparture.fromElement(e),
+          )
+          .toList();
+      print(root);
+      return root;
+    }
+    return List.empty(growable: true);
   }
 }

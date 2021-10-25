@@ -62,7 +62,7 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                         leading: Icon(
                           Icons.near_me_outlined,
-                          size: 28,
+                          size: 19,
                           color: AppColors.of(context).primaryColor,
                         ),
                         visualDensity: VisualDensity.compact,
@@ -79,6 +79,8 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         leading: SvgPicture.asset(
                           'assets/icons/icon_bus.svg',
                           color: AppColors.of(context).primaryColor,
+                          width: 19,
+                          height: 19,
                         ),
                         title: Text(departure.track.route.busLine.name),
                       ),
@@ -93,6 +95,8 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
                         leading: SvgPicture.asset(
                           'assets/icons/icon_bus_stop.svg',
                           color: AppColors.of(context).primaryColor,
+                          width: 19,
+                          height: 19,
                         ),
                         title: Text(departure.busStop.name),
                       ),
@@ -158,6 +162,8 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
 
   Widget _buildDeparturesList(DepartureDetailsLoaded state) {
     int departuresLength = state.departures.length;
+    int departureIndex =
+        state.departures.indexOf(widget.departureWrapper.departure);
     return ListView.builder(
       itemCount: departuresLength,
       shrinkWrap: true,
@@ -167,26 +173,29 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
         if (index == 0) indexValue = 0;
         if (index == departuresLength - 1) indexValue = 2;
 
-        return _buildListItem(state.departures[index], indexValue);
+        return _buildListItem(
+            state.departures[index], departureIndex, index, indexValue);
       },
     );
   }
 
-  Widget _buildListItem(Departure departure, int indexValue) {
+  Widget _buildListItem(
+      Departure departure, int departureIndex, int index, int indexValue) {
+    print('$departureIndex,$index');
     bool isTheSameBusStop =
         departure.busStop.id == widget.departureWrapper.departure.busStop.id;
     Map<int, Widget> imageValues = {
       0: SvgPicture.asset(
         'assets/icons/icon_pin_start.svg',
-        height: 30,
+        fit: BoxFit.fitHeight,
       ),
       1: SvgPicture.asset(
         'assets/icons/icon_pin_middle.svg',
-        height: 30,
+        fit: BoxFit.fitHeight,
       ),
       2: SvgPicture.asset(
         'assets/icons/icon_pin_end.svg',
-        height: 30,
+        fit: BoxFit.fitHeight,
       ),
     };
 
@@ -204,11 +213,14 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: ListTile(
             dense: true,
-            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+            visualDensity: VisualDensity(horizontal: 0),
             contentPadding: EdgeInsets.all(0),
-            leading: SizedBox(
-              width: 20,
-              child: imageValues[indexValue]!,
+            leading: Column(
+              children: [
+                Expanded(
+                  child: imageValues[indexValue]!,
+                ),
+              ],
             ),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -223,31 +235,39 @@ class _DepartureDetailsPage extends State<DepartureDetailsPage> {
               ],
             ),
             minLeadingWidth: 20,
-            title: isTheSameBusStop
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Obecny przystanek',
-                        style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                      ),
-                      Text(
-                        '${departure.busStop.name}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                    ],
-                  )
-                : Text(
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isTheSameBusStop) ...[
+                  Text(
+                    'Obecny przystanek',
+                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                  ),
+                  Text(
+                    '${departure.busStop.name}',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ] else ...[
+                  Text(
                     '${departure.busStop.name}',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
                   ),
+                  if (departureIndex < index)
+                    Text(
+                      'Z ${widget.departureWrapper.departure.busStop.name} w ${departure.timeInMin - widget.departureWrapper.departure.timeInMin} minut',
+                      style: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                ],
+              ],
+            ),
           ),
         ),
       ),

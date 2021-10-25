@@ -26,7 +26,7 @@ class JsonDatabaseParser {
           globalValues.add(valuesList);
           if (valuesCounter >= 100 || j == data.length - 1) {
             await DatabaseHelper.instance.doSQLVoid(
-                'INSERT INTO $tableName (${sqlListOfStringToString(keysList)}) VALUES ${sqlArrayOfArrayObjectToString(globalValues)}');
+                'INSERT OR IGNORE INTO $tableName (${sqlListOfStringToString(keysList)}) VALUES ${sqlArrayOfArrayObjectToString(globalValues)}');
             globalValues.clear();
             valuesCounter = 0;
           }

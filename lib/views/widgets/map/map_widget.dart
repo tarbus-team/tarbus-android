@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 // import 'package:flutter_map_location/flutter_map_location.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,6 +18,13 @@ import 'package:tarbus_app/views/widgets/generic/center_load_spinner.dart';
 import 'mini_schedule_view.dart';
 
 class MapWidget<T extends MapCubit> extends StatefulWidget {
+  final bool wantsMarkerCluster;
+
+  const MapWidget({
+    Key? key,
+    this.wantsMarkerCluster = false,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _MapWidget<T>();
 }
@@ -63,7 +72,10 @@ class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
                 zoom: state.zoom,
                 interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
                 onTap: (tapPosition, latlng) => popupController.hideAllPopups(),
-                maxZoom: 19,
+                maxZoom: 18,
+                plugins: [
+                  MarkerClusterPlugin(),
+                ],
               ),
               children: [
                 TileLayerWidget(
@@ -87,13 +99,51 @@ class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
                     )
                   ]),
                 ),
+                LocationMarkerLayerWidget(),
+                if (widget.wantsMarkerCluster)
+                  MarkerClusterLayerWidget(
+                    options: MarkerClusterLayerOptions(
+                      maxClusterRadius: 120,
+                      disableClusteringAtZoom: 15,
+                      size: Size(40, 40),
+                      fitBoundsOptions: FitBoundsOptions(
+                        padding: EdgeInsets.all(50),
+                      ),
+                      markers: state.markers
+                          .where((e) => e is BusStopMarker)
+                          .toList(),
+                      builder: (context, markers) {
+                        return FloatingActionButton(
+                          backgroundColor: AppColors.of(context).primaryColor,
+                          child: Text(markers.length.toString()),
+                          onPressed: null,
+                        );
+                      },
+                      polygonOptions: PolygonOptions(
+                          borderColor: Colors.transparent,
+                          color: Colors.transparent,
+                          borderStrokeWidth: 0),
+                      popupOptions: PopupOptions(
+                        popupController: popupController,
+                        popupBuilder: (BuildContext context, Marker marker) {
+                          if (marker is BusStopMarker) {
+                            return MiniScheduleView(
+                              busStop: marker.busStop,
+                            );
+                          }
+                          return Text('');
+                        },
+                      ),
+                    ),
+                  ),
                 PopupMarkerLayerWidget(
                   options: PopupMarkerLayerOptions(
                     popupController: popupController,
-                    markers: state.markers,
-                    // markerCenterAnimation: MarkerCenterAnimation(
-                    //   duration: Duration(milliseconds: 500),
-                    // ),
+                    markers: widget.wantsMarkerCluster
+                        ? state.markers
+                            .where((e) => !(e is BusStopMarker))
+                            .toList()
+                        : state.markers,
                     popupBuilder: (BuildContext context, Marker marker) {
                       if (marker is BusStopMarker) {
                         return MiniScheduleView(
@@ -105,28 +155,6 @@ class _MapWidget<T extends MapCubit> extends State<MapWidget<T>> {
                   ),
                 ),
               ],
-              // layers: [
-              //   LocationOptions(
-              //     locationButton(state),
-              //     markerBuilder: (BuildContext context, LatLngData ld,
-              //         ValueNotifier<double?> heading) {
-              //       return Marker(
-              //         builder: (BuildContext context) {
-              //           return Text('');
-              //         },
-              //         point: ld.location,
-              //       );
-              //     },
-              //     onLocationRequested: (LatLngData? ld) {
-              //       if (ld == null || locationRequestCounter == 0) {
-              //         locationRequestCounter += 1;
-              //         return;
-              //       }
-              //       locationRequestCounter += 1;
-              //       mapController.move(ld.location, 15.0);
-              //     },
-              //   ),
-              // ],
             ),
           );
         }

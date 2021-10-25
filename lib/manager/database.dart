@@ -73,6 +73,13 @@ class DatabaseHelper {
     await db.rawQuery(query);
   }
 
+  Future<bool> clearDatabase(String subscribeCode) async {
+    // Version version = await VersionDatabase.getVersionBySubscribeCode(subscribeCode);
+    await doSQL(
+        'DELETE FROM Versions WHERE v_subscribe_code = \'$subscribeCode\'');
+    return true;
+  }
+
   Future<bool> clearAllDatabase() async {
     var tablesToDelete = [
       'BusLine',

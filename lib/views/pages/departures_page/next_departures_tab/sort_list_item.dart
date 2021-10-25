@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:tarbus_app/bloc/departures_cubit/departures_cubit.dart';
-import 'package:tarbus_app/data/model/schedule/bus_line.dart';
-import 'package:tarbus_app/views/widgets/generic/multiple_select.dart';
+
+import 'lines_sort_dialog.dart';
 
 class SortListItem extends StatelessWidget {
   final DeparturesLoaded state;
@@ -33,50 +32,17 @@ class SortListItem extends StatelessWidget {
               ),
               SizedBox(
                 width: 40,
-                child: MultipleSelect<BusLine>(
-                  hint: 'Wybierz linie',
-                  items: state.busLinesFromBusStop,
-                  popupItemBuilder: (context, item) {
-                    return Padding(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/icon_bus.svg',
-                            color: Colors.black,
-                            height: 20,
-                            width: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            item.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
+                height: 40,
+                child: IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => LinesSortDialog(
+                        availableBusLines: state.busLinesFromBusStop,
                       ),
                     );
                   },
-                  onChanged: (items) {
-                    context
-                        .read<DeparturesCubit>()
-                        .setFilters(busStopId, items);
-                  },
-                  dropdownBuilder: (context, item) {
-                    return IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.filter_list),
-                    );
-                  },
-                  selectedItems: state.lineFilters,
-                  comparator: (a, b) {
-                    return a.id == b.id;
-                  },
+                  icon: Icon(Icons.filter_list),
                 ),
               ),
             ],
@@ -94,7 +60,6 @@ class SortListItem extends StatelessWidget {
                   child: Chip(
                     onDeleted: () {
                       context.read<DeparturesCubit>().deleteFilter(
-                            busStopId: busStopId,
                             busLine: e,
                           );
                     },

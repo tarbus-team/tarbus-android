@@ -53,15 +53,15 @@ ThemeData lightTheme = ThemeData(
     headline2: TextStyle(fontSize: 16),
     headline3: GoogleFonts.poppins(
       fontSize: 12.0,
-      color: Color(0xff767676),
+      color: Colors.black,
       fontWeight: FontWeight.w700,
     ),
     bodyText1: GoogleFonts.roboto(
       color: Colors.black,
-      fontSize: 14.0,
+      fontSize: 15.0,
     ),
     bodyText2: TextStyle(
-      fontSize: 16.0,
+      fontSize: 15.0,
       fontWeight: FontWeight.w400,
     ),
     button: TextStyle(
@@ -128,10 +128,10 @@ ThemeData darkTheme = ThemeData(
     ),
     bodyText1: GoogleFonts.roboto(
       color: Colors.white,
-      fontSize: 14.0,
+      fontSize: 15.0,
     ),
     bodyText2: TextStyle(
-      fontSize: 16.0,
+      fontSize: 15.0,
       fontWeight: FontWeight.w400,
     ),
     button: TextStyle(

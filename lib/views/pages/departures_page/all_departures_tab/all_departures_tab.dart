@@ -1,6 +1,7 @@
 import 'package:extended_tabs/extended_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tarbus_app/bloc/timetable_departures_cubit/timetable_departures_cubit.dart';
 import 'package:tarbus_app/config/app_colors.dart';
@@ -47,6 +48,11 @@ class _AllDeparturesTab extends State<AllDeparturesTab>
         if (state is TimetableLoaded) {
           return Column(
             children: [
+              Container(
+                color: AppColors.of(context).breakpoint,
+                height: 24,
+                width: double.infinity,
+              ),
               Container(
                 height: 40,
                 color: AppColors.of(context).breakpoint,

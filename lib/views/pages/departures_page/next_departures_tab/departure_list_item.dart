@@ -20,7 +20,7 @@ class DepartureListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     String _getTimeName() {
       if (departureWrapper.isLive) {
-        return departureWrapper.remoteDeparture!.minutes;
+        return departureWrapper.remoteDeparture!.time;
       }
       return DateTimeUtils.parseMinutesToTime(
           departureWrapper.departure.timeInMin);
@@ -29,7 +29,7 @@ class DepartureListItem extends StatelessWidget {
     Widget _buildSubtitle() {
       if (departureWrapper.isLive)
         return Text(
-          'LIVE',
+          '• LIVE',
           style: Theme.of(context).textTheme.headline3!.copyWith(
                 color: Colors.red,
               ),

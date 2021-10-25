@@ -28,8 +28,8 @@ class API implements _IAPI {
   late String? clientID, secureKeyApi;
 
   API() {
-    // _dio = Dio(BaseOptions(baseUrl: 'https://dev-api.tarbus.pl/'));
-    _dio = Dio(BaseOptions(baseUrl: 'http://192.168.43.45:8082/'));
+    _dio = Dio(BaseOptions(baseUrl: 'https://api.tarbus.pl/'));
+    // _dio = Dio(BaseOptions(baseUrl: 'http://192.168.43.45:8082/'));
   }
 
   @override
@@ -41,7 +41,6 @@ class API implements _IAPI {
   Future get(
       {required String? path,
       required Map<String, dynamic> header,
-      bool useLocalhost = false,
       String? host,
       Map<String, dynamic>? queryParam}) async {
     try {
@@ -51,20 +50,10 @@ class API implements _IAPI {
       } else {
         finalDio = _dio;
       }
-      if (!useLocalhost) {
-        final _res = await finalDio.get(path!,
-            queryParameters: queryParam, options: Options(headers: header));
-        print(_res.realUri);
-        return _res.data;
-      } else {
-        final _res =
-            await Dio(BaseOptions(baseUrl: 'http://192.168.43.45:8082/')).get(
-                path!,
-                queryParameters: queryParam,
-                options: Options(headers: header));
-        print(_res.realUri);
-        return _res.data;
-      }
+      final _res = await finalDio.get(path!,
+          queryParameters: queryParam, options: Options(headers: header));
+      print(_res.realUri);
+      return _res.data;
     } on DioError catch (err) {
       print(err.stackTrace);
       throw ErrorExceptions.fromDioError(err);

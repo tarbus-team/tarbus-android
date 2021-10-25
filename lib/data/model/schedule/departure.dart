@@ -44,4 +44,12 @@ class Departure {
   String toString() {
     return 'Departure{id: $id, busStopLp: $busStopLp, realTime: $timeInMin, timeInString: $timeInString, busStop: $busStop, track: $track,}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Departure && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

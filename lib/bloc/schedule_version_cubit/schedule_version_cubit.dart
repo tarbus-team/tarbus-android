@@ -75,10 +75,11 @@ class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
       print(activeVersions);
       List<List<dynamic>> downloadedDatabases = List.empty(growable: true);
       for (SubscribedVersionModel version in activeVersions) {
+        await DatabaseHelper.instance.clearDatabase(version.subscribeCode!);
         downloadedDatabases.add(await _scheduleVersionRepository
-            .getVersionDatabase("template2-mpktarnow"));
+            .getVersionDatabase("template2-${version.subscribeCode}"));
       }
-      await DatabaseHelper.instance.clearAllDatabase();
+
       for (List<dynamic> dbData in downloadedDatabases) {
         await JsonDatabaseParser.parse(dbData);
       }

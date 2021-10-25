@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -37,13 +36,14 @@ class BusLinesListItem extends StatelessWidget {
               leading: Container(
                 width: 35,
                 child: Center(
-                  child: Image.memory(
-                    base64Decode(company.avatar),
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        'https://api.tarbus.pl/static/company/${company.id}/app_logo.png',
                     height: 30,
                     color: context.read<GetAppConfigUseCaseImpl>().isDarkTheme
                         ? Colors.white
                         : null,
-                    errorBuilder: (context, child, trace) {
+                    errorWidget: (context, url, error) {
                       return Text('Error');
                     },
                   ),

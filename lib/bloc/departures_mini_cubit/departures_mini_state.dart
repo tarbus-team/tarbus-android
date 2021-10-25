@@ -12,12 +12,10 @@ class DeparturesMiniInitial extends DeparturesMiniState {}
 class DeparturesMiniLoading extends DeparturesMiniState {}
 
 class DeparturesMiniLoaded extends DeparturesMiniState {
-  final List<Departure> departures;
-  final int? breakpoint;
+  final List<DepartureWrapper> departures;
 
   DeparturesMiniLoaded({
     required this.departures,
-    this.breakpoint,
   });
 
   @override

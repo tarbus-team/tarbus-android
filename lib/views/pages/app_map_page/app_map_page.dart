@@ -26,7 +26,9 @@ class _AppMapPage extends State<AppMapPage> {
           subTitle: ' Przystanki autobusowe',
         ),
       ),
-      body: MapWidget<BusStopsMapCubit>(),
+      body: MapWidget<BusStopsMapCubit>(
+        wantsMarkerCluster: true,
+      ),
     );
   }
 }

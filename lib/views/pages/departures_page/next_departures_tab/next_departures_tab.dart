@@ -66,26 +66,37 @@ class _NextDeparturesTab extends State<NextDeparturesTab> {
 
     return NotificationListener<ScrollUpdateNotification>(
       onNotification: onScrollNotification,
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: (departuresLength + 2),
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            return SortListItem(
-              state: state,
-              busStopId: widget.busStopId,
-            );
-          }
-          if (index == departuresLength + 1) {
-            return Container(
-              height: 70,
-              child: CenterLoadSpinner(),
-            );
-          }
-          return DepartureListItem(
-            departureWrapper: state.departures[index - 1],
-          );
+      child: RefreshIndicator(
+        onRefresh: () async {
+          context
+              .read<DeparturesCubit>()
+              .initDepartures(initialFilter: widget.busLine);
+          await context
+              .read<DeparturesCubit>()
+              .getAll(busStopId: widget.busStopId);
+          return Future.value(true);
         },
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: (departuresLength + 2),
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return SortListItem(
+                state: state,
+                busStopId: widget.busStopId,
+              );
+            }
+            if (index == departuresLength + 1) {
+              return Container(
+                height: 70,
+                child: CenterLoadSpinner(),
+              );
+            }
+            return DepartureListItem(
+              departureWrapper: state.departures[index - 1],
+            );
+          },
+        ),
       ),
     );
   }

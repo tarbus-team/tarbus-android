@@ -7,8 +7,8 @@ import 'package:tarbus_app/config/app_colors.dart';
 import 'package:tarbus_app/config/app_icons.dart';
 import 'package:tarbus_app/data/model/departure_wrapper.dart';
 import 'package:tarbus_app/data/model/schedule/bus_stop.dart';
-import 'package:tarbus_app/data/model/schedule/departure.dart';
 import 'package:tarbus_app/shared/router/routes.gr.dart';
+import 'package:tarbus_app/shared/utilities/date_time_utils.dart';
 import 'package:tarbus_app/views/widgets/generic/center_load_spinner.dart';
 
 class MiniScheduleView extends StatefulWidget {
@@ -30,16 +30,12 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
   }
 
   Widget _buildDepartureCard(
-      DeparturesMiniLoaded state, Departure departure, int index) {
+      DeparturesMiniLoaded state, DepartureWrapper departureWrapper) {
     return Card(
       child: InkWell(
         onTap: () {
           context.router.navigate(DepartureDetailsRoute(
-            departureWrapper: DepartureWrapper(
-              departure: departure,
-              daysAhead: 0,
-              departureDate: DateTime.now(),
-            ),
+            departureWrapper: departureWrapper,
           ));
         },
         child: Column(
@@ -55,7 +51,7 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
                   children: [
                     AppIcons.of(context).busStopIcon,
                     Text(
-                      departure.track.route.busLine.name,
+                      departureWrapper.departure.track.route.busLine.name,
                       style: Theme.of(context).textTheme.headline3!.copyWith(
                             color: Colors.white,
                             fontSize: 14,
@@ -71,16 +67,28 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    departure.timeInString,
+                    departureWrapper.isLive
+                        ? departureWrapper.remoteDeparture!.time
+                        : departureWrapper.departure.timeInString,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (state.breakpoint != null && state.breakpoint! <= index)
+                  if (departureWrapper.daysAhead != 0)
                     Text(
-                      'Jutro',
+                      DateTimeUtils.getDepartureDayShortcut(
+                          departureWrapper.departureDate,
+                          departureWrapper.daysAhead),
                       style: Theme.of(context).textTheme.headline3!.copyWith(
                             color: AppColors.of(context).primaryColor,
+                            fontSize: 11,
+                          ),
+                    ),
+                  if (departureWrapper.isLive)
+                    Text(
+                      '• LIVE',
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                            color: Colors.red,
                             fontSize: 11,
                           ),
                     ),
@@ -151,7 +159,7 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
                               itemCount: state.departures.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return _buildDepartureCard(
-                                    state, state.departures[index], index);
+                                    state, state.departures[index]);
                               },
                             );
                           }
@@ -167,7 +175,12 @@ class _MiniScheduleViewState extends State<MiniScheduleView> {
                           busStopName: widget.busStop.name,
                         ));
                       },
-                      child: Text('Zobacz rozkład przystanku'),
+                      child: Text(
+                        'Zobacz rozkład przystanku',
+                        style: TextStyle(
+                          color: AppColors.of(context).primaryColor,
+                        ),
+                      ),
                     ),
                   ],
                 ),
