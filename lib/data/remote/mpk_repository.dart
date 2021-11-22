@@ -1,6 +1,5 @@
-import 'package:tarbus_app/config/locator.dart';
 import 'package:tarbus_app/data/model/remote_departure.dart';
-import 'package:tarbus_app/manager/api.dart';
+import 'package:tarbus_app/manager/api_manager.dart';
 import 'package:xml/xml.dart';
 
 abstract class MpkRepository {
@@ -9,17 +8,16 @@ abstract class MpkRepository {
 }
 
 class RemoteMpkRepository extends MpkRepository {
+  ApiManager _apiManager = ApiManager('http://rozklad.komunikacja.tarnow.pl/');
+
   @override
   Future<List<RemoteDeparture>> getLiveDepartures(int busStopId) async {
-    final _response = await getIt<API>().get(
-      host: 'http://rozklad.komunikacja.tarnow.pl/',
+    final _response = await _apiManager.get(
       path: '/Home/GetTimetableReal',
-      queryParam: {"busStopId": busStopId},
-      header: {},
+      queryParameters: {"busStopId": busStopId},
     );
-    print("RESPONSE $_response");
-    if (_response != null && _response.isNotEmpty) {
-      List<RemoteDeparture> root = XmlDocument.parse(_response)
+    if (_response.data != null && _response.data.isNotEmpty) {
+      List<RemoteDeparture> root = XmlDocument.parse(_response.data)
           .firstElementChild!
           .firstElementChild!
           .firstElementChild!

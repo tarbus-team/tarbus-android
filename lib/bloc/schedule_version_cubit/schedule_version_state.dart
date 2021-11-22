@@ -21,7 +21,12 @@ class ScheduleOutOfDate extends ScheduleVersionState {}
 
 class ScheduleCheckingFinished extends ScheduleVersionState {}
 
-class ScheduleDownloading extends ScheduleVersionState {}
+class ScheduleDownloading extends ScheduleVersionState {
+  final int count;
+  final int? total;
+
+  ScheduleDownloading({required this.count, this.total});
+}
 
 class ScheduleFailure extends ScheduleVersionState {
   final String error;

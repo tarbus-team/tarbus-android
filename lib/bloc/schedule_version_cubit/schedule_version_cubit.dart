@@ -14,8 +14,7 @@ part 'schedule_version_state.dart';
 class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
   final ScheduleVersionRepository _scheduleVersionRepository;
 
-  ScheduleVersionCubit(this._scheduleVersionRepository)
-      : super(ScheduleInitial());
+  ScheduleVersionCubit(this._scheduleVersionRepository) : super(ScheduleInitial());
 
   Future<void> validateSavedScheduleVersions(BuildContext context) async {
     // try {
@@ -32,8 +31,7 @@ class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
       localVersions.forEach((version) {
         if (!remoteVersions.containsKey(version.subscribeCode)) {
           removedVersions.add(version);
-        } else if (remoteVersions[version.subscribeCode] !=
-            version.updateDate) {
+        } else if (remoteVersions[version.subscribeCode] != version.updateDate) {
           expiredVersions.add(version);
         }
       });
@@ -54,30 +52,30 @@ class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
     // }
   }
 
-  Future<void> setUpNewVersions(
-      List<AvailableVersionModel> selectedVersions) async {
-    List<SubscribedVersionModel> subscribedVersions =
-        List.empty(growable: true);
+  Future<void> setUpNewVersions(List<AvailableVersionModel> selectedVersions) async {
+    List<SubscribedVersionModel> subscribedVersions = List.empty(growable: true);
     selectedVersions.forEach((version) {
-      subscribedVersions
-          .add(SubscribedVersionModel.fromAvailableVersion(version));
+      subscribedVersions.add(SubscribedVersionModel.fromAvailableVersion(version));
     });
-    await SubscribedScheduleStorage.updateSubscribedVersions(
-        subscribedVersions);
+    await SubscribedScheduleStorage.updateSubscribedVersions(subscribedVersions);
     await downloadVersions();
   }
 
   Future<void> downloadVersions() async {
     try {
-      emit(ScheduleDownloading());
-      List<SubscribedVersionModel> activeVersions =
-          SubscribedScheduleStorage.getSubscribedVersions();
+      emit(ScheduleDownloading(count: 0));
+      List<SubscribedVersionModel> activeVersions = SubscribedScheduleStorage.getSubscribedVersions();
       print(activeVersions);
       List<List<dynamic>> downloadedDatabases = List.empty(growable: true);
       for (SubscribedVersionModel version in activeVersions) {
         await DatabaseHelper.instance.clearDatabase(version.subscribeCode!);
-        downloadedDatabases.add(await _scheduleVersionRepository
-            .getVersionDatabase("template2-${version.subscribeCode}"));
+        print('download version');
+        downloadedDatabases.add(
+          await _scheduleVersionRepository.getDatabaseFile(
+            subscribeCode: "template2-${version.subscribeCode}",
+            onReceiveProgress: onProgressUpdate,
+          ),
+        );
       }
 
       for (List<dynamic> dbData in downloadedDatabases) {
@@ -86,8 +84,13 @@ class ScheduleVersionCubit extends Cubit<ScheduleVersionState> {
 
       emit(ScheduleUpToDate());
     } on ErrorExceptions {
-      emit(ScheduleFailure(
-          error: "Wystąpił błąd w trakcie pobierania rozkładu"));
+      emit(ScheduleFailure(error: "Wystąpił błąd w trakcie pobierania rozkładu"));
     }
+  }
+
+  void onProgressUpdate(int count, int total) {
+    int progress = (((count / total) * 100).toInt());
+    // print(progress);
+    emit(ScheduleDownloading(count: count, total: total));
   }
 }

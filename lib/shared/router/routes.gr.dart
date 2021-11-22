@@ -1,3 +1,7 @@
+// **************************************************************************
+// AutoRouteGenerator
+// **************************************************************************
+
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -5,12 +9,13 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i20;
+import 'package:flutter/cupertino.dart' as _i23;
 import 'package:flutter/material.dart' as _i21;
-import 'package:tarbus_app/data/model/departure_wrapper.dart' as _i27;
-import 'package:tarbus_app/data/model/schedule/bus_line.dart' as _i26;
-import 'package:tarbus_app/data/model/schedule/bus_stop.dart' as _i24;
-import 'package:tarbus_app/data/model/schedule/track.dart' as _i23;
-import 'package:tarbus_app/data/model/schedule/track_route.dart' as _i25;
+import 'package:tarbus_app/data/model/departure_wrapper.dart' as _i28;
+import 'package:tarbus_app/data/model/schedule/bus_line.dart' as _i27;
+import 'package:tarbus_app/data/model/schedule/bus_stop.dart' as _i25;
+import 'package:tarbus_app/data/model/schedule/track.dart' as _i24;
+import 'package:tarbus_app/data/model/schedule/track_route.dart' as _i26;
 import 'package:tarbus_app/shared/guards/gps_guard.dart' as _i22;
 import 'package:tarbus_app/views/pages/add_favourite_bus_stop_page/add_favourite_bus_stop_page.dart'
     as _i11;
@@ -187,11 +192,16 @@ class AppRouter extends _i20.RootStackRouter {
         _i20.RouteConfig(AppRoute.name, path: '/app', guards: [
           gpsGuard
         ], children: [
-          _i20.RouteConfig(AppHomeRoute.name, path: 'home'),
-          _i20.RouteConfig(AppBusLinesRoute.name, path: 'lines'),
-          _i20.RouteConfig(AppMapRoute.name, path: 'map'),
-          _i20.RouteConfig(AppSearchRoute.name, path: 'search'),
-          _i20.RouteConfig(AppMenuRoute.name, path: 'menu')
+          _i20.RouteConfig(AppHomeRoute.name,
+              path: 'home', parent: AppRoute.name),
+          _i20.RouteConfig(AppBusLinesRoute.name,
+              path: 'lines', parent: AppRoute.name),
+          _i20.RouteConfig(AppMapRoute.name,
+              path: 'map', parent: AppRoute.name),
+          _i20.RouteConfig(AppSearchRoute.name,
+              path: 'search', parent: AppRoute.name),
+          _i20.RouteConfig(AppMenuRoute.name,
+              path: 'menu', parent: AppRoute.name)
         ]),
         _i20.RouteConfig(NotFoundRoute.name, path: '/Not_Found_404_error'),
         _i20.RouteConfig('*#redirect',
@@ -215,7 +225,7 @@ class FirstConfigRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for [_i3.SearchListPage]
 class SearchListRoute extends _i20.PageRouteInfo<SearchListRouteArgs> {
-  SearchListRoute({_i21.Key? key, required String type, bool? wantsFavourite})
+  SearchListRoute({_i23.Key? key, required String type, bool? wantsFavourite})
       : super(name,
             path: '/search',
             args: SearchListRouteArgs(
@@ -228,7 +238,7 @@ class SearchListRouteArgs {
   const SearchListRouteArgs(
       {this.key, required this.type, this.wantsFavourite});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
   final String type;
 
@@ -238,7 +248,7 @@ class SearchListRouteArgs {
 /// generated route for [_i4.TrackMapPage]
 class TrackMapRoute extends _i20.PageRouteInfo<TrackMapRouteArgs> {
   TrackMapRoute(
-      {_i21.Key? key, required _i23.Track track, required _i24.BusStop busStop})
+      {_i23.Key? key, required _i24.Track track, required _i25.BusStop busStop})
       : super(name,
             path: '/track-map',
             args: TrackMapRouteArgs(key: key, track: track, busStop: busStop));
@@ -250,11 +260,11 @@ class TrackMapRouteArgs {
   const TrackMapRouteArgs(
       {this.key, required this.track, required this.busStop});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
-  final _i23.Track track;
+  final _i24.Track track;
 
-  final _i24.BusStop busStop;
+  final _i25.BusStop busStop;
 }
 
 /// generated route for [_i5.SettingsPage]
@@ -267,7 +277,7 @@ class SettingsRoute extends _i20.PageRouteInfo<void> {
 /// generated route for [_i6.MapLineStopsPage]
 class MapLineStopsRoute extends _i20.PageRouteInfo<MapLineStopsRouteArgs> {
   MapLineStopsRoute(
-      {_i21.Key? key, required int busLineId, required String busLineName})
+      {_i23.Key? key, required int busLineId, required String busLineName})
       : super(name,
             path: '/lines-stops-map',
             args: MapLineStopsRouteArgs(
@@ -280,7 +290,7 @@ class MapLineStopsRouteArgs {
   const MapLineStopsRouteArgs(
       {this.key, required this.busLineId, required this.busLineName});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
   final int busLineId;
 
@@ -289,7 +299,7 @@ class MapLineStopsRouteArgs {
 
 /// generated route for [_i7.MapRouteStopsPage]
 class MapRouteStopsRoute extends _i20.PageRouteInfo<MapRouteStopsRouteArgs> {
-  MapRouteStopsRoute({_i21.Key? key, required _i25.TrackRoute route})
+  MapRouteStopsRoute({_i23.Key? key, required _i26.TrackRoute route})
       : super(name,
             path: '/route-stops-map',
             args: MapRouteStopsRouteArgs(key: key, route: route));
@@ -300,18 +310,18 @@ class MapRouteStopsRoute extends _i20.PageRouteInfo<MapRouteStopsRouteArgs> {
 class MapRouteStopsRouteArgs {
   const MapRouteStopsRouteArgs({this.key, required this.route});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
-  final _i25.TrackRoute route;
+  final _i26.TrackRoute route;
 }
 
 /// generated route for [_i8.DeparturesPage]
 class DeparturesRoute extends _i20.PageRouteInfo<DeparturesRouteArgs> {
   DeparturesRoute(
-      {_i21.Key? key,
+      {_i23.Key? key,
       String? busStopName,
       required int busStopId,
-      _i26.BusLine? busLine})
+      _i27.BusLine? busLine})
       : super(name,
             path: '/departure',
             args: DeparturesRouteArgs(
@@ -327,20 +337,20 @@ class DeparturesRouteArgs {
   const DeparturesRouteArgs(
       {this.key, this.busStopName, required this.busStopId, this.busLine});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
   final String? busStopName;
 
   final int busStopId;
 
-  final _i26.BusLine? busLine;
+  final _i27.BusLine? busLine;
 }
 
 /// generated route for [_i9.DepartureDetailsPage]
 class DepartureDetailsRoute
     extends _i20.PageRouteInfo<DepartureDetailsRouteArgs> {
   DepartureDetailsRoute(
-      {_i21.Key? key, required _i27.DepartureWrapper departureWrapper})
+      {_i23.Key? key, required _i28.DepartureWrapper departureWrapper})
       : super(name,
             path: '/departure-details',
             args: DepartureDetailsRouteArgs(
@@ -352,9 +362,9 @@ class DepartureDetailsRoute
 class DepartureDetailsRouteArgs {
   const DepartureDetailsRouteArgs({this.key, required this.departureWrapper});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
-  final _i27.DepartureWrapper departureWrapper;
+  final _i28.DepartureWrapper departureWrapper;
 }
 
 /// generated route for [_i10.PermissionPage]
@@ -367,7 +377,7 @@ class PermissionsRoute extends _i20.PageRouteInfo<void> {
 /// generated route for [_i11.AddFavouriteBusStopPage]
 class AddFavouriteBusStopRoute
     extends _i20.PageRouteInfo<AddFavouriteBusStopRouteArgs> {
-  AddFavouriteBusStopRoute({_i21.Key? key, required _i24.BusStop busStop})
+  AddFavouriteBusStopRoute({_i23.Key? key, required _i25.BusStop busStop})
       : super(name,
             path: '/add-favourite-bus-stop',
             args: AddFavouriteBusStopRouteArgs(key: key, busStop: busStop));
@@ -378,15 +388,15 @@ class AddFavouriteBusStopRoute
 class AddFavouriteBusStopRouteArgs {
   const AddFavouriteBusStopRouteArgs({this.key, required this.busStop});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
-  final _i24.BusStop busStop;
+  final _i25.BusStop busStop;
 }
 
 /// generated route for [_i12.LineDetailsPage]
 class LineDetailsRoute extends _i20.PageRouteInfo<LineDetailsRouteArgs> {
   LineDetailsRoute(
-      {_i21.Key? key, required int busLineId, required String busLineName})
+      {_i23.Key? key, required int busLineId, required String busLineName})
       : super(name,
             path: 'routes',
             args: LineDetailsRouteArgs(
@@ -399,7 +409,7 @@ class LineDetailsRouteArgs {
   const LineDetailsRouteArgs(
       {this.key, required this.busLineId, required this.busLineName});
 
-  final _i21.Key? key;
+  final _i23.Key? key;
 
   final int busLineId;
 

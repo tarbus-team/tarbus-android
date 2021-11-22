@@ -1,6 +1,6 @@
-import 'package:tarbus_app/config/locator.dart';
+import 'package:dio/dio.dart';
 import 'package:tarbus_app/data/model/available_versions_response.dart';
-import 'package:tarbus_app/manager/api.dart';
+import 'package:tarbus_app/manager/api_manager.dart';
 
 abstract class ScheduleVersionRepository {
   /// Throws [ErrorExceptions].
@@ -10,26 +10,31 @@ abstract class ScheduleVersionRepository {
   Future<AvailableVersionsResponse> getAvailableVersions();
 
   /// Throws [ErrorExceptions].
-  Future<List<dynamic>> getVersionDatabase(String subscribeCode);
+  Future<List<dynamic>> getDatabaseFile({
+    required String subscribeCode,
+    required ProgressCallback onReceiveProgress,
+  });
 }
 
 class RemoteScheduleVersionRepository extends ScheduleVersionRepository {
+  ApiManager _apiManager = ApiManager('https://api.tarbus.pl/');
+
   Future<AvailableVersionsResponse> getAvailableVersions() async {
-    final _response = await getIt<API>()
-        .get(path: '/static/config/available-versions.json', header: {});
-    return AvailableVersionsResponse.fromJSON(_response);
+    final _response = await _apiManager.get(path: '/static/config/available-versions.json');
+    return AvailableVersionsResponse.fromJSON(_response.data);
   }
 
-  Future<List<dynamic>> getVersionDatabase(String subscribeCode) async {
-    final _response = await getIt<API>()
-        .get(path: '/static/database/$subscribeCode.json', header: {});
-    return _response;
+  Future<List<dynamic>> getDatabaseFile(
+      {required String subscribeCode, required ProgressCallback onReceiveProgress}) async {
+    final _response = await _apiManager.get(
+      path: '/static/database/$subscribeCode.json',
+      onReceiveProgress: onReceiveProgress,
+    );
+    return _response.data;
   }
 
   Future<Map<String, dynamic>> getLatestUpdate() async {
-    final _response = await getIt<API>()
-        .get(path: '/static/config/database-info.json', header: {});
-    print(_response);
-    return _response;
+    final _response = await _apiManager.get(path: '/static/config/database-info.json');
+    return _response.data;
   }
 }
